@@ -22,8 +22,8 @@ pod "LASwift"
 
 ## Author
 
-alexandertar, taraymovich@me.com
+Alexander Taraymovich, taraymovich@me.com
 
 ## License
 
-LASwift is available under the MIT license. See the LICENSE file for more info.
+LASwift is available under the BSD-3-Clause license. See the LICENSE file for more info.

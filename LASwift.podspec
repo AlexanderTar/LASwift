@@ -23,8 +23,8 @@ TODO: Add long description of the pod here.
 
   s.homepage         = 'https://github.com/alexandertar/LASwift'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'alexandertar' => 'taraymovich@me.com' }
+s.license          = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
+  s.author           = { 'Alexander Taraymovich' => 'taraymovich@me.com' }
   s.source           = { :git => 'https://github.com/alexandertar/LASwift.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
