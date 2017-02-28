@@ -14,7 +14,7 @@ class VectorSpec: QuickSpec {
     override func spec() {
         describe("Vector construction tests") {
             
-            let vec1 = Vector<Double>.ones(10)
+            let vec1: [Double] = ones(10)
             
             it("ones vector has correct size") {
                 expect(vec1.count) == 10
@@ -26,7 +26,7 @@ class VectorSpec: QuickSpec {
                 }
             }
             
-            let vec2 = Vector<Double>.zeros(10)
+            let vec2: [Double] = zeros(10)
             
             it("zeros vector has correct size") {
                 expect(vec2.count) == 10
@@ -38,7 +38,7 @@ class VectorSpec: QuickSpec {
                 }
             }
             
-            let vec3 = Vector<Double>.zeros(10)
+            let vec3: [Double] = zeros(10)
             
             it("zeros vectors are equal") {
                 expect(vec3) == vec2
@@ -48,7 +48,7 @@ class VectorSpec: QuickSpec {
                 expect(vec2) != vec1
             }
             
-            let vec4 = Vector<Double>(repeating: 1.0, count: 10)
+            let vec4 = [Double](repeating: 1.0, count: 10)
             
             it("differently constructed ones vectors are equal") {
                 expect(vec1) == vec4
