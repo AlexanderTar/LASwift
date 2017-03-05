@@ -14,7 +14,7 @@ class VectorSpec: QuickSpec {
     override func spec() {
         describe("Vector construction tests") {
             
-            let vec1: [Double] = ones(10)
+            let vec1 = ones(10)
             
             it("ones vector has correct size") {
                 expect(vec1.count) == 10
@@ -26,7 +26,7 @@ class VectorSpec: QuickSpec {
                 }
             }
             
-            let vec2: [Double] = zeros(10)
+            let vec2 = zeros(10)
             
             it("zeros vector has correct size") {
                 expect(vec2.count) == 10
@@ -38,7 +38,7 @@ class VectorSpec: QuickSpec {
                 }
             }
             
-            let vec3: [Double] = zeros(10)
+            let vec3 = zeros(10)
             
             it("zeros vectors are equal") {
                 expect(vec3) == vec2
@@ -54,6 +54,192 @@ class VectorSpec: QuickSpec {
                 expect(vec1) == vec4
             }
         }
+        describe("Vector arithmetic tests") {            
+            it("addition") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = [5.0, 7.0, 9.0]
+                expect(vec1 + vec2).to(beCloseTo(res))
+            }
+            
+            it("substraction") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = [-3.0, -3.0, -3.0]
+                expect(vec1 - vec2).to(beCloseTo(res))
+            }
+            
+            it("multiplication") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = [4.0, 10.0, 18.0]
+                expect(vec1 .* vec2).to(beCloseTo(res))
+            }
+            
+            it("right division") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = [1.0 / 4.0, 2.0 / 5.0, 3.0 / 6.0]
+                expect(vec1 ./ vec2).to(beCloseTo(res))
+            }
+            
+            it("left division") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = [4.0 / 1.0, 5.0 / 2.0, 6.0 / 3.0]
+                expect(vec1 ./. vec2).to(beCloseTo(res))
+            }
+            
+            it("scalar addition") {
+                let vec = [1.0, 2.0, 3.0]
+                let s = 7.0
+                let res = [8.0, 9.0, 10.0]
+                expect(vec + s).to(beCloseTo(res))
+                expect(s + vec).to(beCloseTo(res))
+            }
+            
+            it("scalar substraction") {
+                let vec = [1.0, 2.0, 3.0]
+                let s = 7.0
+                let res1 = [-6.0, -5.0, -4.0]
+                let res2 = [6.0, 5.0, 4.0]
+                expect(vec - s).to(beCloseTo(res1))
+                expect(s - vec).to(beCloseTo(res2))
+            }
+            
+            it("scalar multiplication") {
+                let vec = [1.0, 2.0, 3.0]
+                let s = 7.0
+                let res = [7.0, 14.0, 21.0]
+                expect(vec .* s).to(beCloseTo(res))
+                expect(s .* vec).to(beCloseTo(res))
+            }
+            
+            it("scalar right division") {
+                let vec = [1.0, 2.0, 3.0]
+                let s = 7.0
+                let res1 = [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0]
+                let res2 = [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0]
+                expect(vec ./ s).to(beCloseTo(res1))
+                expect(s ./ vec).to(beCloseTo(res2))
+            }
+            
+            it("scalar left division") {
+                let vec = [1.0, 2.0, 3.0]
+                let s = 7.0
+                let res1 = [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0]
+                let res2 = [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0]
+                expect(vec ./. s).to(beCloseTo(res1))
+                expect(s ./. vec).to(beCloseTo(res2))
+            }
+            
+            it("negation") {
+                let vec = [1.0, -2.0, 3.0]
+                let res = [-1.0, 2.0, -3.0]
+                expect(-vec).to(beCloseTo(res))
+            }
+            
+            it("absolute") {
+                let vec = [1.0, -2.0, 3.0]
+                let res = [1.0, 2.0, 3.0]
+                expect(abs(vec)).to(beCloseTo(res))
+            }
+            
+            it("dot product") {
+                let vec1 = [1.0, 2.0, 3.0]
+                let vec2 = [4.0, 5.0, 6.0]
+                let res = 32.0
+                expect(vec1 * vec2).to(beCloseTo(res))
+            }
+        }
+        
+        describe("Vector power and exponential tests") {
+            it("power") {
+                let vec = [1.0, 2.0, 3.0]
+                let p = 3.0
+                let res = [1.0, 8.0, 27.0]
+                expect(vec .^ p).to(beCloseTo(res))
+            }
+            it("square") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [1.0, 4.0, 9.0]
+                expect(square(vec)).to(beCloseTo(res))
+                expect(square(vec)).to(beCloseTo(vec .^ 2))
+            }
+            it("sqrt") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [sqrt(1.0), sqrt(2.0), sqrt(3.0)]
+                expect(sqrt(vec)).to(beCloseTo(res))
+                expect(sqrt(vec)).to(beCloseTo(vec .^ 0.5))
+            }
+            it("exp") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [exp(1.0), exp(2.0), exp(3.0)]
+                expect(exp(vec)).to(beCloseTo(res))
+            }
+            it("log") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [log(1.0), log(2.0), log(3.0)]
+                expect(log(vec)).to(beCloseTo(res))
+            }
+            it("log10") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [log10(1.0), log10(2.0), log10(3.0)]
+                expect(log10(vec)).to(beCloseTo(res))
+            }
+            it("log2") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [log2(1.0), log2(2.0), log2(3.0)]
+                expect(log2(vec)).to(beCloseTo(res))
+            }
+        }
+        
+        describe("Vector trigonometric tests") {
+            it("sin") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [sin(1.0), sin(2.0), sin(3.0)]
+                expect(sin(vec)).to(beCloseTo(res))
+            }
+            it("cos") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [cos(1.0), cos(2.0), cos(3.0)]
+                expect(cos(vec)).to(beCloseTo(res))
+            }
+            it("tan") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [tan(1.0), tan(2.0), tan(3.0)]
+                expect(tan(vec)).to(beCloseTo(res))
+            }
+        }
+        
+        describe("Vector statistics tests") {
+            it("max") {
+                let vec = [1.0, 3.0, 2.0]
+                let res = 3.0
+                expect(max(vec)).to(beCloseTo(res))
+            }
+            it("min") {
+                let vec = [3.0, 1.0, 2.0]
+                let res = 1.0
+                expect(min(vec)).to(beCloseTo(res))
+            }
+            it("mean") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = 2.0
+                expect(mean(vec)).to(beCloseTo(res))
+            }
+            it("std") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = sqrt(2.0 / 3.0)
+                expect(std(vec)).to(beCloseTo(res))
+            }
+            it("norm") {
+                let vec = [1.0, 2.0, 3.0]
+                let m = mean(vec)
+                let s = std(vec)
+                let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
+                expect(norm(vec)).to(beCloseTo(res))
+            }
+        }
     }
 }
-
