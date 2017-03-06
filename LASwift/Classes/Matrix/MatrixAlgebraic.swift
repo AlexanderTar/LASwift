@@ -53,7 +53,7 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     }
 }
 
-public func ^^^ (_ a: Matrix, _ p: Int) -> Matrix {
+public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
     return mpower(a, p)
 }
 

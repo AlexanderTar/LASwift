@@ -342,7 +342,7 @@ class MatrixSpec: QuickSpec {
                                  [3.0, 4.0]])
                 let res = Matrix([[7.0, 10.0],
                                   [15.0, 22.0]])
-                expect(m1 ^^^ 2) == res
+                expect(m1 ^ 2) == res
                 expect(mpower(m1, 2)) == res
             }
             it("inverse") {
@@ -354,7 +354,7 @@ class MatrixSpec: QuickSpec {
                                   [0.058823529411764663, 0.058823529411764719, -0.098039215686274522]])
                 expect(inv(m1)) == res
                 expect(mpower(m1, -1)) == res
-                expect(m1 ^^^ -1) == res
+                expect(m1 ^ -1) == res
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
                 expect { () -> Void in inv(m2) }.to(throwAssertion())
                 expect { () -> Void in inv(ones(3, 3)) }.to(throwAssertion())
@@ -369,6 +369,151 @@ class MatrixSpec: QuickSpec {
                 expect(m1 * e.0) == e.0 * e.1
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
                 expect { () -> Void in eig(m2) }.to(throwAssertion())
+            }
+            
+            let m1 = Matrix([[1.0, 2.0],
+                             [3.0, 4.0]])
+            let m2 = Matrix([[5.0, 6.0],
+                             [7.0, 8.0]])
+//            let m1 = rand(100, 100)
+//            let m2 = rand(100, 100)
+//            print(m1)
+//            print()
+//            print(m2)
+//            print()
+//            let v = [5.0, 6.0]
+            let m3 = m2 === m1
+            print(m3)
+        }
+        
+        describe("Matrix concatenation") {
+            it("horizontal scalar append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = 5.0
+                let res = Matrix([[1.0, 2.0],
+                                  [3.0, 4.0],
+                                  [5.0, 5.0]])
+                expect(m1 === v) == res
+            }
+            it("horizontal scalar prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = 5.0
+                let res = Matrix([[5.0, 5.0],
+                                  [1.0, 2.0],
+                                  [3.0, 4.0]])
+                expect(v === m1) == res
+            }
+            it("horizontal vector append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = [5.0, 6.0]
+                let res = Matrix([[1.0, 2.0],
+                                  [3.0, 4.0],
+                                  [5.0, 6.0]])
+                expect(m1 === v) == res
+            }
+            it("horizontal vector prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = [5.0, 6.0]
+                let res = Matrix([[5.0, 6.0],
+                                  [1.0, 2.0],
+                                  [3.0, 4.0]])
+                expect(v === m1) == res
+            }
+            it("horizontal matrix append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                [7.0, 8.0]])
+                let res = Matrix([[1.0, 2.0],
+                                  [3.0, 4.0],
+                                  [5.0, 6.0],
+                                  [7.0, 8.0]])
+                expect(m1 === m2) == res
+            }
+            it("horizontal matrix prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                 [7.0, 8.0]])
+                let res = Matrix([[5.0, 6.0],
+                                  [7.0, 8.0],
+                                  [1.0, 2.0],
+                                  [3.0, 4.0]])
+                expect(m2 === m1) == res
+            }
+            it("horizontal matrix insert") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                 [7.0, 8.0]])
+                let res = Matrix([[1.0, 2.0],
+                                  [5.0, 6.0],
+                                  [7.0, 8.0],
+                                  [3.0, 4.0]])
+                expect(insert(m1, rows: m2, at: 1)) == res
+            }
+            it("vertical scalar append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = 5.0
+                let res = Matrix([[1.0, 2.0, 5.0],
+                                  [3.0, 4.0, 5.0]])
+                expect(m1 ||| v) == res
+            }
+            it("vertical scalar prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = 5.0
+                let res = Matrix([[5.0, 1.0, 2.0],
+                                  [5.0, 3.0, 4.0]])
+                expect(v ||| m1) == res
+            }
+            it("vertical vector append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = [5.0, 6.0]
+                let res = Matrix([[1.0, 2.0, 5.0],
+                                  [3.0, 4.0, 6.0]])
+                expect(m1 ||| v) == res
+            }
+            it("vertical vector prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let v = [5.0, 6.0]
+                let res = Matrix([[5.0, 1.0, 2.0],
+                                  [6.0, 3.0, 4.0]])
+                expect(v ||| m1) == res
+            }
+            it("vertical matrix append") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                 [7.0, 8.0]])
+                let res = Matrix([[1.0, 2.0, 5.0, 6.0],
+                                  [3.0, 4.0, 7.0, 8.0]])
+                expect(m1 ||| m2) == res
+            }
+            it("vertical matrix prepend") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                 [7.0, 8.0]])
+                let res = Matrix([[5.0, 6.0, 1.0, 2.0],
+                                  [7.0, 8.0, 3.0, 4.0]])
+                expect(m2 ||| m1) == res
+            }
+            it("vertical matrix insert") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0]])
+                let m2 = Matrix([[5.0, 6.0],
+                                 [7.0, 8.0]])
+                let res = Matrix([[1.0, 5.0, 6.0, 2.0],
+                                  [3.0, 7.0, 8.0, 4.0]])
+                expect(insert(m1, cols: m2, at: 1)) == res
             }
         }
     }

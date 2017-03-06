@@ -22,7 +22,7 @@ public func ones(_ rows: Int, _ cols: Int) -> Matrix {
 
 public func rand(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
-    return Matrix((0..<rows).map{ _ in rand(cols) })
+    return Matrix(rows, cols, rand(rows * cols))
 }
 
 public func eye(_ rows: Int, _ cols: Int) -> Matrix {
@@ -40,18 +40,14 @@ public func diag(_ v: Matrix) -> Matrix {
     precondition(v.cols == 1, "Input must be a vector")
     let count = v.rows
     var m: Matrix = zeros(count, count)
-    for i in 0..<count {
-        m[i, i] = v[i, 0]
-    }
+    (0..<count).map { m[$0, $0] = v[$0, 0] }
     return m
 }
 
 public func diag(_ v: Vector) -> Matrix {
     let count = v.count
     var m: Matrix = zeros(count, count)
-    for i in 0..<count {
-        m[i, i] = v[i]
-    }
+    (0..<count).map { m[$0, $0] = v[$0] }
     return m
 }
 
@@ -107,7 +103,11 @@ public class Matrix {
         _rows = data.count
         _cols = data[0].count
     }
-    
+}
+
+// MARK: - Gathering
+
+extension Matrix {
     public subscript(_ row: Int, _ col: Int ) -> Double {
         get {
             precondition(indexIsValidForRow(row, col), "Invalid index")
@@ -153,7 +153,7 @@ public class Matrix {
         get {
             precondition(col < cols, "Invalid index")
             var result = Vector(repeating: 0.0, count: rows)
-            for i in 0..<rows {
+            (0..<rows).map { i -> () in
                 let index = i * cols + col
                 result[i] = flat[index]
             }
@@ -163,7 +163,7 @@ public class Matrix {
         set {
             precondition(col < cols, "Invalid index")
             precondition(newValue.count == rows, "Input dimensions must agree")
-            for i in 0..<rows {
+            (0..<rows).map { i -> () in
                 let index = i * cols + col
                 flat[index] = newValue[i]
             }
@@ -173,6 +173,192 @@ public class Matrix {
     internal func indexIsValidForRow(_ row: Int, _ col: Int) -> Bool {
         return row >= 0 && row < rows && col >= 0 && col < cols
     }
+}
+
+// MARK: - Matrix manipulation
+
+public func insert(_ m: Matrix, row row: Vector, at index: Int) -> Matrix {
+    return insert(m, rows: Matrix([row]), at: index)
+}
+
+public func insert(_ m: Matrix, rows rows: Matrix, at index: Int) -> Matrix {
+    precondition(rows.cols == m.cols, "Input dimensions must agree")
+    precondition(index <= m.rows, "Index out of bounds")
+    
+    let res = zeros(m.rows + rows.rows, m.cols)
+    
+    if (index > 0) {
+        vDSP_mmovD(m.flat, &res.flat, vDSP_Length(m.cols), vDSP_Length(index), vDSP_Length(m.cols), vDSP_Length(res.cols))
+    }
+    
+    vDSP_mmovD(rows.flat, &res.flat[index * res.cols], vDSP_Length(m.cols), vDSP_Length(rows.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
+    
+    if (index < m.rows) {
+        m.flat.withUnsafeBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + index * m.cols
+            vDSP_mmovD(p, &res.flat[(index + rows.rows) * res.cols], vDSP_Length(m.cols), vDSP_Length(m.rows - index), vDSP_Length(m.cols), vDSP_Length(res.cols))
+        }
+    }
+    
+    return res
+}
+
+public func append(_ m: Matrix, row row: Matrix) -> Matrix {
+    precondition(row.cols == m.cols && row.rows == 1, "Input dimensions must agree")
+    return insert(m, row: row.flat, at: m.rows)
+}
+
+public func append(_ m: Matrix, row row: Vector) -> Matrix {
+    let r = Matrix([row])
+    return append(m, row: r)
+}
+
+public func append(_ m: Matrix, row row: Double) -> Matrix {
+    let r = Vector(repeating: row, count: m.cols)
+    return append(m, row: r)
+}
+
+public func append(_ m: Matrix, rows rows: Matrix) -> Matrix {
+    return insert(m, rows: rows, at: m.rows)
+}
+
+public func append(_ m: Matrix, rows rows: [Vector]) -> Matrix {
+    return append(m, rows: Matrix(rows))
+}
+
+public func === (_ m: Matrix, _ row: Double) -> Matrix {
+    return append(m, row: row)
+}
+
+public func === (_ m: Matrix, _ row: Vector) -> Matrix {
+    return append(m, row: row)
+}
+
+public func prepend(_ m: Matrix, row row: Matrix) -> Matrix {
+    precondition(row.cols == m.cols && row.rows == 1, "Input dimensions must agree")
+    return insert(m, row: row.flat, at: 0)
+}
+
+public func prepend(_ m: Matrix, row row: Vector) -> Matrix {
+    let r = Matrix([row])
+    return prepend(m, row: r)
+}
+
+public func prepend(_ m: Matrix, row row: Double) -> Matrix {
+    let r = Vector(repeating: row, count: m.cols)
+    return prepend(m, row: r)
+}
+
+public func prepend(_ m: Matrix, rows rows: Matrix) -> Matrix {
+    return insert(m, rows: rows, at: 0)
+}
+
+public func prepend(_ m: Matrix, rows rows: [Vector]) -> Matrix {
+    return prepend(m, rows: Matrix(rows))
+}
+
+public func === (_ row: Double, _ m: Matrix) -> Matrix {
+    return prepend(m, row: row)
+}
+
+public func === (_ row: Vector, _ m: Matrix) -> Matrix {
+    return prepend(m, row: row)
+}
+
+public func === (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
+    return append(lhs, rows: rhs)
+}
+
+public func insert(_ m: Matrix, col col: Vector, at index: Int) -> Matrix {
+    return insert(m, cols: Matrix(col), at: index)
+}
+
+public func insert(_ m: Matrix, cols cols: Matrix, at index: Int) -> Matrix {
+    precondition(cols.rows == m.rows, "Input dimensions must agree")
+    precondition(index <= m.cols && index >= 0, "Index out of bounds")
+    
+    let res = zeros(m.rows, m.cols + cols.cols)
+    
+    if (index > 0) {
+        vDSP_mmovD(m.flat, &res.flat, vDSP_Length(index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
+    }
+    
+    vDSP_mmovD(cols.flat, &res.flat[index], vDSP_Length(cols.cols), vDSP_Length(m.rows), vDSP_Length(cols.cols), vDSP_Length(res.cols))
+    
+    if (index < m.cols) {
+        m.flat.withUnsafeBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + index
+            vDSP_mmovD(p, &res.flat[index + cols.cols], vDSP_Length(m.cols - index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
+        }
+    }
+    
+    return res
+}
+
+public func append(_ m: Matrix, col col: Matrix) -> Matrix {
+    precondition(col.rows == m.rows && col.cols == 1, "Input dimensions must agree")
+    return insert(m, col: col.flat, at: m.cols)
+}
+
+public func append(_ m: Matrix, col col: Vector) -> Matrix {
+    let c = Matrix(col.count, 1, col)
+    return append(m, col: c)
+}
+
+public func append(_ m: Matrix, col col: Double) -> Matrix {
+    let c = Vector(repeating: col, count: m.rows)
+    return append(m, col: c)
+}
+
+public func append(_ m: Matrix, cols cols: Matrix) -> Matrix {
+    return insert(m, cols: cols, at: m.cols)
+}
+
+public func append(_ m: Matrix, cols cols: [Vector]) -> Matrix {
+    return append(m, cols: Matrix(cols))
+}
+
+public func ||| (_ m: Matrix, _ col: Double) -> Matrix {
+    return append(m, col: col)
+}
+
+public func ||| (_ m: Matrix, _ col: Vector) -> Matrix {
+    return append(m, col: col)
+}
+
+public func prepend(_ m: Matrix, col col: Matrix) -> Matrix {
+    precondition(col.rows == m.rows && col.cols == 1, "Input dimensions must agree")
+    return insert(m, col: col.flat, at: 0)
+}
+
+public func prepend(_ m: Matrix, col col: Vector) -> Matrix {
+    let c = Matrix(col)
+    return prepend(m, col: c)
+}
+
+public func prepend(_ m: Matrix, col col: Double) -> Matrix {
+    let c = Vector(repeating: col, count: m.rows)
+    return prepend(m, col: c)
+}
+
+public func prepend(_ m: Matrix, cols cols: Matrix) -> Matrix {
+    return insert(m, cols: cols, at: 0)
+}
+
+public func prepend(_ m: Matrix, cols cols: [Vector]) -> Matrix {
+    return prepend(m, cols: transpose(Matrix(cols)))
+}
+
+public func ||| (_ col: Double, _ m: Matrix) -> Matrix {
+    return prepend(m, col: col)
+}
+
+public func ||| (_ col: Vector, _ m: Matrix) -> Matrix {
+    return prepend(m, col: col)
+}
+
+public func ||| (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
+    return append(lhs, cols: rhs)
 }
 
 // MARK: - Sequence
