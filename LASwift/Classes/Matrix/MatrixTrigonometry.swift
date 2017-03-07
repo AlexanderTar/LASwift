@@ -1,4 +1,4 @@
-// Operators.swift
+// MatrixTrigonometry.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 //
@@ -31,11 +31,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-infix operator .* : MultiplicationPrecedence
-infix operator ./ : MultiplicationPrecedence
-infix operator ./. : MultiplicationPrecedence
-infix operator .^ : MultiplicationPrecedence
+// MARK: - Trigonometric functions on matrix
 
-postfix operator ′ 
+public func sin(_ A: Matrix) -> Matrix {
+    return matrixFunction(sin, A)
+}
 
-infix operator ||| : DefaultPrecedence
+public func cos(_ A: Matrix) -> Matrix {
+    return matrixFunction(cos, A)
+}
+
+public func tan(_ A: Matrix) -> Matrix {
+    return matrixFunction(tan, A)
+}

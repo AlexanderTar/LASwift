@@ -1,4 +1,4 @@
-// Operators.swift
+// VectorStatistics.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 //
@@ -31,11 +31,34 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-infix operator .* : MultiplicationPrecedence
-infix operator ./ : MultiplicationPrecedence
-infix operator ./. : MultiplicationPrecedence
-infix operator .^ : MultiplicationPrecedence
+import Accelerate
 
-postfix operator ′ 
+// MARK: - Statistical operations on vector
 
-infix operator ||| : DefaultPrecedence
+public func max(_ a: Vector) -> Double {
+    return unaryOperation(vDSP_maxvD, a)
+}
+
+public func min(_ a: Vector) -> Double {
+    return unaryOperation(vDSP_minvD, a)
+}
+
+public func mean(_ a: Vector) -> Double {
+    return unaryOperation(vDSP_meanvD, a)
+}
+
+public func std(_ a: Vector) -> Double {
+    var m: Double = 0.0
+    var s: Double = 0.0
+    var c = Vector(repeating: 0.0, count: a.count)
+    vDSP_normalizeD(a, 1, &c, 1, &m, &s, vDSP_Length(a.count))
+    return s
+}
+
+public func norm(_ a: Vector) -> Vector {
+    var m: Double = 0.0
+    var s: Double = 0.0
+    var c = Vector(repeating: 0.0, count: a.count)
+    vDSP_normalizeD(a, 1, &c, 1, &m, &s, vDSP_Length(a.count))
+    return c
+}

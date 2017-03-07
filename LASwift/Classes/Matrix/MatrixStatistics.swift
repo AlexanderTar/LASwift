@@ -1,4 +1,4 @@
-// Operators.swift
+// MatrixStatistics.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 //
@@ -31,11 +31,28 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-infix operator .* : MultiplicationPrecedence
-infix operator ./ : MultiplicationPrecedence
-infix operator ./. : MultiplicationPrecedence
-infix operator .^ : MultiplicationPrecedence
+// MARK: - Statistic functions on matrix
 
-postfix operator ′ 
+public func max(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(max, A)
+}
 
-infix operator ||| : DefaultPrecedence
+public func min(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(min, A)
+}
+
+public func mean(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(mean, A)
+}
+
+public func std(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(std, A)
+}
+
+public func norm(_ A: Matrix) -> Matrix {
+    var B = zeros(A.rows, A.cols)
+    for c in (0..<A.cols) {
+        B[col:c] = norm(A[col:c])
+    }
+    return B
+}

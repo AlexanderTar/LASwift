@@ -1,4 +1,4 @@
-// Operators.swift
+// VectorTrigonometry.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 //
@@ -31,11 +31,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-infix operator .* : MultiplicationPrecedence
-infix operator ./ : MultiplicationPrecedence
-infix operator ./. : MultiplicationPrecedence
-infix operator .^ : MultiplicationPrecedence
+import Accelerate
 
-postfix operator ′ 
+// MARK: - Trigonometric operations on vector
 
-infix operator ||| : DefaultPrecedence
+public func sin(_ a: Vector) -> Vector {
+    return unaryFunction(vvsin, a)
+}
+
+public func cos(_ a: Vector) -> Vector {
+    return unaryFunction(vvcos, a)
+}
+
+public func tan(_ a: Vector) -> Vector {
+    return unaryFunction(vvtan, a)
+}

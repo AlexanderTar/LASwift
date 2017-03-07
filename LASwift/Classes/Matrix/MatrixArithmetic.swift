@@ -1,15 +1,40 @@
+// MatrixArithmetic.swift
 //
-//  Arithmetic.swift
-//  Pods
+// Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 //
-//  Created by Alexander Taraymovich on 04/03/2017.
+// All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
 //
+// * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//
+// * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following
+// disclaimer in the documentation and/or other materials provided
+// with the distribution.
+//
+// * Neither the name of Alexander Taraymovich nor the names of other
+// contributors may be used to endorse or promote products derived
+// from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // MARK: - Matrix-Matrix arithmetics
 
 public func plus(_ A: Matrix, _ B: Matrix) -> Matrix {
-    return matrixOperation(plus, A, B)
+    return matrixMatrixOperation(plus, A, B)
 }
 
 public func + (_ A: Matrix, _ B: Matrix) -> Matrix {
@@ -17,7 +42,7 @@ public func + (_ A: Matrix, _ B: Matrix) -> Matrix {
 }
 
 public func minus(_ A: Matrix, _ B: Matrix) -> Matrix {
-    return matrixOperation(minus, A, B)
+    return matrixMatrixOperation(minus, A, B)
 }
 
 public func - (_ A: Matrix, _ B: Matrix) -> Matrix {
@@ -25,7 +50,7 @@ public func - (_ A: Matrix, _ B: Matrix) -> Matrix {
 }
 
 public func times(_ A: Matrix, _ B: Matrix) -> Matrix {
-    return matrixOperation(times, A, B)
+    return matrixMatrixOperation(times, A, B)
 }
 
 public func .* (_ A: Matrix, _ B: Matrix) -> Matrix {
@@ -33,7 +58,7 @@ public func .* (_ A: Matrix, _ B: Matrix) -> Matrix {
 }
 
 public func rdivide(_ A: Matrix, _ B: Matrix) -> Matrix {
-    return matrixOperation(rdivide, A, B)
+    return matrixMatrixOperation(rdivide, A, B)
 }
 
 public func ./ (_ A: Matrix, _ B: Matrix) -> Matrix {
@@ -41,7 +66,7 @@ public func ./ (_ A: Matrix, _ B: Matrix) -> Matrix {
 }
 
 public func ldivide(_ A: Matrix, _ B: Matrix) -> Matrix {
-    return matrixOperation(ldivide, A, B)
+    return matrixMatrixOperation(ldivide, A, B)
 }
 
 public func ./. (_ A: Matrix, _ B: Matrix) -> Matrix {
@@ -51,7 +76,7 @@ public func ./. (_ A: Matrix, _ B: Matrix) -> Matrix {
 // MARK: - Matrix-Scalar arithmetics
 
 public func plus(_ A: Matrix, _ b: Double) -> Matrix {
-    return scalarOperation(plus, A, b)
+    return matrixScalarOperation(plus, A, b)
 }
 
 public func + (_ A: Matrix, _ b: Double) -> Matrix {
@@ -59,7 +84,7 @@ public func + (_ A: Matrix, _ b: Double) -> Matrix {
 }
 
 public func plus(_ a: Double, _ B: Matrix) -> Matrix {
-    return invScalarOperation(plus, a, B)
+    return invMatrixScalarOperation(plus, a, B)
 }
 
 public func + (_ a: Double, _ B: Matrix) -> Matrix {
@@ -67,7 +92,7 @@ public func + (_ a: Double, _ B: Matrix) -> Matrix {
 }
 
 public func minus(_ A: Matrix, _ b: Double) -> Matrix {
-    return scalarOperation(minus, A, b)
+    return matrixScalarOperation(minus, A, b)
 }
 
 public func - (_ A: Matrix, _ b: Double) -> Matrix {
@@ -75,7 +100,7 @@ public func - (_ A: Matrix, _ b: Double) -> Matrix {
 }
 
 public func minus(_ a: Double, _ B: Matrix) -> Matrix {
-    return invScalarOperation(minus, a, B)
+    return invMatrixScalarOperation(minus, a, B)
 }
 
 public func - (_ a: Double, _ B: Matrix) -> Matrix {
@@ -83,7 +108,7 @@ public func - (_ a: Double, _ B: Matrix) -> Matrix {
 }
 
 public func times(_ A: Matrix, _ b: Double) -> Matrix {
-    return scalarOperation(times, A, b)
+    return matrixScalarOperation(times, A, b)
 }
 
 public func .* (_ A: Matrix, _ b: Double) -> Matrix {
@@ -91,7 +116,7 @@ public func .* (_ A: Matrix, _ b: Double) -> Matrix {
 }
 
 public func times(_ a: Double, _ B: Matrix) -> Matrix {
-    return invScalarOperation(times, a, B)
+    return invMatrixScalarOperation(times, a, B)
 }
 
 public func .* (_ a: Double, _ B: Matrix) -> Matrix {
@@ -99,7 +124,7 @@ public func .* (_ a: Double, _ B: Matrix) -> Matrix {
 }
 
 public func rdivide(_ A: Matrix, _ b: Double) -> Matrix {
-    return scalarOperation(rdivide, A, b)
+    return matrixScalarOperation(rdivide, A, b)
 }
 
 public func ./ (_ A: Matrix, _ b: Double) -> Matrix {
@@ -107,7 +132,7 @@ public func ./ (_ A: Matrix, _ b: Double) -> Matrix {
 }
 
 public func rdivide(_ a: Double, _ B: Matrix) -> Matrix {
-    return invScalarOperation(rdivide, a, B)
+    return invMatrixScalarOperation(rdivide, a, B)
 }
 
 public func ./ (_ a: Double, _ B: Matrix) -> Matrix {
@@ -115,7 +140,7 @@ public func ./ (_ a: Double, _ B: Matrix) -> Matrix {
 }
 
 public func ldivide(_ A: Matrix, _ b: Double) -> Matrix {
-    return scalarOperation(ldivide, A, b)
+    return matrixScalarOperation(ldivide, A, b)
 }
 
 public func ./. (_ A: Matrix, _ b: Double) -> Matrix {
@@ -123,7 +148,7 @@ public func ./. (_ A: Matrix, _ b: Double) -> Matrix {
 }
 
 public func ldivide(_ a: Double, _ B: Matrix) -> Matrix {
-    return invScalarOperation(ldivide, a, B)
+    return invMatrixScalarOperation(ldivide, a, B)
 }
 
 public func ./. (_ a: Double, _ B: Matrix) -> Matrix {
