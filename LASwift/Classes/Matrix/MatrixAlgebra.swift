@@ -1,35 +1,10 @@
 // MatrixAlgebra.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
-//
 // All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-//
-// * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//
-// * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following
-// disclaimer in the documentation and/or other materials provided
-// with the distribution.
-//
-// * Neither the name of Alexander Taraymovich nor the names of other
-// contributors may be used to endorse or promote products derived
-// from this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// This software may be modified and distributed under the terms
+// of the BSD license. See the LICENSE file for details.
 
 import Accelerate
 
@@ -88,43 +63,106 @@ public func inv(_ A: Matrix) -> Matrix {
     
     var N = __CLPK_integer(A.rows)
     var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
-    var work = Vector(repeating: 0.0, count: Int(N))
-    var lWork = N
+    
+    var wkOpt = __CLPK_doublereal(0.0)
+    var lWork = __CLPK_integer(-1)
+    
     var error: __CLPK_integer = 0
     
     dgetrf_(&N, &N, &(B.flat), &N, &pivot, &error)
     
-    assert(error == 0, "Matrix is non invertible")
+    precondition(error == 0, "Matrix is non invertible")
+    
+    /* Query and allocate the optimal workspace */
+    
+    dgetri_(&N, &(B.flat), &N, &pivot, &wkOpt, &lWork, &error)
+    
+    lWork = __CLPK_integer(wkOpt)
+    var work = Vector(repeating: 0.0, count: Int(lWork))
+    
+    /* Compute inversed matrix */
     
     dgetri_(&N, &(B.flat), &N, &pivot, &work, &lWork, &error)
     
-    assert(error == 0, "Matrix is non invertible")
+    precondition(error == 0, "Matrix is non invertible")
     
     return B
 }
 
-public func eig(_ A: Matrix) -> (Matrix, Matrix) {
+public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     
     var V = Matrix(A)
     
     var N = __CLPK_integer(A.rows)
+    
     var LDA = N
-    var lWork = __CLPK_integer(1 + 6 * N + 2 * N * N)
-    var work = Vector(repeating: 0.0, count: Int(lWork))
-    var liWork = __CLPK_integer(3 + 5 * N)
-    var iWork = [__CLPK_integer](repeating: 0, count: Int(liWork))
+    
+    var wkOpt = __CLPK_doublereal(0.0)
+    var lWork = __CLPK_integer(-1)
+    
+    var liWkOpt = __CLPK_integer(0)
+    var liWork = __CLPK_integer(-1)
+    
     var jobz: Int8 = 86 // 'V'
     var uplo: Int8 = 85 // 'U'
-    var error: __CLPK_integer = 0
+    
+    var error = __CLPK_integer(0)
     
     var eig = Vector(repeating: 0.0, count: Int(N))
     
+    /* Query and allocate the optimal workspace */
+    
+    dsyevd_(&jobz, &uplo, &N, &V.flat, &LDA, &eig, &wkOpt, &lWork, &liWkOpt, &liWork, &error)
+    
+    lWork = __CLPK_integer(wkOpt)
+    var work = Vector(repeating: 0.0, count: Int(lWork))
+    
+    liWork = liWkOpt
+    var iWork = [__CLPK_integer](repeating: 0, count: Int(liWork))
+    
+    /* Compute eigen vectors */
+    
     dsyevd_(&jobz, &uplo, &N, &V.flat, &LDA, &eig, &work, &lWork, &iWork, &liWork, &error)
     
-    assert(error == 0, "Failed to find eigen vectors")
+    precondition(error == 0, "Failed to compute eigen vectors")
     
-    let D: Matrix = diag(Matrix(eig))
+    return (transpose(V), diag(eig))
+}
+
+public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
+    /* LAPACK is using column-major order */
+    var _A = transpose(A)
     
-    return (transpose(V), D)
+    var jobz: Int8 = 65 // 'A'
+    
+    var M = __CLPK_integer(A.rows);
+    var N = __CLPK_integer(A.cols);
+    
+    var LDA = M;
+    var LDU = M;
+    var LDVT = N;
+    
+    var wkOpt = __CLPK_doublereal(0.0)
+    var lWork = __CLPK_integer(-1)
+    var iWork = [__CLPK_integer](repeating: 0, count: Int(8 * min(M, N)))
+    
+    var error = __CLPK_integer(0)
+    
+    var s = Vector(repeating: 0.0, count: Int(min(M, N)))
+    var U = Matrix(Int(LDU), Int(M))
+    var VT = Matrix(Int(LDVT), Int(N))
+    
+    /* Query and allocate the optimal workspace */
+    dgesdd_(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &wkOpt, &lWork, &iWork, &error)
+    
+    lWork = __CLPK_integer(wkOpt)
+    var work = Vector(repeating: 0.0, count: Int(lWork))
+    
+    /* Compute SVD */
+    dgesdd_(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &work, &lWork, &iWork, &error)
+    
+    precondition(error == 0, "Failed to compute SVD")
+    
+    return (transpose(U), diag(Int(M), Int(N), s), VT)
 }

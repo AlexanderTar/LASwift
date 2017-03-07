@@ -366,24 +366,18 @@ class MatrixSpec: QuickSpec {
                                  [0.3333, 0.6667, 1.0000, 0.7500],
                                  [0.2500, 0.5000, 0.7500, 1.0000]])
                 let e = eig(m1)
-                expect(m1 * e.0) == e.0 * e.1
+                expect(m1 * e.V) == e.V * e.D
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
                 expect { () -> Void in eig(m2) }.to(throwAssertion())
             }
-            
-            let m1 = Matrix([[1.0, 2.0],
-                             [3.0, 4.0]])
-            let m2 = Matrix([[5.0, 6.0],
-                             [7.0, 8.0]])
-//            let m1 = rand(100, 100)
-//            let m2 = rand(100, 100)
-//            print(m1)
-//            print()
-//            print(m2)
-//            print()
-//            let v = [5.0, 6.0]
-            let m3 = m2 === m1
-            print(m3)
+            it("svd") {
+                let m1 = Matrix([[1.0, 2.0],
+                                 [3.0, 4.0],
+                                 [5.0, 6.0],
+                                 [7.0, 8.0]])
+                let usv = svd(m1)
+                expect(usv.U * usv.S * transpose(usv.V)) == m1
+            }
         }
         
         describe("Matrix concatenation") {
