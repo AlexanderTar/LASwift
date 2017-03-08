@@ -376,7 +376,7 @@ class MatrixSpec: QuickSpec {
                                  [5.0, 6.0],
                                  [7.0, 8.0]])
                 let usv = svd(m1)
-                expect(usv.U * usv.S * transpose(usv.V)) == m1
+                expect(usv.U * usv.S * usv.V′) == m1
             }
         }
         
@@ -508,6 +508,26 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[1.0, 5.0, 6.0, 2.0],
                                   [3.0, 7.0, 8.0, 4.0]])
                 expect(insert(m1, cols: m2, at: 1)) == res
+            }
+        }
+        
+        describe("matrix slicing") {
+            it("basic tests") {
+                let m1 = Matrix([[0,  1,  2,  3,  4],
+                                 [5,  6,  7,  8,  9],
+                                 [10, 11, 12, 13, 14],
+                                 [15, 16, 17, 18, 19]])
+                let res1 = Matrix([[0,  1,  2],
+                                   [5,  6,  7],
+                                   [10, 11, 12]])
+                let res2 = Matrix([[10, 11, 12, 13, 14],
+                                   [5,  6,  7,  8,  9 ]])
+                let res3 = Matrix([[9, 7, 5],
+                                   [4, 2, 0]])
+                expect(m1 ?? (.All, .All)) == m1
+                expect(m1 ?? (.Take(3), .DropLast(2))) == res1
+                expect(m1 ?? (.Pos([2, 1]), .All)) == res2
+                expect(m1 ?? (.PosCyc([-7, 80]), .Range(4, -2, 0))) == res3
             }
         }
     }

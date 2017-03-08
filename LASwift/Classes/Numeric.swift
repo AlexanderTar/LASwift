@@ -67,3 +67,16 @@ func !=~ (left: [Double], right: [Double]) -> Bool
     return left.count != right.count ||
         zip(left, right).filter { (l, r) in l !=~ r }.count != 0
 }
+
+// MARK: Modulo operation
+
+infix operator %% : MultiplicationPrecedence
+
+func mod(_ a: Int, _ n: Int) -> Int {
+    let r = a % abs(n)
+    return r >= 0 ? r : r + abs(n)
+}
+
+func %% (_ a: Int, _ n: Int) -> Int {
+    return mod(a, n)
+}

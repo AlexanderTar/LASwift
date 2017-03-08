@@ -374,6 +374,95 @@ public func ||| (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
     return append(lhs, cols: rhs)
 }
 
+// MARK: - Slicing
+
+public enum Extractor {
+    case All
+    case Range(Int, Int, Int)
+    case Pos([Int])
+    case PosCyc([Int])
+    case Take(Int)
+    case TakeLast(Int)
+    case Drop(Int)
+    case DropLast(Int)
+}
+
+public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
+    switch e {
+        
+    case (.All, .All):
+        return m
+        
+    case (.Range(let f, _, let t), _) where f < 0 || t >= m.rows,
+         (_, .Range(let f, _, let t)) where f < 0 || t >= m.cols:
+        preconditionFailure("Range out of bounds")
+        
+    case (.Take(let n), _) where n < 0 || n >= m.rows,
+         (_, .Take(let n)) where n < 0 || n >= m.cols,
+         (.Drop(let n), _) where n < 0 || n >= m.rows,
+         (_, .Drop(let n)) where n < 0 || n >= m.cols:
+        preconditionFailure("Range out of bounds")
+        
+    case (.All, _):
+        return slice(m, (.Pos([Int](0..<m.rows)), e.ec))
+    case (_, .All):
+        return slice(m, (e.er, .Pos([Int](0..<m.cols))))
+        
+    case (.Range(let f, let b, let t), _):
+        return slice(m, (.PosCyc([Int](stride(from: f, through: t, by: b))), e.ec))
+    case (_, .Range(let f, let b, let t)):
+        return slice(m, (e.er, .PosCyc([Int](stride(from: f, through: t, by: b)))))
+        
+    case (.PosCyc(let p), _):
+        return slice(m, (.Pos(p.map { $0 %% m.rows }), e.ec))
+    case (_, .PosCyc(let p)):
+        return slice(m, (e.er, .Pos(p.map { $0 %% m.cols })))
+        
+    case (.TakeLast(let n), _):
+        return slice(m, (.Drop(m.rows - n), e.ec))
+    case (_, .TakeLast(let n)):
+        return slice(m, (e.er, .Drop(m.cols - n)))
+        
+    case (.DropLast(let n), _):
+        return slice(m, (.Take(m.rows - n), e.ec))
+    case (_, .DropLast(let n)):
+        return slice(m, (e.er, .Take(m.cols - n)))
+        
+    case (.Take(let n), _):
+        return slice(m, (.Pos([Int](0..<n)), e.ec))
+    case (_, .Take(let n)):
+        return slice(m, (e.er, .Pos([Int](0..<n))))
+        
+    case (.Drop(let n), _):
+        return slice(m, (.Pos([Int](m.rows-n..<m.rows)), e.ec))
+    case (_, .Drop(let n)):
+        return slice(m, (e.er, .Pos([Int](m.cols-n..<m.cols))))
+        
+    case (.Pos(let pr), .Pos(let pc)):
+        precondition(pr.count > 0 && pr.filter { $0 < 0 || $0 > m.rows }.count == 0, "Range out of bounds")
+        precondition(pc.count > 0 && pc.filter { $0 < 0 || $0 > m.cols }.count == 0, "Range out of bounds")
+        return slice(m, pr, pc)
+        
+    default:
+        preconditionFailure("Invalid range")
+    }
+}
+
+func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
+    var res = zeros(rr.count, cr.count)
+    
+    zip(rr, (0..<rr.count)).map { (i: Int, j: Int) -> () in
+        let r = m[row: i]
+        res[row: j] = cr.map { r[$0] }
+    }
+    
+    return res
+}
+
+public func ?? (_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
+    return slice(m, e)
+}
+
 // MARK: - Sequence
 
 extension Matrix: Sequence {
