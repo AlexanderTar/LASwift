@@ -12,54 +12,45 @@ import Accelerate
 
 typealias Scalar = Double
 
-typealias VectorVectorOperation<T> = ((_: UnsafePointer<T>, _: vDSP_Stride, _: UnsafePointer<T>, _: vDSP_Stride, _: UnsafeMutablePointer<T>, _: vDSP_Stride, _: vDSP_Length) -> ())
-where T: FloatingPoint, T: ExpressibleByFloatLiteral
+typealias VectorVectorOperation = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: vDSP_Stride, _: vDSP_Length) -> ())
 
-func vectorOperation<T>(_ op: VectorVectorOperation<T>, _ a: [T], _ b: [T]) -> [T]
-    where T: FloatingPoint, T: ExpressibleByFloatLiteral {
-        precondition(a.count == b.count, "Vectors must have equal lenghts")
-        var c = [T](repeating: 0.0, count: a.count)
-        op(a, 1, b, 1, &c, 1, vDSP_Length(a.count))
-        return c
+func vectorVectorOperation(_ op: VectorVectorOperation, _ a: Vector, _ b: Vector) -> Vector {
+    precondition(a.count == b.count, "Vectors must have equal lenghts")
+    var c = Vector(repeating: 0.0, count: a.count)
+    op(a, 1, b, 1, &c, 1, vDSP_Length(a.count))
+    return c
 }
 
-typealias VectorScalarOperation<T> = ((_: UnsafePointer<T>, _: vDSP_Stride, _: UnsafePointer<T>, _: UnsafeMutablePointer<T>, _: vDSP_Stride, _: vDSP_Length) -> ())
-where T: FloatingPoint, T: ExpressibleByFloatLiteral
+typealias VectorScalarOperation = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafePointer<Double>, _: UnsafeMutablePointer<Double>, _: vDSP_Stride, _: vDSP_Length) -> ())
 
-func scalarOperation<T>(_ op: VectorScalarOperation<T>, _ a: [T], _ b: T) -> [T]
-    where T: FloatingPoint, T: ExpressibleByFloatLiteral {
-        var c = [T](repeating: 0.0, count: a.count)
-        var b = b
-        op(a, 1, &b, &c, 1, vDSP_Length(a.count))
-        return c
+func vectorScalarOperation(_ op: VectorScalarOperation, _ a: Vector, _ b: Double) -> Vector {
+    var c = Vector(repeating: 0.0, count: a.count)
+    var _b = b
+    op(a, 1, &_b, &c, 1, vDSP_Length(a.count))
+    return c
 }
 
-typealias UnaryVectorOperation<T> = ((_: UnsafePointer<T>, _: vDSP_Stride, _: UnsafeMutablePointer<T>, _: vDSP_Stride, _: vDSP_Length) -> ())
-where T: FloatingPoint, T: ExpressibleByFloatLiteral
+typealias UnaryVectorOperation = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: vDSP_Stride, _: vDSP_Length) -> ())
 
-func unaryOperation<T>(_ op: UnaryVectorOperation<T>, _ a: [T]) -> [T]
-    where T: FloatingPoint, T: ExpressibleByFloatLiteral {
-        var c = [T](repeating: 0.0, count: a.count)
-        op(a, 1, &c, 1, vDSP_Length(a.count))
-        return c
+func unaryVectorOperation(_ op: UnaryVectorOperation, _ a: Vector) -> Vector {
+    var c = Vector(repeating: 0.0, count: a.count)
+    op(a, 1, &c, 1, vDSP_Length(a.count))
+    return c
 }
 
-typealias UnaryVectorFunction<T> = ((_: UnsafeMutablePointer<T>, _: UnsafePointer<T>, _: UnsafePointer<Int32>) -> ())
-where T: FloatingPoint, T: ExpressibleByFloatLiteral
+typealias VectorFunction = ((_: UnsafeMutablePointer<Double>, _: UnsafePointer<Double>, _: UnsafePointer<Int32>) -> ())
 
-func unaryFunction<T>(_ op: UnaryVectorFunction<T>, _ a: [T]) -> [T]
-    where T: FloatingPoint, T: ExpressibleByFloatLiteral {
-        var c = [T](repeating: 0.0, count: a.count)
-        var l = Int32(a.count)
-        op(&c, a, &l)
-        return c
+func vectorFunction(_ op: VectorFunction, _ a: Vector) -> Vector {
+    var c = Vector(repeating: 0.0, count: a.count)
+    var l = Int32(a.count)
+    op(&c, a, &l)
+    return c
 }
 
-typealias UnaryScalarOperation<T> = ((_: UnsafePointer<T>, _: vDSP_Stride, _: UnsafeMutablePointer<T>, _: vDSP_Length) -> ())
-where T: FloatingPoint, T: ExpressibleByFloatLiteral
+typealias AggVectorFunction = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: vDSP_Length) -> ())
 
-func unaryOperation<T>(_ op: UnaryScalarOperation<T>, _ a: [T]) -> T {
-    var c: T = 0.0 as! T
+func aggVectorFunction(_ op: AggVectorFunction, _ a: Vector) -> Double {
+    var c = 0.0
     op(a, 1, &c, vDSP_Length(a.count))
     return c
 }

@@ -11,13 +11,13 @@ import Accelerate
 // MARK: - Trigonometric operations on vector
 
 public func sin(_ a: Vector) -> Vector {
-    return unaryFunction(vvsin, a)
+    return vectorFunction(vvsin, a)
 }
 
 public func cos(_ a: Vector) -> Vector {
-    return unaryFunction(vvcos, a)
+    return vectorFunction(vvcos, a)
 }
 
 public func tan(_ a: Vector) -> Vector {
-    return unaryFunction(vvtan, a)
+    return vectorFunction(vvtan, a)
 }

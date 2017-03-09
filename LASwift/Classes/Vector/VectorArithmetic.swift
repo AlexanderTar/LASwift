@@ -11,7 +11,7 @@ import Accelerate
 // MARK: - Arithmetic operations on two vectors
 
 public func plus(_ a: Vector, _ b: Vector) -> Vector {
-    return vectorOperation(vDSP_vaddD, a, b)
+    return vectorVectorOperation(vDSP_vaddD, a, b)
 }
 
 public func + (_ a: Vector, _ b: Vector) -> Vector {
@@ -19,7 +19,7 @@ public func + (_ a: Vector, _ b: Vector) -> Vector {
 }
 
 public func minus(_ a: Vector, _ b: Vector) -> Vector {
-    return vectorOperation(vDSP_vsubD, b, a)
+    return vectorVectorOperation(vDSP_vsubD, b, a)
 }
 
 public func - (_ a: Vector, _ b: Vector) -> Vector {
@@ -27,7 +27,7 @@ public func - (_ a: Vector, _ b: Vector) -> Vector {
 }
 
 public func times(_ a: Vector, _ b: Vector) -> Vector {
-    return vectorOperation(vDSP_vmulD, a, b)
+    return vectorVectorOperation(vDSP_vmulD, a, b)
 }
 
 public func .* (_ a: Vector, _ b: Vector) -> Vector {
@@ -35,7 +35,7 @@ public func .* (_ a: Vector, _ b: Vector) -> Vector {
 }
 
 public func rdivide(_ a: Vector, _ b: Vector) -> Vector {
-    return vectorOperation(vDSP_vdivD, b, a)
+    return vectorVectorOperation(vDSP_vdivD, b, a)
 }
 
 public func ./ (_ a: Vector, _ b: Vector) -> Vector {
@@ -43,7 +43,7 @@ public func ./ (_ a: Vector, _ b: Vector) -> Vector {
 }
 
 public func ldivide(_ a: Vector, _ b: Vector) -> Vector {
-    return vectorOperation(vDSP_vdivD, a, b)
+    return vectorVectorOperation(vDSP_vdivD, a, b)
 }
 
 public func ./. (_ a: Vector, _ b: Vector) -> Vector {
@@ -66,7 +66,7 @@ public func * (_ a: Vector, _ b: Vector) -> Double {
 // MARK: - Arithmetic operations on vector and scalar
 
 public func plus(_ a: Vector, _ b: Double) -> Vector {
-    return scalarOperation(vDSP_vsaddD, a, b)
+    return vectorScalarOperation(vDSP_vsaddD, a, b)
 }
 
 public func + (_ a: Vector, _ b: Double) -> Vector {
@@ -82,7 +82,7 @@ public func + (_ a: Double, _ b: Vector) -> Vector {
 }
 
 public func minus(_ a: Vector, _ b: Double) -> Vector {
-    return scalarOperation(vDSP_vsaddD, a, -b)
+    return vectorScalarOperation(vDSP_vsaddD, a, -b)
 }
 
 public func - (_ a: Vector, _ b: Double) -> Vector {
@@ -98,7 +98,7 @@ public func - (_ a: Double, _ b: Vector) -> Vector {
 }
 
 public func times(_ a: Vector, _ b: Double) -> Vector {
-    return scalarOperation(vDSP_vsmulD, a, b)
+    return vectorScalarOperation(vDSP_vsmulD, a, b)
 }
 
 public func .* (_ a: Vector, _ b: Double) -> Vector {
@@ -114,7 +114,7 @@ public func .* (_ a: Double, _ b: Vector) -> Vector {
 }
 
 public func rdivide(_ a: Vector, _ b: Double) -> Vector {
-    return scalarOperation(vDSP_vsdivD, a, b)
+    return vectorScalarOperation(vDSP_vsdivD, a, b)
 }
 
 public func ./ (_ a: Vector, _ b: Double) -> Vector {
@@ -149,11 +149,11 @@ public func ./. (_ a: Double, _ b: Vector) -> Vector {
 // MARK: - Sign operations on vector
 
 public func abs(_ a: Vector) -> Vector {
-    return unaryOperation(vDSP_vabsD, a)
+    return unaryVectorOperation(vDSP_vabsD, a)
 }
 
 public func uminus(_ a: Vector) -> Vector {
-    return unaryOperation(vDSP_vnegD, a)
+    return unaryVectorOperation(vDSP_vnegD, a)
 }
 
 public prefix func - (_ a: Vector) -> Vector {

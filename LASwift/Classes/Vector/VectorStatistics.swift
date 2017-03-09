@@ -11,15 +11,15 @@ import Accelerate
 // MARK: - Statistical operations on vector
 
 public func max(_ a: Vector) -> Double {
-    return unaryOperation(vDSP_maxvD, a)
+    return aggVectorFunction(vDSP_maxvD, a)
 }
 
 public func min(_ a: Vector) -> Double {
-    return unaryOperation(vDSP_minvD, a)
+    return aggVectorFunction(vDSP_minvD, a)
 }
 
 public func mean(_ a: Vector) -> Double {
-    return unaryOperation(vDSP_meanvD, a)
+    return aggVectorFunction(vDSP_meanvD, a)
 }
 
 public func std(_ a: Vector) -> Double {

@@ -23,25 +23,25 @@ public func .^ (_ a: Vector, _ p: Double) -> Vector {
 }
 
 public func square(_ a: Vector) -> Vector {
-    return unaryOperation(vDSP_vsqD, a)
+    return unaryVectorOperation(vDSP_vsqD, a)
 }
 
 public func sqrt(_ a: Vector) -> Vector {
-    return unaryFunction(vvsqrt, a)
+    return vectorFunction(vvsqrt, a)
 }
 
 public func exp(_ a: Vector) -> Vector {
-    return unaryFunction(vvexp, a)
+    return vectorFunction(vvexp, a)
 }
 
 public func log(_ a: Vector) -> Vector {
-    return unaryFunction(vvlog, a)
+    return vectorFunction(vvlog, a)
 }
 
 public func log2(_ a: Vector) -> Vector {
-    return unaryFunction(vvlog2, a)
+    return vectorFunction(vvlog2, a)
 }
 
 public func log10(_ a: Vector) -> Vector {
-    return unaryFunction(vvlog10, a)
+    return vectorFunction(vvlog10, a)
 }
