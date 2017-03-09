@@ -10,6 +10,15 @@ import Accelerate
 
 // MARK: - Linear algebra operations on matrices
 
+public func trace(_ A: Matrix) -> Vector {
+    precondition(A.rows == A.cols, "Matrix dimensions must agree")
+    return (0..<A.rows).map { A[$0, $0] }
+}
+
+public func norm(_ A: Matrix) -> Double {
+    return sumsq(trace(A))
+}
+
 public func transpose(_ A: Matrix) -> Matrix {
     var C: Matrix = zeros(A.cols, A.rows)
     vDSP_mtransD(A.flat, 1, &(C.flat), 1, vDSP_Length(A.cols), vDSP_Length(A.rows))

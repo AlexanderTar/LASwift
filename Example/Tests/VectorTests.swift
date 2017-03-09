@@ -233,12 +233,12 @@ class VectorSpec: QuickSpec {
                 let res = sqrt(2.0 / 3.0)
                 expect(std(vec)).to(beCloseTo(res))
             }
-            it("norm") {
+            it("normalize") {
                 let vec = [1.0, 2.0, 3.0]
                 let m = mean(vec)
                 let s = std(vec)
                 let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
-                expect(norm(vec)).to(beCloseTo(res))
+                expect(normalize(vec)).to(beCloseTo(res))
             }
         }
     }

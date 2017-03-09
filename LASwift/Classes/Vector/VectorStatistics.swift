@@ -30,10 +30,18 @@ public func std(_ a: Vector) -> Double {
     return s
 }
 
-public func norm(_ a: Vector) -> Vector {
+public func normalize(_ a: Vector) -> Vector {
     var m: Double = 0.0
     var s: Double = 0.0
     var c = Vector(repeating: 0.0, count: a.count)
     vDSP_normalizeD(a, 1, &c, 1, &m, &s, vDSP_Length(a.count))
     return c
+}
+
+public func sum(_ a: Vector) -> Double {
+    return aggVectorFunction(vDSP_sveD, a)
+}
+
+public func sumsq(_ a: Vector) -> Double {
+    return aggVectorFunction(vDSP_svesqD, a)
 }

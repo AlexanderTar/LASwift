@@ -308,16 +308,23 @@ class MatrixSpec: QuickSpec {
                 let res = [sqrt(2.0 / 2.0), sqrt(2.0 / 2.0)]
                 expect(std(m1)).to(beCloseTo(res))
             }
-            it("norm") {
+            it("normalize") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let m = mean(m1)
                 let s = std(m1)
                 let res = (m1 - m) ./ s
-                expect(norm(m1)) == res
+                expect(normalize(m1)) == res
             }
         }
         
         describe("Matrix linear algebra tests") {
+            it("trace") {
+                let m1 = Matrix([[1.0, 0.0, 2.0],
+                                 [-1.0, 5.0, 0.0],
+                                 [0.0, 3.0, -9.0]])
+                let res = [1.0, 5.0, -9.0]
+                expect(trace(m1)) == res
+            }
             it("transpose") {
                 let m1 = Matrix([[1.0, 4.0],
                                  [3.0, 2.0]])

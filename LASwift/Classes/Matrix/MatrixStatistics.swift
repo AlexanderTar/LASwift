@@ -24,10 +24,18 @@ public func std(_ A: Matrix) -> Vector {
     return aggMatrixFunction(std, A)
 }
 
-public func norm(_ A: Matrix) -> Matrix {
+public func normalize(_ A: Matrix) -> Matrix {
     var B = zeros(A.rows, A.cols)
     for c in (0..<A.cols) {
-        B[col:c] = norm(A[col:c])
+        B[col:c] = normalize(A[col:c])
     }
     return B
+}
+
+public func sum(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(sum, A)
+}
+
+public func sumsq(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(sumsq, A)
 }

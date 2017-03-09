@@ -451,9 +451,19 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
 func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
     var res = zeros(rr.count, cr.count)
     
-    zip(rr, (0..<rr.count)).map { (i: Int, j: Int) -> () in
-        let r = m[row: i]
-        res[row: j] = cr.map { r[$0] }
+    // vgathrD is using 1-based indices
+    let _cr = cr.map { vDSP_Length($0 + 1) }
+    
+    zip(rr, (0..<res.rows)).map { (i: Int, j: Int) -> () in
+        var row = zeros(res.cols)
+        m.flat.withUnsafeBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + i * m.cols
+            vDSP_vgathrD(p, _cr, 1, &row, 1, vDSP_Length(res.cols))
+        }
+        res.flat.withUnsafeMutableBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + j * res.cols
+            vDSP_mmovD(row, p, vDSP_Length(res.cols), vDSP_Length(1), vDSP_Length(res.cols), vDSP_Length(res.cols))
+        }
     }
     
     return res
@@ -461,6 +471,12 @@ func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
 
 public func ?? (_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
     return slice(m, e)
+}
+
+// MARK: - Map-reduce
+
+public func map(_ A: Matrix, _ f: ((Double) -> Double)) -> Matrix {
+    return Matrix(A.rows, A.cols, A.flat.map(f))
 }
 
 // MARK: - Sequence
