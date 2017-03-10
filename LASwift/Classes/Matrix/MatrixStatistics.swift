@@ -8,34 +8,58 @@
 
 // MARK: - Statistic functions on matrix
 
-public func max(_ A: Matrix) -> Vector {
+public func maxr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(max, A)
 }
 
-public func min(_ A: Matrix) -> Vector {
+public func maxc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(max, transpose(A))
+}
+
+public func minr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(min, A)
 }
 
-public func mean(_ A: Matrix) -> Vector {
+public func minc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(min, transpose(A))
+}
+
+public func meanr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(mean, A)
 }
 
-public func std(_ A: Matrix) -> Vector {
+public func meanc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(mean, transpose(A))
+}
+
+public func stdr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(std, A)
 }
 
-public func normalize(_ A: Matrix) -> Matrix {
-    var B = zeros(A.rows, A.cols)
-    for c in (0..<A.cols) {
-        B[col:c] = normalize(A[col:c])
-    }
-    return B
+public func stdc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(std, transpose(A))
 }
 
-public func sum(_ A: Matrix) -> Vector {
+public func normalizer(_ A: Matrix) -> Matrix {
+    return Matrix(A.map { normalize(Vector($0)) })
+}
+
+public func normalizec(_ A: Matrix) -> Matrix {
+    return Matrix(transpose(A).map { normalize(Vector($0)) })
+}
+
+public func sumr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(sum, A)
 }
 
-public func sumsq(_ A: Matrix) -> Vector {
+public func sumc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(sum, transpose(A))
+}
+
+public func sumsqr(_ A: Matrix) -> Vector {
     return aggMatrixFunction(sumsq, A)
+}
+
+public func sumsqc(_ A: Matrix) -> Vector {
+    return aggMatrixFunction(sumsq, transpose(A))
 }

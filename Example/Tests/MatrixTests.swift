@@ -291,29 +291,29 @@ class MatrixSpec: QuickSpec {
             it("max") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let res = [3.0, 4.0]
-                expect(max(m1)).to(beCloseTo(res))
+                expect(maxc(m1)).to(beCloseTo(res))
             }
             it("min") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let res = [1.0, 2.0]
-                expect(min(m1)).to(beCloseTo(res))
+                expect(minc(m1)).to(beCloseTo(res))
             }
             it("mean") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let res = [2.0, 3.0]
-                expect(mean(m1)).to(beCloseTo(res))
+                expect(meanc(m1)).to(beCloseTo(res))
             }
             it("std") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let res = [sqrt(2.0 / 2.0), sqrt(2.0 / 2.0)]
-                expect(std(m1)).to(beCloseTo(res))
+                expect(stdc(m1)).to(beCloseTo(res))
             }
             it("normalize") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let m = mean(m1)
-                let s = std(m1)
+                let m = meanc(m1)
+                let s = stdc(m1)
                 let res = (m1 - m) ./ s
-                expect(normalize(m1)) == res
+                expect(normalizec(m1)) == res
             }
         }
         

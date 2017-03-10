@@ -99,8 +99,5 @@ func matrixFunction(_ op: MatrixFunction, _ A: Matrix) -> Matrix {
 typealias AggMatrixFunction = ((_ A: Vector) -> Double)
 
 func aggMatrixFunction(_ op: AggMatrixFunction, _ A: Matrix) -> Vector {
-    return (0..<A.cols).map { (i: Int) -> Double in
-        var col = A[col:i]
-        return op(col)
-    }
+    return A.map { op(Vector($0)) }
 }
