@@ -290,30 +290,47 @@ class MatrixSpec: QuickSpec {
         describe("Matrix statistics tests") {
             it("max") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let res = [3.0, 4.0]
-                expect(maxc(m1)).to(beCloseTo(res))
+                let res1 = [4.0, 3.0]
+                let res2 = [3.0, 4.0]
+                expect(max(m1)).to(beCloseTo(res1))
+                expect(max(m1, .Row)).to(beCloseTo(res1))
+                expect(max(m1, .Column)).to(beCloseTo(res2))
             }
             it("min") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let res = [1.0, 2.0]
-                expect(minc(m1)).to(beCloseTo(res))
+                let res1 = [1.0, 2.0]
+                let res2 = [1.0, 2.0]
+                expect(min(m1)).to(beCloseTo(res1))
+                expect(min(m1, .Row)).to(beCloseTo(res1))
+                expect(min(m1, .Column)).to(beCloseTo(res2))
             }
             it("mean") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let res = [2.0, 3.0]
-                expect(meanc(m1)).to(beCloseTo(res))
+                let res1 = [2.5, 2.5]
+                let res2 = [2.0, 3.0]
+                expect(mean(m1)).to(beCloseTo(res1))
+                expect(mean(m1, .Row)).to(beCloseTo(res1))
+                expect(mean(m1, .Column)).to(beCloseTo(res2))
             }
             it("std") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let res = [sqrt(2.0 / 2.0), sqrt(2.0 / 2.0)]
-                expect(stdc(m1)).to(beCloseTo(res))
+                let res1 = [sqrt(4.5 / 2.0), sqrt(0.5 / 2.0)]
+                let res2 = [sqrt(2.0 / 2.0), sqrt(2.0 / 2.0)]
+                expect(std(m1)).to(beCloseTo(res1))
+                expect(std(m1, .Row)).to(beCloseTo(res1))
+                expect(std(m1, .Column)).to(beCloseTo(res2))
             }
             it("normalize") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
-                let m = meanc(m1)
-                let s = stdc(m1)
-                let res = (m1 - m) ./ s
-                expect(normalizec(m1)) == res
+                let mr = mean(m1)
+                let sr = std(m1)
+                let mc = mean(m1, .Column)
+                let sc = std(m1, .Column)
+                let res1 = transpose((transpose(m1) - mr) ./ sr)
+                let res2 = (m1 - mc) ./ sc
+                expect(normalize(m1)) == res1
+                expect(normalize(m1, .Row)) == res1
+                expect(normalize(m1, .Column)) == res2
             }
         }
         

@@ -8,58 +8,35 @@
 
 // MARK: - Statistic functions on matrix
 
-public func maxr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(max, A)
+public func max(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(max, A, d)
 }
 
-public func maxc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(max, transpose(A))
+public func min(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(min, A, d)
 }
 
-public func minr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(min, A)
+public func mean(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(mean, A, d)
 }
 
-public func minc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(min, transpose(A))
+public func std(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(std, A, d)
 }
 
-public func meanr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(mean, A)
+public func normalize(_ A: Matrix, _ d: Dim = .Row) -> Matrix {
+    switch d {
+    case .Row:
+        return Matrix(A.map { normalize(Vector($0)) })
+    case .Column:
+        return Matrix(transpose(A).map { normalize(Vector($0)) })
+    }
 }
 
-public func meanc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(mean, transpose(A))
+public func sum(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(sum, A, d)
 }
 
-public func stdr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(std, A)
-}
-
-public func stdc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(std, transpose(A))
-}
-
-public func normalizer(_ A: Matrix) -> Matrix {
-    return Matrix(A.map { normalize(Vector($0)) })
-}
-
-public func normalizec(_ A: Matrix) -> Matrix {
-    return Matrix(transpose(A).map { normalize(Vector($0)) })
-}
-
-public func sumr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(sum, A)
-}
-
-public func sumc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(sum, transpose(A))
-}
-
-public func sumsqr(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(sumsq, A)
-}
-
-public func sumsqc(_ A: Matrix) -> Vector {
-    return aggMatrixFunction(sumsq, transpose(A))
+public func sumsq(_ A: Matrix, _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(sumsq, A, d)
 }
