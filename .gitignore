@@ -23,5 +23,3 @@ DerivedData
 .bundle
 
 Carthage
-Pods/
-Podfile.lock

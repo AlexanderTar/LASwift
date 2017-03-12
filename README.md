@@ -2,8 +2,9 @@
 
 [![CI Status](https://travis-ci.org/AlexanderTar/LASwift.svg?branch=master)](https://travis-ci.org/AlexanderTar/LASwift)
 [![codecov](https://codecov.io/gh/AlexanderTar/LASwift/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderTar/LASwift)
-[![Documentation](https://img.shields.io/badge/LASwift-documentation-blue.svg)](https://alexandertar.github.io/LASwift-docs/index.html)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Documentation](https://img.shields.io/badge/LASwift-documentation-blue.svg)](https://alexandertar.github.io/LASwift-docs/index.html)
+[![GitHub license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://raw.githubusercontent.com/AlexanderTar/LASwift/master/LICENSE)
 
 LASwift provides most of linear algebra operations on vectors and matrices
 required to implement machine learning algorithms. Library syntax is inspired by
