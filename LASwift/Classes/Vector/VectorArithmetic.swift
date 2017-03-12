@@ -383,7 +383,7 @@ public func ./ (_ a: Vector, _ b: Double) -> Vector {
 ///     - b: vector
 /// - Returns: result of elementwise division of scalar a by vector b
 public func rdivide(_ a: Double, _ b: Vector) -> Vector {
-    var c = Vector(repeating: a, count: b.count)
+    let c = Vector(repeating: a, count: b.count)
     return rdivide(c, b)
 }
 

@@ -88,8 +88,8 @@ public func diag(_ v: Matrix) -> Matrix {
 /// - Returns: square diagonal matrix with specified values
 public func diag(_ v: Vector) -> Matrix {
     let count = v.count
-    var m: Matrix = zeros(count, count)
-    (0..<count).map { m[$0, $0] = v[$0] }
+    let m: Matrix = zeros(count, count)
+    _ = (0..<count).map { m[$0, $0] = v[$0] }
     return m
 }
 
@@ -257,7 +257,7 @@ extension Matrix {
         get {
             precondition(col < cols, "Invalid index")
             var result = Vector(repeating: 0.0, count: rows)
-            (0..<rows).map { i -> () in
+            _ = (0..<rows).map { i -> () in
                 let index = i * cols + col
                 result[i] = flat[index]
             }
@@ -267,7 +267,7 @@ extension Matrix {
         set {
             precondition(col < cols, "Invalid index")
             precondition(newValue.count == rows, "Input dimensions must agree")
-            (0..<rows).map { i -> () in
+            _ = (0..<rows).map { i -> () in
                 let index = i * cols + col
                 flat[index] = newValue[i]
             }
@@ -803,12 +803,12 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
 }
 
 func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
-    var res = zeros(rr.count, cr.count)
+    let res = zeros(rr.count, cr.count)
     
     // vgathrD is using 1-based indices
     let _cr = cr.map { vDSP_Length($0 + 1) }
     
-    zip(rr, (0..<res.rows)).map { (i: Int, j: Int) -> () in
+    _ = zip(rr, (0..<res.rows)).map { (i: Int, j: Int) -> () in
         var row = zeros(res.cols)
         m.flat.withUnsafeBufferPointer { bufPtr in
             let p = bufPtr.baseAddress! + i * m.cols

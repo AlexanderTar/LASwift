@@ -14,15 +14,19 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 This library provides most of linear algebra operations on vectors and matrices
 required to implement machine learning algorithms. Library syntax is inspired by
-Matlab language API and Haskell linear algebra library 'hmatrix'
+Matlab matrix manipulation and Haskell linear algebra library 'hmatrix'
                        DESC
 
   s.homepage         = 'https://github.com/alexandertar/LASwift'
-s.license          = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
+  s.license          = { :type => 'BSD-3-Clause', :file => 'LICENSE' }
   s.author           = { 'Alexander Taraymovich' => 'taraymovich@me.com' }
   s.source           = { :git => 'https://github.com/alexandertar/LASwift.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target     = '8.0'
+  s.osx.deployment_target     = '10.9'
+  s.tvos.deployment_target    = '9.0'
+
+  s.frameworks = 'Accelerate'
 
   s.source_files = 'LASwift/Classes/**/*'
 end

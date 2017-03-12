@@ -28,7 +28,7 @@ public func trace(_ A: Matrix) -> Double {
 ///     - A: matrix
 /// - Returns: transposed matrix
 public func transpose(_ A: Matrix) -> Matrix {
-    var C: Matrix = zeros(A.cols, A.rows)
+    let C: Matrix = zeros(A.cols, A.rows)
     vDSP_mtransD(A.flat, 1, &(C.flat), 1, vDSP_Length(A.cols), vDSP_Length(A.rows))
     return C
 }
@@ -54,7 +54,7 @@ public postfix func ′ (_ a: Matrix) -> Matrix {
 /// - Returns: matrix product of A and B
 public func mtimes(_ A: Matrix, _ B: Matrix) -> Matrix {
     precondition(A.cols == B.rows, "Matrix dimensions must agree")
-    var C: Matrix = zeros(A.rows, B.cols)
+    let C: Matrix = zeros(A.rows, B.cols)
     vDSP_mmulD(A.flat, 1, B.flat, 1, &(C.flat), 1, vDSP_Length(A.rows), vDSP_Length(B.cols), vDSP_Length(A.cols))
     return C
 }
@@ -134,7 +134,7 @@ public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
 /// - Returns: inverse of A matrix
 public func inv(_ A: Matrix) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
-    var B = Matrix(A)
+    let B = Matrix(A)
     
     var N = __CLPK_integer(A.rows)
     var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
@@ -174,7 +174,7 @@ public func inv(_ A: Matrix) -> Matrix {
 public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     
-    var V = Matrix(A)
+    let V = Matrix(A)
     
     var N = __CLPK_integer(A.rows)
     
@@ -219,7 +219,7 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
 /// - Returns: matrices U, S, and V such that `A = U * S * transpose(V)`
 public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     /* LAPACK is using column-major order */
-    var _A = transpose(A)
+    let _A = transpose(A)
     
     var jobz: Int8 = 65 // 'A'
     
@@ -237,8 +237,8 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     var error = __CLPK_integer(0)
     
     var s = Vector(repeating: 0.0, count: Int(min(M, N)))
-    var U = Matrix(Int(LDU), Int(M))
-    var VT = Matrix(Int(LDVT), Int(N))
+    let U = Matrix(Int(LDU), Int(M))
+    let VT = Matrix(Int(LDVT), Int(N))
     
     /* Query and allocate the optimal workspace */
     dgesdd_(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &wkOpt, &lWork, &iWork, &error)
