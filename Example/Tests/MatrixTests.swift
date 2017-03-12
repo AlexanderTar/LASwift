@@ -380,8 +380,8 @@ class MatrixSpec: QuickSpec {
                 expect(mpower(m1, -1)) == res
                 expect(m1 ^ -1) == res
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
-                expect { () -> Void in inv(m2) }.to(throwAssertion())
-                expect { () -> Void in inv(ones(3, 3)) }.to(throwAssertion())
+                expect { () -> Void in _ = inv(m2) }.to(throwAssertion())
+                expect { () -> Void in _ = inv(ones(3, 3)) }.to(throwAssertion())
                 expect(inv(m1) * m1) == eye(3, 3)
             }
             it("eigen") {
@@ -392,7 +392,7 @@ class MatrixSpec: QuickSpec {
                 let e = eig(m1)
                 expect(m1 * e.V) == e.V * e.D
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
-                expect { () -> Void in eig(m2) }.to(throwAssertion())
+                expect { () -> Void in _ = eig(m2) }.to(throwAssertion())
             }
             it("svd") {
                 let m1 = Matrix([[1.0, 2.0],

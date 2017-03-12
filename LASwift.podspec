@@ -28,5 +28,5 @@ Matlab matrix manipulation and Haskell linear algebra library 'hmatrix'
 
   s.frameworks = 'Accelerate'
 
-  s.source_files = 'LASwift/Classes/**/*'
+  s.source_files = 'Sources/**/*'
 end
