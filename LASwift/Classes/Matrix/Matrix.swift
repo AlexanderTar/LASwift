@@ -10,21 +10,56 @@ import Accelerate
 
 // MARK: - One-line creators for matrices
 
+/// Create a matrix of zeros.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+/// - Returns: zeros matrix of specified size
 public func zeros(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix(rows, cols, 0.0)
 }
 
+/// Create a matrix of ones.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+/// - Returns: ones matrix of specified size
 public func ones(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix(rows, cols, 1.0)
 }
 
+/// Create a matrix of uniformly distributed on [0, 1) interval random values.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+/// - Returns: random values matrix of specified size
 public func rand(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix(rows, cols, rand(rows * cols))
 }
 
+/// Create a matrix of normally distibuted random values.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+/// - Returns: random values matrix of specified size
+public func randn(_ rows: Int, _ cols: Int) -> Matrix {
+    precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
+    return Matrix(rows, cols, randn(rows * cols))
+}
+
+/// Create a matrix with ones on the main diagonal and zeros elsewhere.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+/// - Returns: identity matrix of specified size
 public func eye(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix((0..<rows).map { (i: Int) -> Vector in
@@ -36,11 +71,21 @@ public func eye(_ rows: Int, _ cols: Int) -> Matrix {
     })
 }
 
+/// Create a square matrix with specified values on the main diagonal and zeros elsewhere.
+///
+/// - Parameters:
+///    - v: matrix of values with one column
+/// - Returns: square diagonal matrix with specified values
 public func diag(_ v: Matrix) -> Matrix {
     precondition(v.cols == 1, "Input must be a vector")
     return diag(v.flat)
 }
 
+/// Create a square matrix with specified values on the main diagonal and zeros elsewhere.
+///
+/// - Parameters:
+///    - v: vector of values
+/// - Returns: square diagonal matrix with specified values
 public func diag(_ v: Vector) -> Matrix {
     let count = v.count
     var m: Matrix = zeros(count, count)
@@ -48,11 +93,25 @@ public func diag(_ v: Vector) -> Matrix {
     return m
 }
 
+/// Create a matrix with specified values on the main diagonal and zeros elsewhere.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+///    - v: matrix of values with one column
+/// - Returns: diagonal matrix with specified values and size
 public func diag(_ rows: Int, _ cols: Int, _ v: Matrix) -> Matrix {
     precondition(v.cols == 1, "Input must be a vector")
     return diag(rows, cols, v.flat)
 }
 
+/// Create a matrix with specified values on the main diagonal and zeros elsewhere.
+///
+/// - Parameters:
+///    - rows: number of rows
+///    - cols: number of columns
+///    - v: vector of values
+/// - Returns: diagonal matrix with specified values and size
 public func diag(_ rows: Int, _ cols: Int, _ v: Vector) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix((0..<rows).map { (i: Int) -> Vector in
@@ -66,15 +125,27 @@ public func diag(_ rows: Int, _ cols: Int, _ v: Vector) -> Matrix {
 
 // MARK: - Matrix class
 
+/// Matrix dimensions.
+///
+/// - Row: row.
+/// - Column: column.
+public enum Dim {
+    case Row
+    case Column
+}
+
+/// Matrix of Double values
 public class Matrix {
     internal var flat = Vector()
     internal var _rows: Int = 0
     internal var _cols: Int = 0
     
+    /// Number of rows in Matrix.
     public var rows: Int {
         return _rows
     }
     
+    /// Number of columns in Matrix.
     public var cols: Int {
         return _cols
     }
@@ -93,18 +164,21 @@ public class Matrix {
         _cols = c
     }
     
+    /// Create new Matrix by copying existing.
     public init(_ M: Matrix) {
         flat = M.flat
         _rows = M.rows
         _cols = M.cols
     }
     
+    /// Create 1-column Matrix (transposed Vector)
     public init(_ v: Vector) {
         flat = v
         _rows = v.count
         _cols = 1
     }
     
+    /// Create Matrix from array of Vectors (two-dimensional array)
     public init(_ data: [Vector]) {
         // assuming empty input as invalid
         precondition(data.count > 0, "Input must not be empty")
@@ -121,6 +195,11 @@ public class Matrix {
 // MARK: - Gathering
 
 extension Matrix {
+    /// Get M(row, column) element of Matrix.
+    ///
+    /// - Parameters:
+    ///    - row: row position of element (0-based)
+    ///    - col: col position of element (0-based)
     public subscript(_ row: Int, _ col: Int ) -> Double {
         get {
             precondition(indexIsValidForRow(row, col), "Invalid index")
@@ -133,6 +212,10 @@ extension Matrix {
         }
     }
     
+    /// Get M(index) element of row-major represented Matrix.
+    ///
+    /// - Parameters:
+    ///    - index: index of element (0-based, 0 <= index < M.rows * M.cols)
     public subscript(_ index: Int) -> Double {
         get {
             precondition(index < rows * cols, "Invalid index")
@@ -145,6 +228,10 @@ extension Matrix {
         }
     }
     
+    /// Get M(row) row of Matrix.
+    ///
+    /// - Parameters:
+    ///    - row: row index (0-based)
     public subscript(row row: Int) -> Vector {
         get {
             precondition(row < rows, "Invalid index")
@@ -162,6 +249,10 @@ extension Matrix {
         }
     }
     
+    /// Get M(col) column of Matrix.
+    ///
+    /// - Parameters:
+    ///    - col: column index (0-based)
     public subscript(col col: Int) -> Vector {
         get {
             precondition(col < cols, "Invalid index")
@@ -190,11 +281,25 @@ extension Matrix {
 
 // MARK: - Matrix manipulation
 
-public func insert(_ m: Matrix, row row: Vector, at index: Int) -> Matrix {
+/// Insert row to matrix at specified position.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to insert
+///    - at: index to insert row to
+/// - Returns: new matrix with inserted row
+public func insert(_ m: Matrix, row: Vector, at index: Int) -> Matrix {
     return insert(m, rows: Matrix([row]), at: index)
 }
 
-public func insert(_ m: Matrix, rows rows: Matrix, at index: Int) -> Matrix {
+/// Insert rows to matrix at specified position.
+///
+/// - Parameters:
+///    - m: matrix
+///    - rows: rows values to insert represented as matrix
+///    - at: index to insert rows to
+/// - Returns: new matrix with inserted rows
+public func insert(_ m: Matrix, rows: Matrix, at index: Int) -> Matrix {
     precondition(rows.cols == m.cols, "Input dimensions must agree")
     precondition(index <= m.rows, "Index out of bounds")
     
@@ -216,77 +321,199 @@ public func insert(_ m: Matrix, rows rows: Matrix, at index: Int) -> Matrix {
     return res
 }
 
-public func append(_ m: Matrix, row row: Matrix) -> Matrix {
+/// Append row to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to append represented as row matrix
+/// - Returns: new matrix with appended row
+public func append(_ m: Matrix, row: Matrix) -> Matrix {
     precondition(row.cols == m.cols && row.rows == 1, "Input dimensions must agree")
     return insert(m, row: row.flat, at: m.rows)
 }
 
-public func append(_ m: Matrix, row row: Vector) -> Matrix {
+/// Append row to matrix.
+///
+/// Alternatively, `append(m, row: row)` can be executed with `m === row`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to append
+/// - Returns: new matrix with appended row
+public func append(_ m: Matrix, row: Vector) -> Matrix {
     let r = Matrix([row])
     return append(m, row: r)
 }
 
-public func append(_ m: Matrix, row row: Double) -> Matrix {
+/// Append row to matrix constructed from scalar value.
+///
+/// Alternatively, `append(m, row: row)` can be executed with `m === row`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row value to append
+/// - Returns: new matrix with appended row
+public func append(_ m: Matrix, row: Double) -> Matrix {
     let r = Vector(repeating: row, count: m.cols)
     return append(m, row: r)
 }
 
-public func append(_ m: Matrix, rows rows: Matrix) -> Matrix {
+/// Append rows to matrix.
+///
+/// Alternatively, `append(m, rows: rows)` can be executed with `m === rows`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - rows: rows values to append represented as matrix
+/// - Returns: new matrix with appended rows
+public func append(_ m: Matrix, rows: Matrix) -> Matrix {
     return insert(m, rows: rows, at: m.rows)
 }
 
-public func append(_ m: Matrix, rows rows: [Vector]) -> Matrix {
+/// Append rows to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - rows: rows values to append represented as array of vectors
+/// - Returns: new matrix with appended rows
+public func append(_ m: Matrix, rows: [Vector]) -> Matrix {
     return append(m, rows: Matrix(rows))
 }
 
+/// Append row to matrix constructed from scalar value.
+///
+/// Alternatively, `m === row` can be executed with `append(m, row: row)`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row value to append
+/// - Returns: new matrix with appended row
 public func === (_ m: Matrix, _ row: Double) -> Matrix {
     return append(m, row: row)
 }
 
+/// Append row to matrix.
+///
+/// Alternatively, `m === row` can be executed with `append(m, row: row)`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to append
+/// - Returns: new matrix with appended row
 public func === (_ m: Matrix, _ row: Vector) -> Matrix {
     return append(m, row: row)
 }
 
-public func prepend(_ m: Matrix, row row: Matrix) -> Matrix {
+/// Prepend row to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to prepend represented as row matrix
+/// - Returns: new matrix with prepended row
+public func prepend(_ m: Matrix, row: Matrix) -> Matrix {
     precondition(row.cols == m.cols && row.rows == 1, "Input dimensions must agree")
     return insert(m, row: row.flat, at: 0)
 }
 
-public func prepend(_ m: Matrix, row row: Vector) -> Matrix {
+/// Prepend row to matrix.
+///
+/// Alternatively, `prepend(m, row: row)` can be executed with `row === m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row values to prepend
+/// - Returns: new matrix with prepended row
+public func prepend(_ m: Matrix, row: Vector) -> Matrix {
     let r = Matrix([row])
     return prepend(m, row: r)
 }
 
-public func prepend(_ m: Matrix, row row: Double) -> Matrix {
+/// Prepend row to matrix constructed from scalar value.
+///
+/// Alternatively, `prepend(m, row: row)` can be executed with `row === m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - row: row value to prepend
+/// - Returns: new matrix with prepended row
+public func prepend(_ m: Matrix, row: Double) -> Matrix {
     let r = Vector(repeating: row, count: m.cols)
     return prepend(m, row: r)
 }
 
-public func prepend(_ m: Matrix, rows rows: Matrix) -> Matrix {
+/// Prepend rows to matrix.
+///
+/// Alternatively, `prepend(m, rows: rows)` can be executed with `rows === m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - rows: rows values to prepend represented as matrix
+/// - Returns: new matrix with prepended rows
+public func prepend(_ m: Matrix, rows: Matrix) -> Matrix {
     return insert(m, rows: rows, at: 0)
 }
 
-public func prepend(_ m: Matrix, rows rows: [Vector]) -> Matrix {
+/// Prepend rows to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - rows: rows values to prepended represented as array of vectors
+/// - Returns: new matrix with prepended rows
+public func prepend(_ m: Matrix, rows: [Vector]) -> Matrix {
     return prepend(m, rows: Matrix(rows))
 }
 
+/// Prepend row to matrix constructed from scalar value.
+///
+/// Alternatively, `row === m` can be executed with `prepend(m, row: row)`.
+///
+/// - Parameters:
+///    - row: row value to prepend
+///    - m: matrix
+/// - Returns: new matrix with prepended row
 public func === (_ row: Double, _ m: Matrix) -> Matrix {
     return prepend(m, row: row)
 }
 
+/// Prepend row to matrix.
+///
+/// Alternatively, `row === m` can be executed with `prepend(m, row: row)`.
+///
+/// - Parameters:
+///    - row: row values to prepend
+///    - m: matrix
+/// - Returns: new matrix with prepended row
 public func === (_ row: Vector, _ m: Matrix) -> Matrix {
     return prepend(m, row: row)
 }
 
+/// Horizontally concatenate two matrices.
+/// It is similar to appending rhs as rows to lhs
+///
+/// Alternatively, `lhs === rhs` can be executed with `append(lhs, rows: rhs)`.
 public func === (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
     return append(lhs, rows: rhs)
 }
 
-public func insert(_ m: Matrix, col col: Vector, at index: Int) -> Matrix {
+/// Insert column to matrix at specified position.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: column values to insert
+///    - at: index to insert column to
+/// - Returns: new matrix with inserted column
+public func insert(_ m: Matrix, col: Vector, at index: Int) -> Matrix {
     return insert(m, cols: Matrix(col), at: index)
 }
 
-public func insert(_ m: Matrix, cols cols: Matrix, at index: Int) -> Matrix {
+/// Insert columns to matrix at specified position.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: columns values to insert represented as matrix
+///    - at: index to insert columns to
+/// - Returns: new matrix with inserted columns
+public func insert(_ m: Matrix, cols: Matrix, at index: Int) -> Matrix {
     precondition(cols.rows == m.rows, "Input dimensions must agree")
     precondition(index <= m.cols && index >= 0, "Index out of bounds")
     
@@ -308,74 +535,193 @@ public func insert(_ m: Matrix, cols cols: Matrix, at index: Int) -> Matrix {
     return res
 }
 
-public func append(_ m: Matrix, col col: Matrix) -> Matrix {
+/// Append column to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column values to append represented as column matrix
+/// - Returns: new matrix with appended column
+public func append(_ m: Matrix, col: Matrix) -> Matrix {
     precondition(col.rows == m.rows && col.cols == 1, "Input dimensions must agree")
     return insert(m, col: col.flat, at: m.cols)
 }
 
-public func append(_ m: Matrix, col col: Vector) -> Matrix {
+/// Append column to matrix.
+///
+/// Alternatively, `append(m, col: col)` can be executed with `m ||| col`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column values to append
+/// - Returns: new matrix with appended column
+public func append(_ m: Matrix, col: Vector) -> Matrix {
     let c = Matrix(col.count, 1, col)
     return append(m, col: c)
 }
 
-public func append(_ m: Matrix, col col: Double) -> Matrix {
+/// Append column to matrix constructed from scalar value.
+///
+/// Alternatively, `append(m, col: col)` can be executed with `m ||| col`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column value to append
+/// - Returns: new matrix with appended column
+public func append(_ m: Matrix, col: Double) -> Matrix {
     let c = Vector(repeating: col, count: m.rows)
     return append(m, col: c)
 }
 
-public func append(_ m: Matrix, cols cols: Matrix) -> Matrix {
+/// Append columns to matrix.
+///
+/// Alternatively, `append(m, cols: cols)` can be executed with `m ||| cols`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: columns values to append represented as matrix
+/// - Returns: new matrix with appended columns
+public func append(_ m: Matrix, cols: Matrix) -> Matrix {
     return insert(m, cols: cols, at: m.cols)
 }
 
-public func append(_ m: Matrix, cols cols: [Vector]) -> Matrix {
-    return append(m, cols: Matrix(cols))
+/// Append columns to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: columns values to append represented as array of vectors
+/// - Returns: new matrix with appended columns
+public func append(_ m: Matrix, cols: [Vector]) -> Matrix {
+    return append(m, cols: transpose(Matrix(cols)))
 }
 
+/// Append column to matrix constructed from scalar value.
+///
+/// Alternatively, `m ||| col` can be executed with `append(m, col: col)`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column value to append
+/// - Returns: new matrix with appended column
 public func ||| (_ m: Matrix, _ col: Double) -> Matrix {
     return append(m, col: col)
 }
 
+/// Append column to matrix.
+///
+/// Alternatively, `m ||| col` can be executed with `append(m, col: col)`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column values to append
+/// - Returns: new matrix with appended column
 public func ||| (_ m: Matrix, _ col: Vector) -> Matrix {
     return append(m, col: col)
 }
 
-public func prepend(_ m: Matrix, col col: Matrix) -> Matrix {
+/// Prepend column to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column values to prepend represented as column matrix
+/// - Returns: new matrix with prepended column
+public func prepend(_ m: Matrix, col: Matrix) -> Matrix {
     precondition(col.rows == m.rows && col.cols == 1, "Input dimensions must agree")
     return insert(m, col: col.flat, at: 0)
 }
 
-public func prepend(_ m: Matrix, col col: Vector) -> Matrix {
+/// Prepend column to matrix.
+///
+/// Alternatively, `prepend(m, col: col)` can be executed with `col ||| m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column values to prepend
+/// - Returns: new matrix with prepended column
+public func prepend(_ m: Matrix, col: Vector) -> Matrix {
     let c = Matrix(col)
     return prepend(m, col: c)
 }
 
-public func prepend(_ m: Matrix, col col: Double) -> Matrix {
+/// Prepend column to matrix constructed from scalar value.
+///
+/// Alternatively, `prepend(m, col: col)` can be executed with `col ||| m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - col: column value to prepend
+/// - Returns: new matrix with prepended column
+public func prepend(_ m: Matrix, col: Double) -> Matrix {
     let c = Vector(repeating: col, count: m.rows)
     return prepend(m, col: c)
 }
 
-public func prepend(_ m: Matrix, cols cols: Matrix) -> Matrix {
+/// Prepend columns to matrix.
+///
+/// Alternatively, `prepend(m, cols: cols)` can be executed with `cols ||| m`.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: columns values to prepend represented as matrix
+/// - Returns: new matrix with prepended columns
+public func prepend(_ m: Matrix, cols: Matrix) -> Matrix {
     return insert(m, cols: cols, at: 0)
 }
 
-public func prepend(_ m: Matrix, cols cols: [Vector]) -> Matrix {
+/// Prepend columns to matrix.
+///
+/// - Parameters:
+///    - m: matrix
+///    - cols: columns values to prepended represented as array of vectors
+/// - Returns: new matrix with prepended columns
+public func prepend(_ m: Matrix, cols: [Vector]) -> Matrix {
     return prepend(m, cols: transpose(Matrix(cols)))
 }
 
+/// Prepend column to matrix constructed from scalar value.
+///
+/// Alternatively, `col ||| m` can be executed with `prepend(m, col: col)`.
+///
+/// - Parameters:
+///    - col: column value to prepend
+///    - m: matrix
+/// - Returns: new matrix with prepended column
 public func ||| (_ col: Double, _ m: Matrix) -> Matrix {
     return prepend(m, col: col)
 }
 
+/// Prepend column to matrix.
+///
+/// Alternatively, `col ||| m` can be executed with `prepend(m, col: col)`.
+///
+/// - Parameters:
+///    - col: column values to prepend
+///    - m: matrix
+/// - Returns: new matrix with prepended column
 public func ||| (_ col: Vector, _ m: Matrix) -> Matrix {
     return prepend(m, col: col)
 }
 
+/// Vertically concatenate two matrices.
+/// It is similar to appending rhs as columns to lhs
+///
+/// Alternatively, `lhs ||| rhs` can be executed with `append(lhs, cols: rhs)`.
 public func ||| (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
     return append(lhs, cols: rhs)
 }
 
 // MARK: - Slicing
 
+/// Matrix extractor.
+///
+/// - All: Take all rows/columns from source matrix.
+/// - Range: Take rows/columns from source matrix with indices
+///          starting at `from` with `stride` ending at `to`.
+/// - Pos: Take rows/columns from source matrix at specified positions
+/// - PosCyc: Take rows/columns from source matrix at specified cyclic positions
+/// - Take: Take first `n` rows/columns from source matrix
+/// - TakeLast: Take last `n` rows/columns from source matrix
+/// - Drop: Drop first `n` rows/columns from source matrix
+/// - DropLast: Drop last `n` rows/columns from source matrix
 public enum Extractor {
     case All
     case Range(Int, Int, Int)
@@ -387,6 +733,14 @@ public enum Extractor {
     case DropLast(Int)
 }
 
+/// Construct new matrix from source using specified extractor
+///
+/// Alternatively, `slice(m, e)` can be executed with `m ?? e`.
+///
+/// - Parameters
+///     - m: source matrix
+///     - e: extractor tuple for rows and columns
+/// - Returns: extracted matrix
 public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
     switch e {
         
@@ -469,12 +823,26 @@ func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
     return res
 }
 
+/// Construct new matrix from source using specified extractor.
+///
+/// Alternatively, `m ?? e` can be executed with `slice(m, e)`.
+///
+/// - Parameters
+///     - m: source matrix
+///     - e: extractor tuple for rows and columns
+/// - Returns: extracted matrix
 public func ?? (_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
     return slice(m, e)
 }
 
 // MARK: - Map-reduce
 
+/// Map all elements of source matrix to new matrix using specific function.
+///
+/// - Parameters
+///     - A: source matrix
+///     - f: mapping function
+/// - Returns: mapped matrix
 public func map(_ A: Matrix, _ f: ((Double) -> Double)) -> Matrix {
     return Matrix(A.rows, A.cols, A.flat.map(f))
 }
@@ -483,6 +851,7 @@ public func map(_ A: Matrix, _ f: ((Double) -> Double)) -> Matrix {
 
 extension Matrix: Sequence {
     public typealias MatrixIterator = AnyIterator<ArraySlice<Double>>
+    /// Iterate through matrix by rows
     public func makeIterator() -> MatrixIterator {
         let end = rows * cols
         var nextRowStart = 0
@@ -511,6 +880,8 @@ extension Matrix: CustomStringConvertible {
 // MARK: - Equatable
 
 extension Matrix: Equatable {}
+
+/// Compare two matrices using Double value approximate comparison
 public func == (lhs: Matrix, rhs: Matrix) -> Bool {
     return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat ==~ rhs.flat
 }

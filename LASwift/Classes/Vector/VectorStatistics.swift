@@ -10,18 +10,38 @@ import Accelerate
 
 // MARK: - Statistical operations on vector
 
+/// Return the largest element of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: largest element of vector a
 public func max(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_maxvD, a)
 }
 
+/// Return the smallest element of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: smallest element of vector a
 public func min(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_minvD, a)
 }
 
+/// Return mean (statistically average) value of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: mean value of vector a
 public func mean(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_meanvD, a)
 }
 
+/// Return standard deviation value of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: standard deviation value of vector a
 public func std(_ a: Vector) -> Double {
     var m: Double = 0.0
     var s: Double = 0.0
@@ -30,6 +50,11 @@ public func std(_ a: Vector) -> Double {
     return s
 }
 
+/// Return normalized vector (substract mean value and divide by standard deviation).
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: normalized vector a
 public func normalize(_ a: Vector) -> Vector {
     var m: Double = 0.0
     var s: Double = 0.0
@@ -38,10 +63,20 @@ public func normalize(_ a: Vector) -> Vector {
     return c
 }
 
+/// Return sum of vector's elements.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: sum of elements of vector a
 public func sum(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_sveD, a)
 }
 
+/// Return sum of vector's squared elements.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: sum of squared elements of vector a
 public func sumsq(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_svesqD, a)
 }

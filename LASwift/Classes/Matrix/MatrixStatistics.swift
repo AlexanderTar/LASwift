@@ -8,22 +8,49 @@
 
 // MARK: - Statistic functions on matrix
 
+/// Return vector of largest elements of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func max(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(max, A, d)
 }
 
+/// Return vector of smallest elements of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func min(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(min, A, d)
 }
 
+/// Return vector of mean values of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func mean(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(mean, A, d)
 }
 
+/// Return vector of standard deviation values of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func std(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(std, A, d)
 }
 
+/// Return normalized matrix (substract mean value and divide by standard deviation)
+/// in dpecified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
+/// - Returns: normalized matrix A
 public func normalize(_ A: Matrix, _ d: Dim = .Row) -> Matrix {
     switch d {
     case .Row:
@@ -33,10 +60,20 @@ public func normalize(_ A: Matrix, _ d: Dim = .Row) -> Matrix {
     }
 }
 
+/// Return vector of sums of values of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func sum(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(sum, A, d)
 }
 
+/// Return vector of sums of squared values of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
 public func sumsq(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(sumsq, A, d)
 }

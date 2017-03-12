@@ -10,25 +10,48 @@ import Accelerate
 
 // MARK: - Linear algebra operations on matrices
 
-public func trace(_ A: Matrix) -> Vector {
+/// Compute the trace of a matrix.
+///
+/// - Parameters:
+///     - A: matrix to compute trace of
+/// - Returns: sum of the elements on the main diagonal
+public func trace(_ A: Matrix) -> Double {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
-    return (0..<A.rows).map { A[$0, $0] }
+    return sum((0..<A.rows).map { A[$0, $0] })
 }
 
-public func norm(_ A: Matrix) -> Double {
-    return sumsq(trace(A))
-}
-
+/// Transpose matrix.
+///
+/// Alternatively, `transpose(A)` can be executed with `A′`.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: transposed matrix
 public func transpose(_ A: Matrix) -> Matrix {
     var C: Matrix = zeros(A.cols, A.rows)
     vDSP_mtransD(A.flat, 1, &(C.flat), 1, vDSP_Length(A.cols), vDSP_Length(A.rows))
     return C
 }
 
+/// Transpose matrix.
+///
+/// Alternatively, `A′` can be executed with `transpose(A)`.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: transposed matrix
 public postfix func ′ (_ a: Matrix) -> Matrix {
     return transpose(a)
 }
 
+/// Perform matrix multiplication.
+///
+/// Alternatively, `mtimes(A, B)` can be executed with `A * B`.
+///
+/// - Parameters
+///     - A: left matrix
+///     - B: right matrix
+/// - Returns: matrix product of A and B
 public func mtimes(_ A: Matrix, _ B: Matrix) -> Matrix {
     precondition(A.cols == B.rows, "Matrix dimensions must agree")
     var C: Matrix = zeros(A.rows, B.cols)
@@ -36,10 +59,32 @@ public func mtimes(_ A: Matrix, _ B: Matrix) -> Matrix {
     return C
 }
 
+/// Perform matrix multiplication.
+///
+/// Alternatively, `A * B` can be executed with `mtimes(A, B)`.
+///
+/// - Parameters
+///     - A: left matrix
+///     - B: right matrix
+/// - Returns: matrix product of A and B
 public func * (_ A: Matrix, _ B: Matrix) -> Matrix {
     return mtimes(A, B)
 }
 
+/// Raise matrix to specified power (integer value).
+///
+/// If power is 1, source matrix is returned
+/// If power is -1, inverted matrix is returned
+/// If power is > 1, continuous matrix product result is returned (eg `mpower(A, 2) = mtimes(A, A)`)
+/// If power is < -1, continuous matrix product of inverted matrix result is returned
+/// All other values are invalid
+///
+/// Alternatively, `mpower(A, p)` can be executed with `A ^ p`.
+///
+/// - Parameters
+///     - A: matrix
+///     - p: power to raise matrix to (integer)
+/// - Returns: matrix A raised to power p
 public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     precondition(A.cols == A.rows, "Matrix dimensions must agree")
     switch p {
@@ -62,10 +107,31 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     }
 }
 
+/// Raise matrix to specified power (integer value).
+///
+/// If power is 1, source matrix is returned
+/// If power is -1, inverted matrix is returned
+/// If power is > 1, continuous matrix product result is returned (eg `A ^ 2 = mtimes(A, A)`)
+/// If power is < -1, continuous matrix product of inverted matrix result is returned
+/// All other values are invalid
+///
+/// Alternatively, `A ^ p` can be executed with `mpower(A, p)`.
+///
+/// - Parameters
+///     - A: matrix
+///     - p: power to raise matrix to (integer)
+/// - Returns: matrix A raised to power p
 public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
     return mpower(a, p)
 }
 
+/// Compute the inverse of a given square matrix.
+///
+///	A precondition error is thrown if the given matrix is singular or algorithm fails to converge.
+///
+/// - Parameters:
+///     - A: square matrix to invert
+/// - Returns: inverse of A matrix
 public func inv(_ A: Matrix) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     var B = Matrix(A)
@@ -98,6 +164,13 @@ public func inv(_ A: Matrix) -> Matrix {
     return B
 }
 
+/// Compute eigen values and vectors of a given square matrix.
+///
+///	A precondition error is thrown if the algorithm fails to converge.
+///
+/// - Parameters:
+///     - A: square matrix to calculate eigen values and vectors of
+/// - Returns: eigenvectors matrix (by rows) and diagonal matrix with eigenvalues on the main diagonal
 public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     
@@ -139,6 +212,11 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     return (transpose(V), diag(eig))
 }
 
+/// Perform a singular value decomposition of a given matrix.
+///
+/// - Parameters:
+///    - A: matrix to find singular values of
+/// - Returns: matrices U, S, and V such that `A = U * S * transpose(V)`
 public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     /* LAPACK is using column-major order */
     var _A = transpose(A)

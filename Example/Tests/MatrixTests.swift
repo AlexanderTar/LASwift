@@ -339,7 +339,7 @@ class MatrixSpec: QuickSpec {
                 let m1 = Matrix([[1.0, 0.0, 2.0],
                                  [-1.0, 5.0, 0.0],
                                  [0.0, 3.0, -9.0]])
-                let res = [1.0, 5.0, -9.0]
+                let res = -3.0
                 expect(trace(m1)) == res
             }
             it("transpose") {

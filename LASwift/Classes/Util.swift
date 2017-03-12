@@ -96,11 +96,6 @@ func matrixFunction(_ op: MatrixFunction, _ A: Matrix) -> Matrix {
     return Matrix(A.rows, A.cols, op(A.flat))
 }
 
-public enum Dim {
-    case Row
-    case Column
-}
-
 typealias AggMatrixFunction = ((_ A: Vector) -> Double)
 
 func aggMatrixFunction(_ op: AggMatrixFunction, _ A: Matrix, _ d: Dim) -> Vector {
