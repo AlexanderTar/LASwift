@@ -17,9 +17,4 @@ public struct Random {
             return (range.upperBound - range.lowerBound) *
                 (T(arc4random()) / T(UInt32.max)) + range.lowerBound
     }
-    
-    /// Return random value uniformly distributed on [0, 1) interval
-    public static func generate() -> Double {
-        return within(0.0...1.0)
-    }
 }

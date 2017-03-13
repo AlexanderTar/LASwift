@@ -54,6 +54,34 @@ class VectorSpec: QuickSpec {
                 expect(vec1) == vec4
             }
         }
+        
+        describe("Vector comparison") {
+            it("equal") {
+                let v1 = [1.0, 2.0]
+                let v2 = [1.0, 2.0]
+                expect(v1 == v2) == true
+            }
+            it("not equal") {
+                let v1 = [1.0, 2.0]
+                let v2 = [1.0, 4.0]
+                expect(v1 != v2) == true
+            }
+            it("greater/less than") {
+                let v1 = [11.0, 12.0]
+                let v2 = [1.0, 2.0]
+                expect(v1 > v2) == true
+                expect(v2 < v1) == true
+            }
+            it("greater/less than or equal") {
+                let v1 = [11.0, 12.0]
+                let v2 = [1.0, 2.0]
+                let v3 = [1.0, 2.0]
+                expect(v1 >= v2) == true
+                expect(v2 <= v1) == true
+                expect(v2 >= v3) == true
+                expect(v2 <= v3) == true
+            }
+        }
         describe("Vector arithmetic tests") {            
             it("addition") {
                 let vec1 = [1.0, 2.0, 3.0]

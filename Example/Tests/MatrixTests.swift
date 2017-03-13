@@ -72,12 +72,15 @@ class MatrixSpec: QuickSpec {
             let v2 = Matrix(v1)
             let m5 = diag(v1)
             let m6 = diag(v2)
+            let m7 = diag(v1.count + 2, v1.count, v2)
             
             it("diag matrix has correct dimensions") {
                 expect(m5.rows) == v1.count
                 expect(m5.cols) == v1.count
                 expect(m6.rows) == v1.count
                 expect(m6.cols) == v1.count
+                expect(m7.rows) == v1.count + 2
+                expect(m7.cols) == v1.count
             }
             
             it("diag matrix correct") {
@@ -85,10 +88,34 @@ class MatrixSpec: QuickSpec {
                     if i == j {
                         expect(m5[i, j]).to(beCloseTo(v1[i]))
                         expect(m6[i, j]).to(beCloseTo(v1[i]))
+                        expect(m7[i, j]).to(beCloseTo(v1[i]))
                     } else {
                         expect(m5[i, j]).to(beCloseTo(0.0))
                         expect(m6[i, j]).to(beCloseTo(0.0))
+                        expect(m7[i, j]).to(beCloseTo(0.0))
                     }
+                }
+            }
+            
+            it("rand") {
+                let m8 = rand(1000, 1000)
+                expect(m8.rows) == 1000
+                expect(m8.cols) == 1000
+                _ = zip(0..<1000, 0..<1000).map { (i, j) in
+                    expect(m8[i, j]).to(beLessThan(1.0))
+                    expect(m8[i, j]).to(beGreaterThanOrEqualTo(0.0))
+                }
+            }
+            
+            it("randn") {
+                let m8 = randn(1000, 1000)
+                expect(m8.rows) == 1000
+                expect(m8.cols) == 1000
+                let m = mean(m8)
+                let s = std(m8)
+                _ = (0..<1000).map { (i) in
+                    expect(m[i]).to(beCloseTo(0.0, within: 0.2))
+                    expect(s[i]).to(beCloseTo(1.0, within: 0.2))
                 }
             }
             
@@ -228,6 +255,74 @@ class MatrixSpec: QuickSpec {
             }
         }
         
+        describe("Matrix comparison") {
+            it("equal") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let m2 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1 == m2) == true
+            }
+            it("not equal") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let m2 = Matrix([[1.0, 4.0], [3.0, 2.0]])
+                expect(m1 != m2) == true
+            }
+            it("greater/less than") {
+                let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
+                let m2 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1) > m2
+                expect(m2) < m1
+            }
+            it("greater/less than or equal") {
+                let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
+                let m2 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let m3 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1) >= m2
+                expect(m2) <= m1
+                expect(m2) >= m3
+                expect(m2) <= m3
+            }
+        }
+        
+        describe("Matrix subscript") {
+            it("[i,j]") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1[1, 1]) == 4.0
+                m1[1, 0] = 10.0
+                expect(m1[1, 0]) == 10.0
+            }
+            it("index") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1[3]) == 4.0
+                m1[2] = 10.0
+                expect(m1[2]) == 10.0
+                expect(m1[1, 0]) == 10.0
+            }
+            it("row") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1[row: 1]) == [3.0, 4.0]
+                m1[row: 0] = [10.0, 20.0]
+                expect(m1[row: 0]) == [10.0, 20.0]
+                expect(m1[0, 0]) == 10.0
+                expect(m1[0, 1]) == 20.0
+            }
+            it("column") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(m1[col: 1]) == [2.0, 4.0]
+                m1[col: 0] = [10.0, 30.0]
+                expect(m1[col: 0]) == [10.0, 30.0]
+                expect(m1[0, 0]) == 10.0
+                expect(m1[1, 0]) == 30.0
+            }
+        }
+        
+        describe("Matrix map/reduce") {
+            it("map") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let res = Matrix([[1.0, 4.0], [9.0, 16.0]])
+                expect(map(m1, { $0 * $0 })) == res
+            }
+        }
+        
         describe("Matrix power and exponential tests") {
             it("power") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -332,6 +427,22 @@ class MatrixSpec: QuickSpec {
                 expect(normalize(m1, .Row)) == res1
                 expect(normalize(m1, .Column)) == res2
             }
+            it("sum") {
+                let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
+                let res1 = [5.0, 5.0]
+                let res2 = [4.0, 6.0]
+                expect(sum(m1)).to(beCloseTo(res1))
+                expect(sum(m1, .Row)).to(beCloseTo(res1))
+                expect(sum(m1, .Column)).to(beCloseTo(res2))
+            }
+            it("sumsq") {
+                let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
+                let res1 = [17.0, 13.0]
+                let res2 = [10.0, 20.0]
+                expect(sumsq(m1)).to(beCloseTo(res1))
+                expect(sumsq(m1, .Row)).to(beCloseTo(res1))
+                expect(sumsq(m1, .Column)).to(beCloseTo(res2))
+            }
         }
         
         describe("Matrix linear algebra tests") {
@@ -364,10 +475,13 @@ class MatrixSpec: QuickSpec {
             it("mpower") {
                 let m1 = Matrix([[1.0, 2.0],
                                  [3.0, 4.0]])
-                let res = Matrix([[7.0, 10.0],
+                let res1 = Matrix([[7.0, 10.0],
                                   [15.0, 22.0]])
-                expect(m1 ^ 2) == res
-                expect(mpower(m1, 2)) == res
+                let res2 = inv(m1 * m1)
+                expect(m1 ^ 1) == m1
+                expect(m1 ^ 2) == res1
+                expect(m1 ^ -2) == res2
+                expect { () -> Void in _ = m1 ^ 0 }.to(throwAssertion())
             }
             it("inverse") {
                 let m1 = Matrix([[1.0, 0.0, 2.0],
@@ -431,6 +545,8 @@ class MatrixSpec: QuickSpec {
                                   [3.0, 4.0],
                                   [5.0, 6.0]])
                 expect(m1 === v) == res
+                expect(append(m1, rows: [v])) == res
+                expect(append(m1, rows: Matrix([v]))) == res
             }
             it("horizontal vector prepend") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -440,6 +556,8 @@ class MatrixSpec: QuickSpec {
                                   [1.0, 2.0],
                                   [3.0, 4.0]])
                 expect(v === m1) == res
+                expect(prepend(m1, rows: [v])) == res
+                expect(prepend(m1, rows: Matrix([v]))) == res
             }
             it("horizontal matrix append") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -497,6 +615,8 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[1.0, 2.0, 5.0],
                                   [3.0, 4.0, 6.0]])
                 expect(m1 ||| v) == res
+                expect(append(m1, cols: [v])) == res
+                expect(append(m1, cols: Matrix(v))) == res
             }
             it("vertical vector prepend") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -505,6 +625,8 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[5.0, 1.0, 2.0],
                                   [6.0, 3.0, 4.0]])
                 expect(v ||| m1) == res
+                expect(prepend(m1, cols: [v])) == res
+                expect(prepend(m1, cols: Matrix(v))) == res
             }
             it("vertical matrix append") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -544,14 +666,43 @@ class MatrixSpec: QuickSpec {
                 let res1 = Matrix([[0,  1,  2],
                                    [5,  6,  7],
                                    [10, 11, 12]])
-                let res2 = Matrix([[10, 11, 12, 13, 14],
+                let res2 = Matrix([[12,  13,  14],
+                                   [17,  18,  19]])
+                let res3 = Matrix([[10, 11, 12, 13, 14],
                                    [5,  6,  7,  8,  9 ]])
-                let res3 = Matrix([[9, 7, 5],
+                let res4 = Matrix([[2,  1],
+                                  [7,  6],
+                                  [12, 11],
+                                  [17, 16]])
+                let res5 = Matrix([[9, 7, 5],
                                    [4, 2, 0]])
+                let res6 = Matrix([[18, 15],
+                                   [8,  5]])
                 expect(m1 ?? (.All, .All)) == m1
                 expect(m1 ?? (.Take(3), .DropLast(2))) == res1
-                expect(m1 ?? (.Pos([2, 1]), .All)) == res2
-                expect(m1 ?? (.PosCyc([-7, 80]), .Range(4, -2, 0))) == res3
+                expect(m1 ?? (.DropLast(1), .Take(3))) == res1
+                expect(m1 ?? (.TakeLast(2), .TakeLast(3))) == res2
+                expect(m1 ?? (.Drop(2), .Drop(2))) == res2
+                expect(m1 ?? (.Pos([2, 1]), .All)) == res3
+                expect(m1 ?? (.All, .Pos([2, 1]))) == res4
+                expect(m1 ?? (.PosCyc([-7, 80]), .Range(4, -2, 0))) == res5
+                expect(m1 ?? (.Range(3, -2, 0), .PosCyc([-7, 80]))) == res6
+                expect { () -> Void in _ = m1 ?? (.Range(4, -2, 0), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Range(3, -2, -1), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Range(5, -2, 0)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Range(3, -2, -1)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Range(0, -2, 4), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Range(-1, -2, 3), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Range(0, -2, 5)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Range(-1, -2, 3)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Take(5), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Take(-1), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Take(6)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Take(-1)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Drop(5), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.Drop(-1), .All) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Drop(6)) }.to(throwAssertion())
+                expect { () -> Void in _ = m1 ?? (.All, .Drop(-1)) }.to(throwAssertion())
             }
         }
     }

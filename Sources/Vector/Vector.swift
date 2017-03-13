@@ -60,9 +60,34 @@ public func randn(_ count: Int) -> Vector {
     return x
 }
 
-// MARK: - Equatable
+// MARK: - Vector comparison
 
-/// Compare two vectors using Double value approximate comparison
+/// Check if two vectors are equal using Double value approximate comparison
 public func == (lhs: Vector, rhs: Vector) -> Bool {
     return lhs ==~ rhs
+}
+
+/// Check if two vectors are not equal using Double value approximate comparison
+public func != (lhs: Vector, rhs: Vector) -> Bool {
+    return lhs !=~ rhs
+}
+
+/// Check if one vector is greater than another using Double value approximate comparison
+public func > (lhs: Vector, rhs: Vector) -> Bool {
+    return lhs >~ rhs
+}
+
+/// Check if one vector is less than another using Double value approximate comparison
+public func < (lhs: Vector, rhs: Vector) -> Bool {
+    return lhs <~ rhs
+}
+
+/// Check if one vector is greater than or equal to another using Double value approximate comparison
+public func >= (lhs: Vector, rhs: Vector) -> Bool {
+    return lhs >=~ rhs
+}
+
+/// Check if one vector is less than or equal to another using Double value approximate comparison
+public func <= (lhs: Vector, rhs: Vector) -> Bool {
+    return lhs <=~ rhs
 }

@@ -52,7 +52,7 @@ func >~ (left: Double, right: Double) -> Bool
     return left.distance(to: right) < -deps
 }
 
-// MARK: Double array equality
+// MARK: Double array comparison
 
 func ==~ (left: [Double], right: [Double]) -> Bool
 {
@@ -64,6 +64,30 @@ func !=~ (left: [Double], right: [Double]) -> Bool
 {
     return left.count != right.count ||
         zip(left, right).filter { (l, r) in l !=~ r }.count != 0
+}
+
+func >~ (left: [Double], right: [Double]) -> Bool
+{
+    return left.count != right.count ||
+        zip(left, right).filter { (l, r) in l >~ r }.count != 0
+}
+
+func <~ (left: [Double], right: [Double]) -> Bool
+{
+    return left.count != right.count ||
+        zip(left, right).filter { (l, r) in l <~ r }.count != 0
+}
+
+func >=~ (left: [Double], right: [Double]) -> Bool
+{
+    return left.count != right.count ||
+        zip(left, right).filter { (l, r) in l >=~ r }.count != 0
+}
+
+func <=~ (left: [Double], right: [Double]) -> Bool
+{
+    return left.count != right.count ||
+        zip(left, right).filter { (l, r) in l <=~ r }.count != 0
 }
 
 // MARK: Modulo operation

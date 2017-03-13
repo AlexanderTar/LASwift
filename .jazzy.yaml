@@ -1,8 +1,12 @@
 podspec: LASwift.podspec
 
+github_url: https://github.com/AlexanderTar/LASwift/
+
 swift_version: 3.0.2
 
 min_acl: public
 skip_undocumented: true
 hide_documentation_coverage: true
 clean: true
+
+use_safe_filenames: true

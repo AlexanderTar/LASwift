@@ -748,7 +748,9 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
         return m
         
     case (.Range(let f, _, let t), _) where f < 0 || t >= m.rows,
-         (_, .Range(let f, _, let t)) where f < 0 || t >= m.cols:
+         (_, .Range(let f, _, let t)) where f < 0 || t >= m.cols,
+         (.Range(let f, _, let t), _) where f >= m.rows || t < 0,
+         (_, .Range(let f, _, let t)) where f >= m.cols || t < 0:
         preconditionFailure("Range out of bounds")
         
     case (.Take(let n), _) where n < 0 || n >= m.rows,
@@ -788,9 +790,9 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
         return slice(m, (e.er, .Pos([Int](0..<n))))
         
     case (.Drop(let n), _):
-        return slice(m, (.Pos([Int](m.rows-n..<m.rows)), e.ec))
+        return slice(m, (.Pos([Int](n..<m.rows)), e.ec))
     case (_, .Drop(let n)):
-        return slice(m, (e.er, .Pos([Int](m.cols-n..<m.cols))))
+        return slice(m, (e.er, .Pos([Int](n..<m.cols))))
         
     case (.Pos(let pr), .Pos(let pc)):
         precondition(pr.count > 0 && pr.filter { $0 < 0 || $0 > m.rows }.count == 0, "Range out of bounds")
@@ -877,11 +879,38 @@ extension Matrix: CustomStringConvertible {
     }
 }
 
-// MARK: - Equatable
+// MARK: - Matrix comparison
 
 extension Matrix: Equatable {}
 
-/// Compare two matrices using Double value approximate comparison
+/// Check if two matrices are equal using Double value approximate comparison
 public func == (lhs: Matrix, rhs: Matrix) -> Bool {
     return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat ==~ rhs.flat
+}
+
+/// Check if two matrices are not equal using Double value approximate comparison
+public func != (lhs: Matrix, rhs: Matrix) -> Bool {
+    return lhs.rows != rhs.rows || lhs.cols != rhs.cols || lhs.flat !=~ rhs.flat
+}
+
+extension Matrix: Comparable {}
+
+/// Check if one matrix is greater than another using Double value approximate comparison
+public func > (lhs: Matrix, rhs: Matrix) -> Bool {
+    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat >~ rhs.flat
+}
+
+/// Check if one matrix is less than another using Double value approximate comparison
+public func < (lhs: Matrix, rhs: Matrix) -> Bool {
+    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat <~ rhs.flat
+}
+
+/// Check if one matrix is greater than or equal to another using Double value approximate comparison
+public func >= (lhs: Matrix, rhs: Matrix) -> Bool {
+    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat >=~ rhs.flat
+}
+
+/// Check if one matrix is less than or equal to another using Double value approximate comparison
+public func <= (lhs: Matrix, rhs: Matrix) -> Bool {
+    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat <=~ rhs.flat
 }
