@@ -19,6 +19,18 @@ public func max(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_maxvD, a)
 }
 
+/// Return the index of largest element of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: index of largest element of vector a
+public func maxi(_ a: Vector) -> Int {
+    var value = 0.0
+    var index: vDSP_Length = 0
+    vDSP_maxviD(a, 1, &value, &index, vDSP_Length(a.count))
+    return Int(index)
+}
+
 /// Return the smallest element of vector.
 ///
 /// - Parameters
@@ -26,6 +38,18 @@ public func max(_ a: Vector) -> Double {
 /// - Returns: smallest element of vector a
 public func min(_ a: Vector) -> Double {
     return aggVectorFunction(vDSP_minvD, a)
+}
+
+/// Return the index of smallest element of vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: index of smallest element of vector a
+public func mini(_ a: Vector) -> Int {
+    var value = 0.0
+    var index: vDSP_Length = 0
+    vDSP_minviD(a, 1, &value, &index, vDSP_Length(a.count))
+    return Int(index)
 }
 
 /// Return mean (statistically average) value of vector.

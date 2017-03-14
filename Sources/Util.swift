@@ -106,3 +106,14 @@ func aggMatrixFunction(_ op: AggMatrixFunction, _ A: Matrix, _ d: Dim) -> Vector
         return transpose(A).map { op(Vector($0)) }
     }
 }
+
+typealias AggMatrixIFunction = ((_ A: Vector) -> Int)
+
+func aggMatrixIFunction(_ op: AggMatrixIFunction, _ A: Matrix, _ d: Dim) -> [Int] {
+    switch d {
+    case .Row:
+        return A.map { op(Vector($0)) }
+    case .Column:
+        return transpose(A).map { op(Vector($0)) }
+    }
+}

@@ -173,6 +173,12 @@ class VectorSpec: QuickSpec {
                 expect(abs(vec)).to(beCloseTo(res))
             }
             
+            it("threshold") {
+                let vec = [1.0, -2.0, 3.0]
+                let res = [1.0, 0.0, 3.0]
+                expect(thr(vec, 0.0)).to(beCloseTo(res))
+            }
+            
             it("dot product") {
                 let vec1 = [1.0, 2.0, 3.0]
                 let vec2 = [4.0, 5.0, 6.0]

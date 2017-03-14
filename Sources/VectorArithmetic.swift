@@ -495,3 +495,16 @@ public func uminus(_ a: Vector) -> Vector {
 public prefix func - (_ a: Vector) -> Vector {
     return uminus(a)
 }
+
+/// Threshold function on vector.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: vector with values less than certain value set to 0 
+///            and keeps the value otherwise
+public func thr(_ a: Vector, _ t: Double) -> Vector {
+    var b = zeros(a.count)
+    var t = t
+    vDSP_vthrD(a, 1, &t, &b, 1, vDSP_Length(a.count))
+    return b
+}

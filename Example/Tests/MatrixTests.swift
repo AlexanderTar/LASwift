@@ -253,6 +253,12 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 expect(abs(m1)) == res
             }
+            
+            it("threshold") {
+                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
+                let res = Matrix([[1.0, 0.0], [0.0, 4.0]])
+                expect(thr(m1, 0.0)) == res
+            }
         }
         
         describe("Matrix comparison") {
@@ -391,6 +397,14 @@ class MatrixSpec: QuickSpec {
                 expect(max(m1, .Row)).to(beCloseTo(res1))
                 expect(max(m1, .Column)).to(beCloseTo(res2))
             }
+            it("maxi") {
+                let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
+                let res1 = [1, 0]
+                let res2 = [1, 0]
+                expect(maxi(m1)) == res1
+                expect(maxi(m1, .Row)) == res1
+                expect(maxi(m1, .Column)) == res2
+            }
             it("min") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
                 let res1 = [1.0, 2.0]
@@ -398,6 +412,14 @@ class MatrixSpec: QuickSpec {
                 expect(min(m1)).to(beCloseTo(res1))
                 expect(min(m1, .Row)).to(beCloseTo(res1))
                 expect(min(m1, .Column)).to(beCloseTo(res2))
+            }
+            it("mini") {
+                let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
+                let res1 = [0, 1]
+                let res2 = [0, 1]
+                expect(mini(m1)) == res1
+                expect(mini(m1, .Row)) == res1
+                expect(mini(m1, .Column)) == res2
             }
             it("mean") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
@@ -515,6 +537,15 @@ class MatrixSpec: QuickSpec {
                                  [7.0, 8.0]])
                 let usv = svd(m1)
                 expect(usv.U * usv.S * usv.V′) == m1
+            }
+            it("chol") {
+                let m1 = Matrix([[1, 1, 1, 1, 1],
+                                 [1, 2, 3, 4, 5],
+                                 [1, 3, 6, 10, 15],
+                                 [1, 4, 10, 20, 35],
+                                 [1, 5, 15, 35, 70]])
+                let u = chol(m1)
+                expect(u′ * u) == m1
             }
         }
         

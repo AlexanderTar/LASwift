@@ -17,6 +17,15 @@ public func max(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(max, A, d)
 }
 
+/// Return vector of indices of largest elements of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
+public func maxi(_ A: Matrix, _ d: Dim = .Row) -> [Int] {
+    return aggMatrixIFunction(maxi, A, d)
+}
+
 /// Return vector of smallest elements of matrix in a specified dimension.
 ///
 /// - Parameters
@@ -24,6 +33,15 @@ public func max(_ A: Matrix, _ d: Dim = .Row) -> Vector {
 ///     - d: dimension (.Column or .Row, defaults to .Row)
 public func min(_ A: Matrix, _ d: Dim = .Row) -> Vector {
     return aggMatrixFunction(min, A, d)
+}
+
+/// Return vector of indices of smallest elements of matrix in a specified dimension.
+///
+/// - Parameters
+///     - A: matrix
+///     - d: dimension (.Column or .Row, defaults to .Row)
+public func mini(_ A: Matrix, _ d: Dim = .Row) -> [Int] {
+    return aggMatrixIFunction(mini, A, d)
 }
 
 /// Return vector of mean values of matrix in a specified dimension.

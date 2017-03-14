@@ -253,3 +253,40 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     
     return (transpose(U), diag(Int(M), Int(N), s), VT)
 }
+
+/// Compute the Cholesky factorization of a real symmetric positive definite matrix.
+///
+///	A precondition error is thrown if the algorithm fails to converge.
+///
+/// - Parameters:
+///     - A: square matrix to compute Cholesky factorization of
+/// - Returns: upper triangular matrix U so that `A = U' * U`
+public func chol(_ A: Matrix) -> Matrix {
+    precondition(A.rows == A.cols, "Matrix dimensions must agree")
+    
+    var uplo: Int8 = 85 // 'U'
+    var N = __CLPK_integer(A.rows)
+    
+    /* LAPACK is using column-major order */
+    var U = transpose(A)
+    
+    var LDA = N
+    
+    var error = __CLPK_integer(0)
+    
+    /* Compute Cholesky decomposition */
+    
+    dpotrf_(&uplo, &N, &U.flat, &LDA, &error)
+    
+    precondition(error == 0, "Failed to compute Cholesky decomposition")
+    
+    U = transpose(U)
+    
+    _ = (0..<A.rows).map { i in
+        _ = (0..<i).map { j in
+            U[i, j] = 0.0
+        }
+    }
+    
+    return U
+}

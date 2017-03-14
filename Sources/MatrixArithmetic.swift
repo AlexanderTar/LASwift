@@ -766,3 +766,13 @@ public func uminus(_ A: Matrix) -> Matrix {
 public prefix func - (_ A: Matrix) -> Matrix {
     return uminus(A)
 }
+
+/// Threshold function on matrix.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: matrix with values less than certain value set to 0
+///            and keeps the value otherwise
+public func thr(_ A: Matrix, _ t: Double) -> Matrix {
+    return Matrix(A.rows, A.cols, thr(A.flat, t))
+}
