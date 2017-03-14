@@ -573,12 +573,21 @@
 		A8C728D4E9BC0B2D4C76F72B28793B09 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				FA26034D1E6B509800F7914A /* Matrix */,
-				FA26034E1E6B509800F7914A /* Vector */,
-				FA4AC40F1E6618D300D5F51F /* Random.swift */,
+				FA4AC40B1E6614D900D5F51F /* Matrix.swift */,
+				FA2603591E6B8C6F00F7914A /* MatrixAlgebra.swift */,
+				FA2603511E6B520000F7914A /* MatrixArithmetic.swift */,
+				FA2603531E6B528000F7914A /* MatrixExponent.swift */,
+				FA2603571E6B87A200F7914A /* MatrixStatistics.swift */,
+				FA2603551E6B877100F7914A /* MatrixTrigonometry.swift */,
 				FA76EEC81E6ACABA00542B18 /* Numeric.swift */,
-				FA76EEC21E6AC95C00542B18 /* Util.swift */,
 				FA26035B1E6B936600F7914A /* Operators.swift */,
+				FA4AC40F1E6618D300D5F51F /* Random.swift */,
+				FA76EEC21E6AC95C00542B18 /* Util.swift */,
+				FA26034F1E6B517100F7914A /* Vector.swift */,
+				FA4AC4091E5F79BE00D5F51F /* VectorArithmetic.swift */,
+				FA76EEC41E6AC9D800542B18 /* VectorExponent.swift */,
+				FA76EEC01E6AC90700542B18 /* VectorStatistics.swift */,
+				FA76EEC61E6ACA1500542B18 /* VectorTrigonometry.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -595,31 +604,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Nimble";
-			sourceTree = "<group>";
-		};
-		FA26034D1E6B509800F7914A /* Matrix */ = {
-			isa = PBXGroup;
-			children = (
-				FA4AC40B1E6614D900D5F51F /* Matrix.swift */,
-				FA2603511E6B520000F7914A /* MatrixArithmetic.swift */,
-				FA2603531E6B528000F7914A /* MatrixExponent.swift */,
-				FA2603551E6B877100F7914A /* MatrixTrigonometry.swift */,
-				FA2603571E6B87A200F7914A /* MatrixStatistics.swift */,
-				FA2603591E6B8C6F00F7914A /* MatrixAlgebra.swift */,
-			);
-			path = Matrix;
-			sourceTree = "<group>";
-		};
-		FA26034E1E6B509800F7914A /* Vector */ = {
-			isa = PBXGroup;
-			children = (
-				FA4AC4091E5F79BE00D5F51F /* VectorArithmetic.swift */,
-				FA76EEC01E6AC90700542B18 /* VectorStatistics.swift */,
-				FA76EEC41E6AC9D800542B18 /* VectorExponent.swift */,
-				FA76EEC61E6ACA1500542B18 /* VectorTrigonometry.swift */,
-				FA26034F1E6B517100F7914A /* Vector.swift */,
-			);
-			path = Vector;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
