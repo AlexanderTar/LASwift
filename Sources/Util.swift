@@ -50,9 +50,26 @@ func vectorFunction(_ op: VectorFunction, _ a: Vector) -> Vector {
 typealias AggVectorFunction = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: vDSP_Length) -> ())
 
 func aggVectorFunction(_ op: AggVectorFunction, _ a: Vector) -> Double {
+    return aggVectorFunction(op, a, a.count)
+}
+
+func aggVectorFunction(_ op: AggVectorFunction, _ a: UnsafePointer<Double>, _ count: Int) -> Double {
     var c = 0.0
-    op(a, 1, &c, vDSP_Length(a.count))
+    op(a, 1, &c, vDSP_Length(count))
     return c
+}
+
+typealias AggVectorIFunction = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: UnsafeMutablePointer<vDSP_Length>, _: vDSP_Length) -> ())
+
+func aggVectorIFunction(_ op: AggVectorIFunction, _ a: Vector) -> Int {
+    return aggVectorIFunction(op, a, a.count)
+}
+
+func aggVectorIFunction(_ op: AggVectorIFunction, _ a: UnsafePointer<Double>, _ count: Int) -> Int {
+    var c = 0.0
+    var i: vDSP_Length = 0
+    op(a, 1, &c, &i, vDSP_Length(count))
+    return Int(i)
 }
 
 // MARK: - Matrix operations
@@ -99,21 +116,34 @@ func matrixFunction(_ op: MatrixFunction, _ A: Matrix) -> Matrix {
 typealias AggMatrixFunction = ((_ A: Vector) -> Double)
 
 func aggMatrixFunction(_ op: AggMatrixFunction, _ A: Matrix, _ d: Dim) -> Vector {
-    switch d {
-    case .Row:
-        return A.map { op(Vector($0)) }
-    case .Column:
-        return transpose(A).map { op(Vector($0)) }
+    let _A = toRows(A, d)
+    var res = zeros(_A.rows)
+    for i in (0..<_A.rows) {
+        res[i] = op(_A[row: i])
     }
+    return res
 }
 
-typealias AggMatrixIFunction = ((_ A: Vector) -> Int)
-
-func aggMatrixIFunction(_ op: AggMatrixIFunction, _ A: Matrix, _ d: Dim) -> [Int] {
-    switch d {
-    case .Row:
-        return A.map { op(Vector($0)) }
-    case .Column:
-        return transpose(A).map { op(Vector($0)) }
+func aggMatrixFunction(_ op: AggVectorFunction, _ A: Matrix, _ d: Dim) -> Vector {
+    let _A = toRows(A, d)
+    var res = zeros(_A.rows)
+    for i in (0..<_A.rows) {
+        _A.flat.withUnsafeBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + i * _A.cols
+            res[i] = aggVectorFunction(op, p, _A.cols)
+        }
     }
+    return res
+}
+
+func aggMatrixIFunction(_ op: AggVectorIFunction, _ A: Matrix, _ d: Dim) -> [Int] {
+    let _A = toRows(A, d)
+    var res = [Int](repeating: 0, count: _A.rows)
+    for i in (0..<_A.rows) {
+        _A.flat.withUnsafeBufferPointer { bufPtr in
+            let p = bufPtr.baseAddress! + i * _A.cols
+            res[i] = aggVectorIFunction(op, p, _A.cols)
+        }
+    }
+    return res
 }

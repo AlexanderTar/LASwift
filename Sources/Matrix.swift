@@ -274,8 +274,37 @@ extension Matrix {
         }
     }
     
+    /// Construct new matrix from source using specified extractor.
+    ///
+    /// Alternatively, `m[e]` can be executed with `m ?? e` or `slice(m, e)`
+    ///
+    /// - Parameters
+    ///     - e: extractor tuple for rows and columns
+    /// - Returns: extracted matrix
+    public subscript(_ e: (er: Extractor, ec: Extractor)) -> Matrix {
+        return slice(self, e)
+    }
+    
     internal func indexIsValidForRow(_ row: Int, _ col: Int) -> Bool {
         return row >= 0 && row < rows && col >= 0 && col < cols
+    }
+}
+
+internal func toRows(_ A: Matrix, _ d: Dim) -> Matrix {
+    switch d {
+    case .Row:
+        return A
+    case .Column:
+        return transpose(A)
+    }
+}
+
+internal func toCols(_ A: Matrix, _ d: Dim) -> Matrix {
+    switch d {
+    case .Row:
+        return transpose(A)
+    case .Column:
+        return A
     }
 }
 
@@ -735,7 +764,7 @@ public enum Extractor {
 
 /// Construct new matrix from source using specified extractor
 ///
-/// Alternatively, `slice(m, e)` can be executed with `m ?? e`.
+/// Alternatively, `slice(m, e)` can be executed with `m ?? e` or `m[e]`.
 ///
 /// - Parameters
 ///     - m: source matrix
@@ -827,7 +856,7 @@ func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
 
 /// Construct new matrix from source using specified extractor.
 ///
-/// Alternatively, `m ?? e` can be executed with `slice(m, e)`.
+/// Alternatively, `m ?? e` can be executed with `slice(m, e)` or `m[e]`.
 ///
 /// - Parameters
 ///     - m: source matrix

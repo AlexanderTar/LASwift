@@ -8,6 +8,15 @@
 
 import Accelerate
 
+/// Matrix triangular part.
+///
+/// - Upper: Upper triangular part.
+/// - Lower: Lower triangular part.
+public enum Triangle {
+    case Upper
+    case Lower
+}
+
 // MARK: - Linear algebra operations on matrices
 
 /// Compute the trace of a matrix.
@@ -209,7 +218,7 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     
     precondition(error == 0, "Failed to compute eigen vectors")
     
-    return (transpose(V), diag(eig))
+    return (toRows(V, .Column), diag(eig))
 }
 
 /// Perform a singular value decomposition of a given matrix.
@@ -219,7 +228,7 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
 /// - Returns: matrices U, S, and V such that `A = U * S * transpose(V)`
 public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     /* LAPACK is using column-major order */
-    let _A = transpose(A)
+    let _A = toCols(A, .Row)
     
     var jobz: Int8 = 65 // 'A'
     
@@ -251,7 +260,7 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     
     precondition(error == 0, "Failed to compute SVD")
     
-    return (transpose(U), diag(Int(M), Int(N), s), VT)
+    return (toRows(U, .Column), diag(Int(M), Int(N), s), VT)
 }
 
 /// Compute the Cholesky factorization of a real symmetric positive definite matrix.
@@ -260,15 +269,24 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
 ///
 /// - Parameters:
 ///     - A: square matrix to compute Cholesky factorization of
-/// - Returns: upper triangular matrix U so that `A = U' * U`
-public func chol(_ A: Matrix) -> Matrix {
+///     - t: Triangle value (.Upper, .Lower)
+/// - Returns: upper triangular matrix U so that `A = U' * U` or 
+///            lower triangular matrix L so that `A = L * L'`
+public func chol(_ A: Matrix, _ t: Triangle = .Upper) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     
-    var uplo: Int8 = 85 // 'U'
+    var uplo: Int8
+    switch t {
+    case .Upper:
+        uplo = 85 // 'U'
+    case .Lower:
+        uplo = 76 // 'L'
+    }
+    
     var N = __CLPK_integer(A.rows)
     
     /* LAPACK is using column-major order */
-    var U = transpose(A)
+    var U = toCols(A, .Row)
     
     var LDA = N
     
@@ -280,13 +298,34 @@ public func chol(_ A: Matrix) -> Matrix {
     
     precondition(error == 0, "Failed to compute Cholesky decomposition")
     
-    U = transpose(U)
+    U = toRows(U, .Column)
     
-    for i in (0..<A.rows) {
-        for j in (0..<i) {
-            U[i, j] = 0.0
+    return tri(U, t)
+}
+
+/// Return the upper/lower triangular part of a given matrix.
+///
+/// - Parameters:
+///     - A: matrix
+///     - t: Triangle value (.Upper, .Lower)
+/// - Returns: upper/lower triangular part
+public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
+    let _A = zeros(A.rows, A.cols)
+    switch t {
+    case .Upper:
+        for i in (0..<A.rows) {
+            A.flat.withUnsafeBufferPointer { bufPtr in
+                let p = bufPtr.baseAddress! + (i * _A.cols) + i
+                vDSP_mmovD(p, &_A.flat[(i * _A.cols) + i], vDSP_Length(A.cols - i), vDSP_Length(1), vDSP_Length(A.cols), vDSP_Length(_A.cols))
+            }
+        }
+    case .Lower:
+        for i in (0..<A.rows) {
+            A.flat.withUnsafeBufferPointer { bufPtr in
+                let p = bufPtr.baseAddress! + (i * _A.cols)
+                vDSP_mmovD(p, &_A.flat[(i * _A.cols)], vDSP_Length(i + 1), vDSP_Length(1), vDSP_Length(A.cols), vDSP_Length(_A.cols))
+            }
         }
     }
-    
-    return U
+    return _A
 }

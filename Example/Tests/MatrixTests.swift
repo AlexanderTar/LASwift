@@ -546,6 +546,9 @@ class MatrixSpec: QuickSpec {
                                  [1, 5, 15, 35, 70]])
                 let u = chol(m1)
                 expect(u′ * u) == m1
+                let l = chol(m1, .Lower)
+                print(l)
+                expect(l * l′) == m1
             }
         }
         
@@ -710,6 +713,7 @@ class MatrixSpec: QuickSpec {
                 let res6 = Matrix([[18, 15],
                                    [8,  5]])
                 expect(m1 ?? (.All, .All)) == m1
+                expect(m1[(.All, .All)]) == m1
                 expect(m1 ?? (.Take(3), .DropLast(2))) == res1
                 expect(m1 ?? (.DropLast(1), .Take(3))) == res1
                 expect(m1 ?? (.TakeLast(2), .TakeLast(3))) == res2

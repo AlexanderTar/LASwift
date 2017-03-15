@@ -252,10 +252,20 @@ class VectorSpec: QuickSpec {
                 let res = 3.0
                 expect(max(vec)).to(beCloseTo(res))
             }
+            it("maxi") {
+                let vec = [1.0, 3.0, 2.0]
+                let res = 1
+                expect(maxi(vec)) == res
+            }
             it("min") {
                 let vec = [3.0, 1.0, 2.0]
                 let res = 1.0
                 expect(min(vec)).to(beCloseTo(res))
+            }
+            it("mini") {
+                let vec = [3.0, 1.0, 2.0]
+                let res = 1
+                expect(mini(vec)) == res
             }
             it("mean") {
                 let vec = [1.0, 2.0, 3.0]
@@ -266,6 +276,16 @@ class VectorSpec: QuickSpec {
                 let vec = [1.0, 2.0, 3.0]
                 let res = sqrt(2.0 / 3.0)
                 expect(std(vec)).to(beCloseTo(res))
+            }
+            it("sum") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = 6.0
+                expect(sum(vec)).to(beCloseTo(res))
+            }
+            it("sumsq") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = 14.0
+                expect(sumsq(vec)).to(beCloseTo(res))
             }
             it("normalize") {
                 let vec = [1.0, 2.0, 3.0]
