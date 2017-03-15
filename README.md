@@ -40,6 +40,12 @@ Following matrix manipulation operations are supported:
 - Xcode 8.0+
 - Swift 3.0+
 
+## Benchmarks
+
+Refer to [linalg-benchmarks](https://github.com/Alexander-Ignatyev/linalg-benchmarks) project
+regarding basic benchmarking of latest version of LASwift against most popular linear
+algebra libraries (Haskell hmatrix, Python NumPy, Octave, Go gonum-matrix).
+
 ## Installation
 
 #### CocoaPods
