@@ -282,8 +282,8 @@ public func chol(_ A: Matrix) -> Matrix {
     
     U = transpose(U)
     
-    _ = (0..<A.rows).map { i in
-        _ = (0..<i).map { j in
+    for i in (0..<A.rows) {
+        for j in (0..<i) {
             U[i, j] = 0.0
         }
     }
