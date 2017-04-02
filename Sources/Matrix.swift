@@ -868,7 +868,7 @@ public func ?? (_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
 
 // MARK: - Map-reduce
 
-/// Map all elements of source matrix to new matrix using specific function.
+/// Map all elements of source matrix to new matrix using specified function.
 ///
 /// - Parameters
 ///     - A: source matrix
@@ -876,6 +876,29 @@ public func ?? (_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
 /// - Returns: mapped matrix
 public func map(_ A: Matrix, _ f: ((Double) -> Double)) -> Matrix {
     return Matrix(A.rows, A.cols, A.flat.map(f))
+}
+
+/// Map all elements of source matrix to new matrix using specified function
+/// which operates on vectors.
+///
+/// - Parameters
+///     - A: source matrix
+///     - f: mapping function
+/// - Returns: mapped matrix
+public func map(_ A: Matrix, _ f: ((Vector) -> Vector)) -> Matrix {
+    return matrixFunction(f, A)
+}
+
+/// Perform reduce operation on a matrix using specified function
+/// within the specified dimension.
+///
+/// - Parameters
+///     - A: source matrix
+///     - f: reducing function
+///     - d: dimesion to apply reduce within (Row by default)
+/// - Returns: vector of reduced values
+public func reduce(_ A: Matrix, _ f: ((Vector) -> Double), _ d: Dim = .Row) -> Vector {
+    return aggMatrixFunction(f, A, d)
 }
 
 // MARK: - Sequence

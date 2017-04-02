@@ -327,6 +327,22 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[1.0, 4.0], [9.0, 16.0]])
                 expect(map(m1, { $0 * $0 })) == res
             }
+            it("map vec") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let res = Matrix([[1.0, 4.0], [9.0, 16.0]])
+                expect(map(m1, square)) == res
+            }
+            it("reduce rows") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let res = [3.0, 7.0]
+                expect(reduce(m1, sum)) == res
+                expect(reduce(m1, sum, .Row)) == res
+            }
+            it("reduce cols") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let res = [4.0, 6.0]
+                expect(reduce(m1, sum, .Column)) == res
+            }
         }
         
         describe("Matrix power and exponential tests") {
