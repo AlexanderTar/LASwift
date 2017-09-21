@@ -541,10 +541,19 @@ class MatrixSpec: QuickSpec {
                                  [0.5000, 1.0000, 0.6667, 0.5000],
                                  [0.3333, 0.6667, 1.0000, 0.7500],
                                  [0.2500, 0.5000, 0.7500, 1.0000]])
-                let e = eig(m1)
-                expect(m1 * e.V) == e.V * e.D
-                let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
+                let e1 = eig(m1)
+                expect(m1 * e1.V) == e1.V * e1.D
+                let m2 = Matrix([[1.0, 0.0, 2.0],
+                                 [-1.0, 5.0, 0.0]])
                 expect { () -> Void in _ = eig(m2) }.to(throwAssertion())
+                let m3 = Matrix([[0, 1],
+                                 [-2, -3]])
+                let e2 = eig(m3)
+                expect(m3 * e2.V) == e2.V * e2.D
+                let v3 = Matrix([[-1.0, 0.0],
+                                 [0.0, -2.0]])
+                expect(e2.D) == v3
+
             }
             it("svd") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -563,7 +572,6 @@ class MatrixSpec: QuickSpec {
                 let u = chol(m1)
                 expect(u′ * u) == m1
                 let l = chol(m1, .Lower)
-                print(l)
                 expect(l * l′) == m1
             }
         }

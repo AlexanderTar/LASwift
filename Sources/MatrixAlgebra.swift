@@ -192,33 +192,34 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     var wkOpt = __CLPK_doublereal(0.0)
     var lWork = __CLPK_integer(-1)
     
-    var liWkOpt = __CLPK_integer(0)
-    var liWork = __CLPK_integer(-1)
-    
-    var jobz: Int8 = 86 // 'V'
-    var uplo: Int8 = 85 // 'U'
+    var jobvl: Int8 = 86 // 'V'
+    var jobvr: Int8 = 86 // 'V'
     
     var error = __CLPK_integer(0)
     
-    var eig = Vector(repeating: 0.0, count: Int(N))
+    // Real parts of eigenvalues
+    var wr = Vector(repeating: 0.0, count: Int(N))
+    // Imaginary parts of eigenvalues
+    var wi = Vector(repeating: 0.0, count: Int(N))
+    // Left eigenvectors
+    var vl = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N))
+    // Right eigenvectors
+    var vr = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N))
     
     /* Query and allocate the optimal workspace */
     
-    dsyevd_(&jobz, &uplo, &N, &V.flat, &LDA, &eig, &wkOpt, &lWork, &liWkOpt, &liWork, &error)
+    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &N, &vr, &N, &wkOpt, &lWork, &error)
     
     lWork = __CLPK_integer(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
-    liWork = liWkOpt
-    var iWork = [__CLPK_integer](repeating: 0, count: Int(liWork))
-    
     /* Compute eigen vectors */
     
-    dsyevd_(&jobz, &uplo, &N, &V.flat, &LDA, &eig, &work, &lWork, &iWork, &liWork, &error)
+    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &N, &vr, &N, &work, &lWork, &error)
     
     precondition(error == 0, "Failed to compute eigen vectors")
     
-    return (toRows(V, .Column), diag(eig))
+    return (toRows(Matrix(A.rows, A.cols, vl), .Column), diag(wr))
 }
 
 /// Perform a singular value decomposition of a given matrix.
