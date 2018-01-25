@@ -6,6 +6,8 @@
 //  Copyright © 2017 CocoaPods. All rights reserved.
 //
 
+import Darwin
+
 import Quick
 import Nimble
 import LASwift
@@ -516,10 +518,12 @@ class MatrixSpec: QuickSpec {
                 let res1 = Matrix([[7.0, 10.0],
                                   [15.0, 22.0]])
                 let res2 = inv(m1 * m1)
+                let eye = Matrix([[1.0, 0.0],
+                                  [0.0, 1.0]])
                 expect(m1 ^ 1) == m1
                 expect(m1 ^ 2) == res1
                 expect(m1 ^ -2) == res2
-                expect { () -> Void in _ = m1 ^ 0 }.to(throwAssertion())
+                expect(m1 ^ 0) == eye
             }
             it("inverse") {
                 let m1 = Matrix([[1.0, 0.0, 2.0],

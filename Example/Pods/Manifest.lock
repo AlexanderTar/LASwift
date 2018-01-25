@@ -1,22 +1,22 @@
 PODS:
-  - LASwift (0.1.0)
-  - Nimble (5.1.1)
-  - Quick (1.0.0)
+  - LASwift (0.1.2)
+  - Nimble (7.0.3)
+  - Quick (1.2.0)
 
 DEPENDENCIES:
   - LASwift (from `../`)
-  - Nimble (~> 5.1.1)
-  - Quick (~> 1.0.0)
+  - Nimble (~> 7.0.3)
+  - Quick (~> 1.2.0)
 
 EXTERNAL SOURCES:
   LASwift:
     :path: ../
 
 SPEC CHECKSUMS:
-  LASwift: ff02f0877990a137e08ae955642a25f2662e51eb
-  Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
-  Quick: 8024e4a47e6cc03a9d5245ef0948264fc6d27cff
+  LASwift: 7258809243d69f4b70e4b24265ce17f600dbb455
+  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
+  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
 
-PODFILE CHECKSUM: 929b9dc6a43cf32439dda54be046e25b14706d73
+PODFILE CHECKSUM: 00b45421d5cfe9d314fc90398d085936386b98a0
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.4.0

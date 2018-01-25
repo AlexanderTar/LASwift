@@ -2,6 +2,6 @@ use_frameworks!
 target 'LASwift_Tests' do
   pod 'LASwift', :path => '../'
   
-  pod 'Quick', '~> 1.0.0'
-  pod 'Nimble', '~> 5.1.1'
+  pod 'Quick', '~> 1.2.0'
+  pod 'Nimble', '~> 7.0.3'
 end

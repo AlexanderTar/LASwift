@@ -77,7 +77,7 @@ func aggVectorIFunction(_ op: AggVectorIFunction, _ a: UnsafePointer<Double>, _ 
 typealias MatrixMatrixOperation = ((_ A: Vector, _ B: Vector) -> Vector)
 
 func matrixMatrixOperation(_ op: MatrixMatrixOperation, _ A: Matrix, _ B: Matrix) -> Matrix {
-    precondition(A.rows == B.rows && A.cols == B.cols)
+    precondition(A.rows == B.rows && A.cols == B.cols, "Matrices must be of same dimensions")
     return Matrix(A.rows, A.cols, op(A.flat, B.flat))
 }
 

@@ -3,6 +3,7 @@
 
 # Xcode
 build/
+.build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -23,3 +24,6 @@ DerivedData
 .bundle
 
 Carthage
+
+Package.resolved
+

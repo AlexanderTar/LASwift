@@ -112,7 +112,7 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     case _ where p < -1:
         return inv(mpower(A, -p))
     default:
-        preconditionFailure("Power must be non-zero")
+        return eye(A.rows, A.cols)
     }
 }
 
@@ -145,7 +145,9 @@ public func inv(_ A: Matrix) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     let B = Matrix(A)
     
-    var N = __CLPK_integer(A.rows)
+    var M = __CLPK_integer(A.rows)
+    var N = M
+    var LDA = N
     var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
     
     var wkOpt = __CLPK_doublereal(0.0)
@@ -153,20 +155,20 @@ public func inv(_ A: Matrix) -> Matrix {
     
     var error: __CLPK_integer = 0
     
-    dgetrf_(&N, &N, &(B.flat), &N, &pivot, &error)
+    dgetrf_(&M, &N, &(B.flat), &LDA, &pivot, &error)
     
     precondition(error == 0, "Matrix is non invertible")
     
     /* Query and allocate the optimal workspace */
     
-    dgetri_(&N, &(B.flat), &N, &pivot, &wkOpt, &lWork, &error)
+    dgetri_(&N, &(B.flat), &LDA, &pivot, &wkOpt, &lWork, &error)
     
     lWork = __CLPK_integer(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute inversed matrix */
     
-    dgetri_(&N, &(B.flat), &N, &pivot, &work, &lWork, &error)
+    dgetri_(&N, &(B.flat), &LDA, &pivot, &work, &lWork, &error)
     
     precondition(error == 0, "Matrix is non invertible")
     
@@ -206,16 +208,19 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     // Right eigenvectors
     var vr = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N))
     
+    var ldvl = N
+    var ldvr = N
+    
     /* Query and allocate the optimal workspace */
     
-    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &N, &vr, &N, &wkOpt, &lWork, &error)
+    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error)
     
     lWork = __CLPK_integer(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute eigen vectors */
     
-    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &N, &vr, &N, &work, &lWork, &error)
+    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error)
     
     precondition(error == 0, "Failed to compute eigen vectors")
     
