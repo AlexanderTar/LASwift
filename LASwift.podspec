@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LASwift'
-  s.version          = '0.1.2'
+  s.version          = '0.2.0'
   s.summary          = 'Linear algebra library for Swift language'
 
   s.description      = <<-DESC
