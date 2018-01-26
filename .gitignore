@@ -23,6 +23,8 @@ DerivedData
 # Bundler
 .bundle
 
+*.lock
+
 Carthage
 
 Package.resolved
