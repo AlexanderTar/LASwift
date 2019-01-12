@@ -1,18 +1,34 @@
-osx_image: xcode9.2
+osx_image: xcode10.1
 language: objective-c
 cache: cocoapods
 podfile: Example/Podfile
+env:
+  global:
+  - FRAMEWORK_NAME=LASwift
 before_install:
-- gem install cocoapods # Since Travis is not always on latest version
+- gem install cocoapods --pre
 - gem install jazzy
 - gem install psych
 - pod repo update
 - pod install --project-directory=Example
+- brew update
+- brew outdated carthage || brew upgrade carthage
 script:
-- set -o pipefail && xcodebuild -workspace Example/LASwift.xcworkspace -scheme LASwift-Tests -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6s" ONLY_ACTIVE_ARCH=YES -enableCodeCoverage YES test | xcpretty -c
-
+- set -o pipefail && xcodebuild -workspace Example/LASwift.xcworkspace -scheme LASwift-Tests ONLY_ACTIVE_ARCH=YES -enableCodeCoverage YES test | xcpretty -c
 after_success:
-- bash <(curl -s https://codecov.io/bash) -cF ios -t 1d1872c3-a9e1-490e-8e5d-09e3383f1dd1 -J '^LASwift$'
+- bash <(curl -s https://codecov.io/bash) -cF ios -t 1d1872c3-a9e1-490e-8e5d-09e3383f1dd1
+  -J '^LASwift$'
 - pod lib lint --allow-warnings
-- jazzy # generate documents
+- jazzy
 - rake publish_docs
+before_deploy:
+- carthage build --no-skip-current
+- carthage archive $FRAMEWORK_NAME
+deploy:
+  provider: releases
+  api_key:
+    secure: k+mjG2ozVT520XbjFVJUBP1mFrIcj9ZPOpFQcU2bcWXLiiF+nMeLYuiALhTseSYM3BKkYNiU8Vv3TyhvGq8lnBNMzA0KdN3QdTAvYUK+IjwCqxVBnN1AtLauMLjGdRQWmyRWluAq6Qeefiis2Vo23BXe+Vo2eL9CXjFBq82frMVwT9wUTqRI5j2e0u4XkXBVlahWWE7RSWgx9Ah4xOt2IA17Mop/TlzyGYzNLDlTQizdQixyPQaC8+gzykG9TCktxk9UoK3qCgBY+fNymgtj7bVpGuaqQN+taeFchTekNK1rJl74X6wnmi5qGzFyOxK8Bir3G065CYrYMmplm4nHt0Borfch+OZQumUMsicK7aQsXoEXi3TM1crcNwGzaTPYP4oP0KIztWuxwgcEMZnyVdxjSVUXMA48yIVkEGZHZvcqmrpPgeJuojAPoZtHsSH/O39baSRqHDSD9M2vraP7/WaXLG/UNxnrfqmdGafck0clFLZ8k31P5j0lND8Edd7G1DpbWNNCyjgcJ+vKMnGsiI/UrZOEJ67+fQUVSxYgu313XPnCaa1q/1HvbTc5aH0dXR1nSvKe17uCj1rz9MULQmK34QSvqmrzQN0MYXjwVXPSjMwakROp6eFh8O1TCZl40wilqYdPWBkNJGFGrYDOoFXp0P7l7I6kv5um9JISOXI=
+  file: "$FRAMEWORK_NAME.framework.zip"
+  on:
+    repo: AlexanderTar/LASwift
+    tags: true
