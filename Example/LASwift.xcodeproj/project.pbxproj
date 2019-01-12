@@ -7,27 +7,165 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2149A62B993E148DF7CD2E8A /* Pods_LASwift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */; };
+		2520B6917DD3B295EB6FDAE0 /* Pods_LASwift_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */; };
+		3611B5C921E96CD1004E0EF8 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
+		3611B5CA21E96CD1004E0EF8 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
+		3611B5CB21E96CD1004E0EF8 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
+		3611B5CC21E96CD1004E0EF8 /* MatrixTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */; };
+		3611B5CD21E96CD1004E0EF8 /* MatrixStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */; };
+		3611B5CE21E96CD1004E0EF8 /* VectorExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */; };
+		3611B5CF21E96CD1004E0EF8 /* MatrixExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */; };
+		3611B5D021E96CD1004E0EF8 /* MatrixArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */; };
+		3611B5D121E96CD1004E0EF8 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C221E96CD1004E0EF8 /* Operators.swift */; };
+		3611B5D221E96CD1004E0EF8 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C321E96CD1004E0EF8 /* Vector.swift */; };
+		3611B5D321E96CD1004E0EF8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C421E96CD1004E0EF8 /* Util.swift */; };
+		3611B5D421E96CD1004E0EF8 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C521E96CD1004E0EF8 /* Matrix.swift */; };
+		3611B5D521E96CD1004E0EF8 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C621E96CD1004E0EF8 /* Numeric.swift */; };
+		3611B5D621E96CD1004E0EF8 /* VectorTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */; };
+		3611B5D721E96CD1004E0EF8 /* MatrixAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */; };
+		3611B5D921E96CE5004E0EF8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B5D821E96CE5004E0EF8 /* Accelerate.framework */; };
+		3611B65E21E96EBA004E0EF8 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
+		3611B65F21E96EBA004E0EF8 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
+		3611B66021E96EBA004E0EF8 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
+		3611B66121E96EBA004E0EF8 /* MatrixTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */; };
+		3611B66221E96EBA004E0EF8 /* MatrixStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */; };
+		3611B66321E96EBA004E0EF8 /* VectorExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */; };
+		3611B66421E96EBA004E0EF8 /* MatrixExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */; };
+		3611B66521E96EBA004E0EF8 /* MatrixArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */; };
+		3611B66621E96EBA004E0EF8 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C221E96CD1004E0EF8 /* Operators.swift */; };
+		3611B66721E96EBA004E0EF8 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C321E96CD1004E0EF8 /* Vector.swift */; };
+		3611B66821E96EBA004E0EF8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C421E96CD1004E0EF8 /* Util.swift */; };
+		3611B66921E96EBA004E0EF8 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C521E96CD1004E0EF8 /* Matrix.swift */; };
+		3611B66A21E96EBA004E0EF8 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C621E96CD1004E0EF8 /* Numeric.swift */; };
+		3611B66B21E96EBA004E0EF8 /* VectorTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */; };
+		3611B66C21E96EBA004E0EF8 /* MatrixAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */; };
+		3611B66D21E96EBB004E0EF8 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
+		3611B66E21E96EBB004E0EF8 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
+		3611B66F21E96EBB004E0EF8 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
+		3611B67021E96EBB004E0EF8 /* MatrixTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */; };
+		3611B67121E96EBB004E0EF8 /* MatrixStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */; };
+		3611B67221E96EBB004E0EF8 /* VectorExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */; };
+		3611B67321E96EBB004E0EF8 /* MatrixExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */; };
+		3611B67421E96EBB004E0EF8 /* MatrixArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */; };
+		3611B67521E96EBB004E0EF8 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C221E96CD1004E0EF8 /* Operators.swift */; };
+		3611B67621E96EBB004E0EF8 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C321E96CD1004E0EF8 /* Vector.swift */; };
+		3611B67721E96EBB004E0EF8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C421E96CD1004E0EF8 /* Util.swift */; };
+		3611B67821E96EBB004E0EF8 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C521E96CD1004E0EF8 /* Matrix.swift */; };
+		3611B67921E96EBB004E0EF8 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C621E96CD1004E0EF8 /* Numeric.swift */; };
+		3611B67A21E96EBB004E0EF8 /* VectorTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */; };
+		3611B67B21E96EBB004E0EF8 /* MatrixAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */; };
+		3611B67D21E96ECF004E0EF8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B67C21E96ECF004E0EF8 /* Accelerate.framework */; };
+		3611B67F21E96ED8004E0EF8 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B67E21E96ED8004E0EF8 /* Accelerate.framework */; };
+		36EF117821E9703700B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117721E9703700B11E01 /* Foundation.framework */; };
+		36EF117A21E9703F00B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117921E9703F00B11E01 /* Foundation.framework */; };
+		36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117B21E9704600B11E01 /* Foundation.framework */; };
+		36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B64221E96E08004E0EF8 /* Accelerate.framework */; };
+		36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117E21E9705600B11E01 /* Foundation.framework */; };
+		C27CC983E4CD8E1391C925EC /* Pods_LASwift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */; };
 		D6AB38F19319980B12634450 /* Pods_LASwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */; };
+		D762015965607B775250746C /* Pods_LASwift_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */; };
 		FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */; };
 		FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */; };
 		FAD2257E1E7925C40012219D /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD2257D1E7925C40012219D /* PerformanceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1704107214A5332AD1B6A5CA /* Pods-LASwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		1C05CC535742F2351D533EF9 /* LASwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LASwift.podspec; path = ../LASwift.podspec; sourceTree = "<group>"; };
+		1C05CC535742F2351D533EF9 /* LASwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LASwift.podspec; path = ../LASwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		1E0486DAC721E4465B68CF48 /* Pods-LASwift-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-Tests/Pods-LASwift-Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		3611B5B021E96BD3004E0EF8 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3611B5BA21E96CD1004E0EF8 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
+		3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorStatistics.swift; sourceTree = "<group>"; };
+		3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorArithmetic.swift; sourceTree = "<group>"; };
+		3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixTrigonometry.swift; sourceTree = "<group>"; };
+		3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixStatistics.swift; sourceTree = "<group>"; };
+		3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorExponent.swift; sourceTree = "<group>"; };
+		3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixExponent.swift; sourceTree = "<group>"; };
+		3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixArithmetic.swift; sourceTree = "<group>"; };
+		3611B5C221E96CD1004E0EF8 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		3611B5C321E96CD1004E0EF8 /* Vector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		3611B5C421E96CD1004E0EF8 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		3611B5C521E96CD1004E0EF8 /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
+		3611B5C621E96CD1004E0EF8 /* Numeric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Numeric.swift; sourceTree = "<group>"; };
+		3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorTrigonometry.swift; sourceTree = "<group>"; };
+		3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixAlgebra.swift; sourceTree = "<group>"; };
+		3611B5D821E96CE5004E0EF8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		3611B64221E96E08004E0EF8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		3611B64921E96E1D004E0EF8 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3611B65621E96E47004E0EF8 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3611B67C21E96ECF004E0EF8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.1.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		3611B67E21E96ED8004E0EF8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS5.1.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		3611B68521E96F46004E0EF8 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		36EF117721E9703700B11E01 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		36EF117921E9703F00B11E01 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		36EF117B21E9704600B11E01 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		36EF117E21E9705600B11E01 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3DE47813017AD6FCE558FFA6 /* Pods-LASwift_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		607FACE51AFB9204008FA782 /* LASwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LASwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ED83793FC8493634255E29D /* Pods-LASwift-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-Tests/Pods-LASwift-Tests.release.xcconfig"; sourceTree = "<group>"; };
+		49E04D6738A29ED00A388393 /* Pods-LASwift-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-tvOS/Pods-LASwift-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		607FACE51AFB9204008FA782 /* LASwift-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LASwift-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6257553D7700889886E99285 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		6D15D806270D98DDCB0FB8F4 /* Pods-LASwift-watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-watchOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-watchOS/Pods-LASwift-watchOS.release.xcconfig"; sourceTree = "<group>"; };
+		71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8982C2AF1B7A836D1583B9D4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		8C2FD693A9DA150F043CE3C2 /* Pods-LASwift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-macOS/Pods-LASwift-macOS.release.xcconfig"; sourceTree = "<group>"; };
+		98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA60353EB7DC503309D0D1CB /* Pods-LASwift-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-tvOS/Pods-LASwift-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6E171B93F492125827A097F /* Pods-LASwift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-iOS/Pods-LASwift-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		D73221DE1DD93737086D2485 /* Pods-LASwift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-macOS/Pods-LASwift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		DDDF3121628E3379F1F31373 /* Pods-LASwift-watchOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-watchOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-watchOS/Pods-LASwift-watchOS.debug.xcconfig"; sourceTree = "<group>"; };
+		EE763846861F5AA02103B434 /* Pods-LASwift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-iOS/Pods-LASwift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorTests.swift; sourceTree = "<group>"; };
 		FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixTests.swift; sourceTree = "<group>"; };
 		FAD2257D1E7925C40012219D /* PerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3611B5AD21E96BD3004E0EF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36EF117821E9703700B11E01 /* Foundation.framework in Frameworks */,
+				3611B5D921E96CE5004E0EF8 /* Accelerate.framework in Frameworks */,
+				C27CC983E4CD8E1391C925EC /* Pods_LASwift_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B64621E96E1D004E0EF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36EF117A21E9703F00B11E01 /* Foundation.framework in Frameworks */,
+				3611B67D21E96ECF004E0EF8 /* Accelerate.framework in Frameworks */,
+				2520B6917DD3B295EB6FDAE0 /* Pods_LASwift_tvOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B65321E96E47004E0EF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */,
+				3611B67F21E96ED8004E0EF8 /* Accelerate.framework in Frameworks */,
+				D762015965607B775250746C /* Pods_LASwift_watchOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B68221E96F46004E0EF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */,
+				36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */,
+				2149A62B993E148DF7CD2E8A /* Pods_LASwift_macOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACE21AFB9204008FA782 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -44,13 +182,47 @@
 			children = (
 				1704107214A5332AD1B6A5CA /* Pods-LASwift_Tests.debug.xcconfig */,
 				3DE47813017AD6FCE558FFA6 /* Pods-LASwift_Tests.release.xcconfig */,
+				1E0486DAC721E4465B68CF48 /* Pods-LASwift-Tests.debug.xcconfig */,
+				3ED83793FC8493634255E29D /* Pods-LASwift-Tests.release.xcconfig */,
+				EE763846861F5AA02103B434 /* Pods-LASwift-iOS.debug.xcconfig */,
+				D6E171B93F492125827A097F /* Pods-LASwift-iOS.release.xcconfig */,
+				D73221DE1DD93737086D2485 /* Pods-LASwift-macOS.debug.xcconfig */,
+				8C2FD693A9DA150F043CE3C2 /* Pods-LASwift-macOS.release.xcconfig */,
+				49E04D6738A29ED00A388393 /* Pods-LASwift-tvOS.debug.xcconfig */,
+				AA60353EB7DC503309D0D1CB /* Pods-LASwift-tvOS.release.xcconfig */,
+				DDDF3121628E3379F1F31373 /* Pods-LASwift-watchOS.debug.xcconfig */,
+				6D15D806270D98DDCB0FB8F4 /* Pods-LASwift-watchOS.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		3611B5B921E96CD1004E0EF8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				3611B5BA21E96CD1004E0EF8 /* Random.swift */,
+				3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */,
+				3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */,
+				3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */,
+				3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */,
+				3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */,
+				3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */,
+				3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */,
+				3611B5C221E96CD1004E0EF8 /* Operators.swift */,
+				3611B5C321E96CD1004E0EF8 /* Vector.swift */,
+				3611B5C421E96CD1004E0EF8 /* Util.swift */,
+				3611B5C521E96CD1004E0EF8 /* Matrix.swift */,
+				3611B5C621E96CD1004E0EF8 /* Numeric.swift */,
+				3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */,
+				3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */,
+			);
+			name = Sources;
+			path = ../Sources;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				3611B5B921E96CD1004E0EF8 /* Sources */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
@@ -62,7 +234,11 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACE51AFB9204008FA782 /* LASwift_Tests.xctest */,
+				607FACE51AFB9204008FA782 /* LASwift-Tests.xctest */,
+				3611B5B021E96BD3004E0EF8 /* LASwift.framework */,
+				3611B64921E96E1D004E0EF8 /* LASwift.framework */,
+				3611B65621E96E47004E0EF8 /* LASwift.framework */,
+				3611B68521E96F46004E0EF8 /* LASwift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -99,32 +275,150 @@
 		BFAD3E9406358B3FFE7AFC15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				36EF117721E9703700B11E01 /* Foundation.framework */,
+				36EF117921E9703F00B11E01 /* Foundation.framework */,
+				36EF117B21E9704600B11E01 /* Foundation.framework */,
+				36EF117E21E9705600B11E01 /* Foundation.framework */,
+				3611B5D821E96CE5004E0EF8 /* Accelerate.framework */,
+				3611B64221E96E08004E0EF8 /* Accelerate.framework */,
+				3611B67C21E96ECF004E0EF8 /* Accelerate.framework */,
+				3611B67E21E96ED8004E0EF8 /* Accelerate.framework */,
 				B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */,
+				98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */,
+				02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */,
+				7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */,
+				71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		3611B5AB21E96BD3004E0EF8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B64421E96E1D004E0EF8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B65121E96E47004E0EF8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B68021E96F46004E0EF8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		607FACE41AFB9204008FA782 /* LASwift_Tests */ = {
+		3611B5AF21E96BD3004E0EF8 /* LASwift-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "LASwift_Tests" */;
+			buildConfigurationList = 3611B5B521E96BD3004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-iOS" */;
+			buildPhases = (
+				F307C5BF27D94AC1BD201D66 /* [CP] Check Pods Manifest.lock */,
+				3611B5AB21E96BD3004E0EF8 /* Headers */,
+				3611B5AC21E96BD3004E0EF8 /* Sources */,
+				3611B5AD21E96BD3004E0EF8 /* Frameworks */,
+				3611B5AE21E96BD3004E0EF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LASwift-iOS";
+			productName = "LASwift-iOS";
+			productReference = 3611B5B021E96BD3004E0EF8 /* LASwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3611B64821E96E1D004E0EF8 /* LASwift-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3611B64E21E96E1D004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-tvOS" */;
+			buildPhases = (
+				0637430DB5C6C9C5BF47605B /* [CP] Check Pods Manifest.lock */,
+				3611B64421E96E1D004E0EF8 /* Headers */,
+				3611B64521E96E1D004E0EF8 /* Sources */,
+				3611B64621E96E1D004E0EF8 /* Frameworks */,
+				3611B64721E96E1D004E0EF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LASwift-tvOS";
+			productName = "LASwift-tvOS";
+			productReference = 3611B64921E96E1D004E0EF8 /* LASwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3611B65521E96E47004E0EF8 /* LASwift-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3611B65B21E96E47004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-watchOS" */;
+			buildPhases = (
+				8734904D8DFA9F10A02BCE77 /* [CP] Check Pods Manifest.lock */,
+				3611B65121E96E47004E0EF8 /* Headers */,
+				3611B65221E96E47004E0EF8 /* Sources */,
+				3611B65321E96E47004E0EF8 /* Frameworks */,
+				3611B65421E96E47004E0EF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LASwift-watchOS";
+			productName = "LASwift-watchOS";
+			productReference = 3611B65621E96E47004E0EF8 /* LASwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3611B68421E96F46004E0EF8 /* LASwift-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3611B68A21E96F46004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-macOS" */;
+			buildPhases = (
+				80A09343D4E820B9863664DB /* [CP] Check Pods Manifest.lock */,
+				3611B68021E96F46004E0EF8 /* Headers */,
+				3611B68121E96F46004E0EF8 /* Sources */,
+				3611B68221E96F46004E0EF8 /* Frameworks */,
+				3611B68321E96F46004E0EF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LASwift-macOS";
+			productName = "LASwift-macOS";
+			productReference = 3611B68521E96F46004E0EF8 /* LASwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		607FACE41AFB9204008FA782 /* LASwift-Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "LASwift-Tests" */;
 			buildPhases = (
 				D7587C0C53CB2871B2A7E88F /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
 				4ACE765EEACC0BBB17E3540E /* [CP] Embed Pods Frameworks */,
-				245B6B65C88B7E362A372335 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = LASwift_Tests;
+			name = "LASwift-Tests";
 			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* LASwift_Tests.xctest */;
+			productReference = 607FACE51AFB9204008FA782 /* LASwift-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -137,6 +431,22 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
+					3611B5AF21E96BD3004E0EF8 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+					};
+					3611B64821E96E1D004E0EF8 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+					};
+					3611B65521E96E47004E0EF8 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+					};
+					3611B68421E96F46004E0EF8 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						LastSwiftMigration = 0920;
@@ -157,12 +467,44 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				607FACE41AFB9204008FA782 /* LASwift_Tests */,
+				607FACE41AFB9204008FA782 /* LASwift-Tests */,
+				3611B5AF21E96BD3004E0EF8 /* LASwift-iOS */,
+				3611B64821E96E1D004E0EF8 /* LASwift-tvOS */,
+				3611B65521E96E47004E0EF8 /* LASwift-watchOS */,
+				3611B68421E96F46004E0EF8 /* LASwift-macOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3611B5AE21E96BD3004E0EF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B64721E96E1D004E0EF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B65421E96E47004E0EF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B68321E96F46004E0EF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACE31AFB9204008FA782 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -173,19 +515,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		245B6B65C88B7E362A372335 /* [CP] Copy Pods Resources */ = {
+		0637430DB5C6C9C5BF47605B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
-			name = "[CP] Copy Pods Resources";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LASwift-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4ACE765EEACC0BBB17E3540E /* [CP] Embed Pods Frameworks */ = {
@@ -194,8 +543,8 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/LASwift/LASwift.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-LASwift-Tests/Pods-LASwift-Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/LASwift-macOS/LASwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 			);
@@ -207,7 +556,51 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LASwift-Tests/Pods-LASwift-Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		80A09343D4E820B9863664DB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LASwift-macOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8734904D8DFA9F10A02BCE77 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LASwift-watchOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D7587C0C53CB2871B2A7E88F /* [CP] Check Pods Manifest.lock */ = {
@@ -221,7 +614,29 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LASwift_Tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-LASwift-Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F307C5BF27D94AC1BD201D66 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LASwift-iOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -231,6 +646,79 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3611B5AC21E96BD3004E0EF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3611B5D321E96CD1004E0EF8 /* Util.swift in Sources */,
+				3611B5D021E96CD1004E0EF8 /* MatrixArithmetic.swift in Sources */,
+				3611B5CB21E96CD1004E0EF8 /* VectorArithmetic.swift in Sources */,
+				3611B5D621E96CD1004E0EF8 /* VectorTrigonometry.swift in Sources */,
+				3611B5D221E96CD1004E0EF8 /* Vector.swift in Sources */,
+				3611B5C921E96CD1004E0EF8 /* Random.swift in Sources */,
+				3611B5D521E96CD1004E0EF8 /* Numeric.swift in Sources */,
+				3611B5CA21E96CD1004E0EF8 /* VectorStatistics.swift in Sources */,
+				3611B5CD21E96CD1004E0EF8 /* MatrixStatistics.swift in Sources */,
+				3611B5D721E96CD1004E0EF8 /* MatrixAlgebra.swift in Sources */,
+				3611B5CF21E96CD1004E0EF8 /* MatrixExponent.swift in Sources */,
+				3611B5D421E96CD1004E0EF8 /* Matrix.swift in Sources */,
+				3611B5CC21E96CD1004E0EF8 /* MatrixTrigonometry.swift in Sources */,
+				3611B5CE21E96CD1004E0EF8 /* VectorExponent.swift in Sources */,
+				3611B5D121E96CD1004E0EF8 /* Operators.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B64521E96E1D004E0EF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3611B66821E96EBA004E0EF8 /* Util.swift in Sources */,
+				3611B66521E96EBA004E0EF8 /* MatrixArithmetic.swift in Sources */,
+				3611B66021E96EBA004E0EF8 /* VectorArithmetic.swift in Sources */,
+				3611B66B21E96EBA004E0EF8 /* VectorTrigonometry.swift in Sources */,
+				3611B66721E96EBA004E0EF8 /* Vector.swift in Sources */,
+				3611B65E21E96EBA004E0EF8 /* Random.swift in Sources */,
+				3611B66A21E96EBA004E0EF8 /* Numeric.swift in Sources */,
+				3611B65F21E96EBA004E0EF8 /* VectorStatistics.swift in Sources */,
+				3611B66221E96EBA004E0EF8 /* MatrixStatistics.swift in Sources */,
+				3611B66C21E96EBA004E0EF8 /* MatrixAlgebra.swift in Sources */,
+				3611B66421E96EBA004E0EF8 /* MatrixExponent.swift in Sources */,
+				3611B66921E96EBA004E0EF8 /* Matrix.swift in Sources */,
+				3611B66121E96EBA004E0EF8 /* MatrixTrigonometry.swift in Sources */,
+				3611B66321E96EBA004E0EF8 /* VectorExponent.swift in Sources */,
+				3611B66621E96EBA004E0EF8 /* Operators.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B65221E96E47004E0EF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3611B67721E96EBB004E0EF8 /* Util.swift in Sources */,
+				3611B67421E96EBB004E0EF8 /* MatrixArithmetic.swift in Sources */,
+				3611B66F21E96EBB004E0EF8 /* VectorArithmetic.swift in Sources */,
+				3611B67A21E96EBB004E0EF8 /* VectorTrigonometry.swift in Sources */,
+				3611B67621E96EBB004E0EF8 /* Vector.swift in Sources */,
+				3611B66D21E96EBB004E0EF8 /* Random.swift in Sources */,
+				3611B67921E96EBB004E0EF8 /* Numeric.swift in Sources */,
+				3611B66E21E96EBB004E0EF8 /* VectorStatistics.swift in Sources */,
+				3611B67121E96EBB004E0EF8 /* MatrixStatistics.swift in Sources */,
+				3611B67B21E96EBB004E0EF8 /* MatrixAlgebra.swift in Sources */,
+				3611B67321E96EBB004E0EF8 /* MatrixExponent.swift in Sources */,
+				3611B67821E96EBB004E0EF8 /* Matrix.swift in Sources */,
+				3611B67021E96EBB004E0EF8 /* MatrixTrigonometry.swift in Sources */,
+				3611B67221E96EBB004E0EF8 /* VectorExponent.swift in Sources */,
+				3611B67521E96EBB004E0EF8 /* Operators.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3611B68121E96F46004E0EF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACE11AFB9204008FA782 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -244,6 +732,316 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		3611B5B621E96BD3004E0EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE763846861F5AA02103B434 /* Pods-LASwift-iOS.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3611B5B721E96BD3004E0EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D6E171B93F492125827A097F /* Pods-LASwift-iOS.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3611B64F21E96E1D004E0EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49E04D6738A29ED00A388393 /* Pods-LASwift-tvOS.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3611B65021E96E1D004E0EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA60353EB7DC503309D0D1CB /* Pods-LASwift-tvOS.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3611B65C21E96E47004E0EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DDDF3121628E3379F1F31373 /* Pods-LASwift-watchOS.debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		3611B65D21E96E47004E0EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6D15D806270D98DDCB0FB8F4 /* Pods-LASwift-watchOS.release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
+				PRODUCT_NAME = LASwift;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		3611B68B21E96F46004E0EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D73221DE1DD93737086D2485 /* Pods-LASwift-macOS.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.LASwift-macOS";
+				PRODUCT_NAME = LASwift;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3611B68C21E96F46004E0EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C2FD693A9DA150F043CE3C2 /* Pods-LASwift-macOS.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.LASwift-macOS";
+				PRODUCT_NAME = LASwift;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_VERSION = 4.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		607FACED1AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -349,7 +1147,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1704107214A5332AD1B6A5CA /* Pods-LASwift_Tests.debug.xcconfig */;
+			baseConfigurationReference = 1E0486DAC721E4465B68CF48 /* Pods-LASwift-Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -364,14 +1162,16 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3DE47813017AD6FCE558FFA6 /* Pods-LASwift_Tests.release.xcconfig */;
+			baseConfigurationReference = 3ED83793FC8493634255E29D /* Pods-LASwift-Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -382,14 +1182,52 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3611B5B521E96BD3004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3611B5B621E96BD3004E0EF8 /* Debug */,
+				3611B5B721E96BD3004E0EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3611B64E21E96E1D004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3611B64F21E96E1D004E0EF8 /* Debug */,
+				3611B65021E96E1D004E0EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3611B65B21E96E47004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3611B65C21E96E47004E0EF8 /* Debug */,
+				3611B65D21E96E47004E0EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3611B68A21E96F46004E0EF8 /* Build configuration list for PBXNativeTarget "LASwift-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3611B68B21E96F46004E0EF8 /* Debug */,
+				3611B68C21E96F46004E0EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "LASwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -399,7 +1237,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "LASwift_Tests" */ = {
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "LASwift-Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,

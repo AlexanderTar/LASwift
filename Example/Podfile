@@ -1,7 +1,33 @@
 use_frameworks!
-target 'LASwift_Tests' do
+target 'LASwift-Tests' do
   pod 'LASwift', :path => '../'
   
   pod 'Quick', '~> 1.2.0'
   pod 'Nimble', '7.0.2'
+
+  platform :osx, '10.10'
+end
+
+target 'LASwift-macOS' do
+  pod 'LASwift', :path => '../'
+
+  platform :osx, '10.10'
+end
+
+target 'LASwift-iOS' do
+  pod 'LASwift', :path => '../'
+
+  platform :ios, '8.0'
+end
+
+target 'LASwift-tvOS' do
+  pod 'LASwift', :path => '../'
+
+  platform :tvos, '9.0'
+end
+
+target 'LASwift-watchOS' do
+  pod 'LASwift', :path => '../'
+
+  platform :watchos, '2.0'
 end

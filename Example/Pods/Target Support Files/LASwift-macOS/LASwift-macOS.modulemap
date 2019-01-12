@@ -1,0 +1,6 @@
+framework module LASwift {
+  umbrella header "LASwift-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
