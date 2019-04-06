@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2149A62B993E148DF7CD2E8A /* Pods_LASwift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */; };
-		2520B6917DD3B295EB6FDAE0 /* Pods_LASwift_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */; };
+		006638F15A109C6E1B4B9D97 /* Pods_LASwift_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C7C07F6C2C3A1C56A4F776 /* Pods_LASwift_tvOS.framework */; };
 		3611B5C921E96CD1004E0EF8 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
 		3611B5CA21E96CD1004E0EF8 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
 		3611B5CB21E96CD1004E0EF8 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
@@ -62,16 +61,32 @@
 		36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117B21E9704600B11E01 /* Foundation.framework */; };
 		36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B64221E96E08004E0EF8 /* Accelerate.framework */; };
 		36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117E21E9705600B11E01 /* Foundation.framework */; };
-		C27CC983E4CD8E1391C925EC /* Pods_LASwift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */; };
-		D6AB38F19319980B12634450 /* Pods_LASwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */; };
-		D762015965607B775250746C /* Pods_LASwift_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */; };
+		B1EC68B8EA0F226DEEFAE493 /* Pods_LASwift_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */; };
 		FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */; };
 		FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */; };
 		FAD2257E1E7925C40012219D /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD2257D1E7925C40012219D /* PerformanceTests.swift */; };
+		FB1CD5FC2258D0DF0073C207 /* Pods_LASwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1CD5FB2258D0DF0073C207 /* Pods_LASwift_Tests.framework */; };
+		FB1CD5FE2258D0E90073C207 /* Pods_LASwift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1CD5FD2258D0E90073C207 /* Pods_LASwift_iOS.framework */; };
+		FB1CD6072258D4F50073C207 /* Pods_LASwift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1CD6062258D4F50073C207 /* Pods_LASwift_macOS.framework */; };
+		FB1CD6082258D5150073C207 /* LASwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B68521E96F46004E0EF8 /* LASwift.framework */; };
+		FB1CD6092258D5310073C207 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
+		FB1CD60A2258D5310073C207 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
+		FB1CD60B2258D5310073C207 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
+		FB1CD60C2258D5310073C207 /* MatrixTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BD21E96CD1004E0EF8 /* MatrixTrigonometry.swift */; };
+		FB1CD60D2258D5310073C207 /* MatrixStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BE21E96CD1004E0EF8 /* MatrixStatistics.swift */; };
+		FB1CD60E2258D5310073C207 /* VectorExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BF21E96CD1004E0EF8 /* VectorExponent.swift */; };
+		FB1CD60F2258D5310073C207 /* MatrixExponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C021E96CD1004E0EF8 /* MatrixExponent.swift */; };
+		FB1CD6102258D5310073C207 /* MatrixArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C121E96CD1004E0EF8 /* MatrixArithmetic.swift */; };
+		FB1CD6112258D5310073C207 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C221E96CD1004E0EF8 /* Operators.swift */; };
+		FB1CD6122258D5310073C207 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C321E96CD1004E0EF8 /* Vector.swift */; };
+		FB1CD6132258D5310073C207 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C421E96CD1004E0EF8 /* Util.swift */; };
+		FB1CD6142258D5310073C207 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C521E96CD1004E0EF8 /* Matrix.swift */; };
+		FB1CD6152258D5310073C207 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C621E96CD1004E0EF8 /* Numeric.swift */; };
+		FB1CD6162258D5310073C207 /* VectorTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */; };
+		FB1CD6172258D5310073C207 /* MatrixAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1704107214A5332AD1B6A5CA /* Pods-LASwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift_Tests/Pods-LASwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		1C05CC535742F2351D533EF9 /* LASwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LASwift.podspec; path = ../LASwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1E0486DAC721E4465B68CF48 /* Pods-LASwift-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-Tests/Pods-LASwift-Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -109,20 +124,34 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6257553D7700889886E99285 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		6D15D806270D98DDCB0FB8F4 /* Pods-LASwift-watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-watchOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-watchOS/Pods-LASwift-watchOS.release.xcconfig"; sourceTree = "<group>"; };
-		71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AA417EDFA0CA2E0992CCB12 /* Pods_LASwift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		87C7C07F6C2C3A1C56A4F776 /* Pods_LASwift_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8982C2AF1B7A836D1583B9D4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		8C2FD693A9DA150F043CE3C2 /* Pods-LASwift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-macOS/Pods-LASwift-macOS.release.xcconfig"; sourceTree = "<group>"; };
-		98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA60353EB7DC503309D0D1CB /* Pods-LASwift-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-tvOS/Pods-LASwift-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6E171B93F492125827A097F /* Pods-LASwift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-iOS/Pods-LASwift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		D73221DE1DD93737086D2485 /* Pods-LASwift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-macOS/Pods-LASwift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		DB0CB7F64E7C2DDAFC7D43C4 /* Pods_LASwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDF3121628E3379F1F31373 /* Pods-LASwift-watchOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-watchOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-watchOS/Pods-LASwift-watchOS.debug.xcconfig"; sourceTree = "<group>"; };
+		EC0674FFF44A1713951E0F93 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE763846861F5AA02103B434 /* Pods-LASwift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-iOS/Pods-LASwift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorTests.swift; sourceTree = "<group>"; };
 		FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixTests.swift; sourceTree = "<group>"; };
 		FAD2257D1E7925C40012219D /* PerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
+		FB1CD5EC2258D0450073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5EF2258D0710073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5F12258D07B0073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5F32258D0850073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5F52258D0BE0073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5F72258D0C30073C207 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5F92258D0D30073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5FB2258D0DF0073C207 /* Pods_LASwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD5FD2258D0E90073C207 /* Pods_LASwift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD6002258D48E0073C207 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD6022258D4A90073C207 /* LASwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LASwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD6042258D4EE0073C207 /* Pods_LASwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB1CD6062258D4F50073C207 /* Pods_LASwift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_LASwift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,9 +159,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1CD5FE2258D0E90073C207 /* Pods_LASwift_iOS.framework in Frameworks */,
 				36EF117821E9703700B11E01 /* Foundation.framework in Frameworks */,
 				3611B5D921E96CE5004E0EF8 /* Accelerate.framework in Frameworks */,
-				C27CC983E4CD8E1391C925EC /* Pods_LASwift_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +171,7 @@
 			files = (
 				36EF117A21E9703F00B11E01 /* Foundation.framework in Frameworks */,
 				3611B67D21E96ECF004E0EF8 /* Accelerate.framework in Frameworks */,
-				2520B6917DD3B295EB6FDAE0 /* Pods_LASwift_tvOS.framework in Frameworks */,
+				006638F15A109C6E1B4B9D97 /* Pods_LASwift_tvOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,7 +181,7 @@
 			files = (
 				36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */,
 				3611B67F21E96ED8004E0EF8 /* Accelerate.framework in Frameworks */,
-				D762015965607B775250746C /* Pods_LASwift_watchOS.framework in Frameworks */,
+				B1EC68B8EA0F226DEEFAE493 /* Pods_LASwift_watchOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,9 +189,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1CD6072258D4F50073C207 /* Pods_LASwift_macOS.framework in Frameworks */,
 				36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */,
 				36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */,
-				2149A62B993E148DF7CD2E8A /* Pods_LASwift_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +199,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AB38F19319980B12634450 /* Pods_LASwift_Tests.framework in Frameworks */,
+				FB1CD6082258D5150073C207 /* LASwift.framework in Frameworks */,
+				FB1CD5FC2258D0DF0073C207 /* Pods_LASwift_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +305,19 @@
 		BFAD3E9406358B3FFE7AFC15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB1CD6062258D4F50073C207 /* Pods_LASwift_macOS.framework */,
+				FB1CD6042258D4EE0073C207 /* Pods_LASwift_Tests.framework */,
+				FB1CD6022258D4A90073C207 /* LASwift.framework */,
+				FB1CD6002258D48E0073C207 /* Pods_LASwift_macOS.framework */,
+				FB1CD5FD2258D0E90073C207 /* Pods_LASwift_iOS.framework */,
+				FB1CD5FB2258D0DF0073C207 /* Pods_LASwift_Tests.framework */,
+				FB1CD5F92258D0D30073C207 /* LASwift.framework */,
+				FB1CD5F72258D0C30073C207 /* Pods_LASwift_macOS.framework */,
+				FB1CD5F52258D0BE0073C207 /* LASwift.framework */,
+				FB1CD5F32258D0850073C207 /* LASwift.framework */,
+				FB1CD5F12258D07B0073C207 /* LASwift.framework */,
+				FB1CD5EF2258D0710073C207 /* LASwift.framework */,
+				FB1CD5EC2258D0450073C207 /* LASwift.framework */,
 				36EF117721E9703700B11E01 /* Foundation.framework */,
 				36EF117921E9703F00B11E01 /* Foundation.framework */,
 				36EF117B21E9704600B11E01 /* Foundation.framework */,
@@ -283,11 +326,11 @@
 				3611B64221E96E08004E0EF8 /* Accelerate.framework */,
 				3611B67C21E96ECF004E0EF8 /* Accelerate.framework */,
 				3611B67E21E96ED8004E0EF8 /* Accelerate.framework */,
-				B9BA33C94DB81BD751A7C512 /* Pods_LASwift_Tests.framework */,
-				98209CCB36809614A7349657 /* Pods_LASwift_iOS.framework */,
-				02FCEA82356538166C2794E7 /* Pods_LASwift_macOS.framework */,
-				7EC8D4A024A4852FD75B0940 /* Pods_LASwift_tvOS.framework */,
-				71E4E4F12F00EACAC9DF5303 /* Pods_LASwift_watchOS.framework */,
+				DB0CB7F64E7C2DDAFC7D43C4 /* Pods_LASwift_Tests.framework */,
+				7AA417EDFA0CA2E0992CCB12 /* Pods_LASwift_iOS.framework */,
+				EC0674FFF44A1713951E0F93 /* Pods_LASwift_macOS.framework */,
+				87C7C07F6C2C3A1C56A4F776 /* Pods_LASwift_tvOS.framework */,
+				D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -410,7 +453,7 @@
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				4ACE765EEACC0BBB17E3540E /* [CP] Embed Pods Frameworks */,
+				079E412AE2B99DD7DE240951 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -459,6 +502,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -537,7 +581,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4ACE765EEACC0BBB17E3540E /* [CP] Embed Pods Frameworks */ = {
+		079E412AE2B99DD7DE240951 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -716,6 +760,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1CD6092258D5310073C207 /* Random.swift in Sources */,
+				FB1CD60A2258D5310073C207 /* VectorStatistics.swift in Sources */,
+				FB1CD60B2258D5310073C207 /* VectorArithmetic.swift in Sources */,
+				FB1CD60C2258D5310073C207 /* MatrixTrigonometry.swift in Sources */,
+				FB1CD60D2258D5310073C207 /* MatrixStatistics.swift in Sources */,
+				FB1CD60E2258D5310073C207 /* VectorExponent.swift in Sources */,
+				FB1CD60F2258D5310073C207 /* MatrixExponent.swift in Sources */,
+				FB1CD6102258D5310073C207 /* MatrixArithmetic.swift in Sources */,
+				FB1CD6112258D5310073C207 /* Operators.swift in Sources */,
+				FB1CD6122258D5310073C207 /* Vector.swift in Sources */,
+				FB1CD6132258D5310073C207 /* Util.swift in Sources */,
+				FB1CD6142258D5310073C207 /* Matrix.swift in Sources */,
+				FB1CD6152258D5310073C207 /* Numeric.swift in Sources */,
+				FB1CD6162258D5310073C207 /* VectorTrigonometry.swift in Sources */,
+				FB1CD6172258D5310073C207 /* MatrixAlgebra.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,7 +824,7 @@
 				PRODUCT_NAME = LASwift;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -802,7 +861,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.LASwift;
 				PRODUCT_NAME = LASwift;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -842,7 +901,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -880,7 +939,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -922,7 +981,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -961,7 +1020,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchsimulator watchos";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1005,7 +1064,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1044,7 +1103,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1101,7 +1160,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1148,7 +1207,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1158,10 +1217,7 @@
 			baseConfigurationReference = 1E0486DAC721E4465B68CF48 /* Pods-LASwift-Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1174,7 +1230,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1183,10 +1239,7 @@
 			baseConfigurationReference = 3ED83793FC8493634255E29D /* Pods-LASwift-Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1195,7 +1248,7 @@
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

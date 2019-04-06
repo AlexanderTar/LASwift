@@ -358,13 +358,13 @@ class MatrixSpec: QuickSpec {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let res = Matrix([[1.0, 4.0], [9.0, 16.0]])
                 expect(square(m1)) == res
-                expect(square(m1)) == m1 .^ 2
+                expect(m1 .^ 2.0) == res
             }
             it("sqrt") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let res = Matrix([[sqrt(1.0), sqrt(2.0)], [sqrt(3.0), sqrt(4.0)]])
                 expect(sqrt(m1)) == res
-                expect(sqrt(m1)) == m1 .^ 0.5
+                expect(m1 .^ 0.5) == res
             }
             it("exp") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -536,8 +536,12 @@ class MatrixSpec: QuickSpec {
                 expect(mpower(m1, -1)) == res
                 expect(m1 ^ -1) == res
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
-                expect { () -> Void in _ = inv(m2) }.to(throwAssertion())
-                expect { () -> Void in _ = inv(ones(3, 3)) }.to(throwAssertion())
+                
+                #if !SWIFT_PACKAGE
+                    expect { () -> Void in _ = inv(m2) }.to(throwAssertion())
+                    expect { () -> Void in _ = inv(ones(3, 3)) }.to(throwAssertion())
+                #endif
+                
                 expect(inv(m1) * m1) == eye(3, 3)
             }
             it("eigen") {
@@ -549,7 +553,10 @@ class MatrixSpec: QuickSpec {
                 expect(m1 * e1.V) == e1.V * e1.D
                 let m2 = Matrix([[1.0, 0.0, 2.0],
                                  [-1.0, 5.0, 0.0]])
-                expect { () -> Void in _ = eig(m2) }.to(throwAssertion())
+                
+                #if !SWIFT_PACKAGE
+                    expect { () -> Void in _ = eig(m2) }.to(throwAssertion())
+                #endif
                 let m3 = Matrix([[0, 1],
                                  [-2, -3]])
                 let e2 = eig(m3)
@@ -750,22 +757,24 @@ class MatrixSpec: QuickSpec {
                 expect(m1 ?? (.All, .Pos([2, 1]))) == res4
                 expect(m1 ?? (.PosCyc([-7, 80]), .Range(4, -2, 0))) == res5
                 expect(m1 ?? (.Range(3, -2, 0), .PosCyc([-7, 80]))) == res6
-                expect { () -> Void in _ = m1 ?? (.Range(4, -2, 0), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Range(3, -2, -1), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Range(5, -2, 0)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Range(3, -2, -1)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Range(0, -2, 4), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Range(-1, -2, 3), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Range(0, -2, 5)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Range(-1, -2, 3)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Take(5), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Take(-1), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Take(6)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Take(-1)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Drop(5), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.Drop(-1), .All) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Drop(6)) }.to(throwAssertion())
-                expect { () -> Void in _ = m1 ?? (.All, .Drop(-1)) }.to(throwAssertion())
+                #if !SWIFT_PACKAGE
+                    expect { () -> Void in _ = m1 ?? (.Range(4, -2, 0), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Range(3, -2, -1), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Range(5, -2, 0)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Range(3, -2, -1)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Range(0, -2, 4), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Range(-1, -2, 3), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Range(0, -2, 5)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Range(-1, -2, 3)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Take(5), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Take(-1), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Take(6)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Take(-1)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Drop(5), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.Drop(-1), .All) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Drop(6)) }.to(throwAssertion())
+                    expect { () -> Void in _ = m1 ?? (.All, .Drop(-1)) }.to(throwAssertion())
+                #endif
             }
         }
     }

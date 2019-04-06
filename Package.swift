@@ -11,11 +11,11 @@ import PackageDescription
 let package = Package(
     name: "LASwift",
     products: [
-    .library(name: "LASwift", targets: ["LASwift"])
+        .library(name: "LASwift", targets: ["LASwift"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Quick.git", from: "1.2.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "7.0.3")
+        .package(url: "https://github.com/Quick/Quick.git", from: "2.0.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.1")
     ],
     targets: [
         .target(
