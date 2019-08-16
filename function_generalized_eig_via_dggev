@@ -1,0 +1,58 @@
+public func eig(_ A: Matrix, _ B: Matrix) -> (Vleft: Matrix, Vright: Matrix, DR: Matrix, DI: Matrix, Dbeta: Matrix) {
+    precondition(A.rows == A.cols, "Matrix dimensions must agree")
+
+    let Acopy = Matrix(A)
+    let Bcopy = Matrix(B)
+
+    var N = __CLPK_integer(A.rows) //check
+
+    var LDA = N //check
+    var LDB = N //check new
+
+    var wkOpt = __CLPK_doublereal(0.0) //check
+    var lWork = __CLPK_integer(-1) // upon return, should be >= max(1, 8*N) - this here is initial value //check
+
+    var jobvl: Int8 = 86 // 'V': the left and/or right eigenvectors are computed //check
+    var jobvr: Int8 = 86 // 'V' //check
+
+    var error = __CLPK_integer(0) //check
+
+    // Real parts of eigenvalues (need to be divided by the corresponding beta(j))
+    var alphaR = Vector(repeating: 0.0, count: Int(N)) // wr
+    // Imaginary parts of eigenvalues (need to be divided by the corresponding beta(j))
+    var alphaI = Vector(repeating: 0.0, count: Int(N)) // wi
+    // (ALPHAR(j)+i·ALPHAI(j))/BETA(j)   ---    divide - WITH CARE CUZ beta(j) could be zero
+    var beta = Vector(repeating: 0.0, count: Int(N))
+
+    // Left eigenvectors
+    var vl = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N)) //check
+    // Right eigenvectors
+    var vr = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N)) //check
+
+    var ldvl = N //check
+    var ldvr = N //check
+
+    /* Query and allocate the optimal workspace */
+
+    dggev_(&jobvl, &jobvr, &N, &Acopy.flat, &LDA, &Bcopy.flat, &LDB, &alphaR, &alphaI, &beta, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error) // first call takes &wkOpt which is an integer
+
+    lWork = __CLPK_integer(wkOpt) //check
+    var work = Vector(repeating: 0.0, count: Int(lWork)) //check
+
+    /* Compute eigen vectors */
+
+    dggev_(&jobvl, &jobvr, &N, &Acopy.flat, &LDA, &Bcopy.flat, &LDB, &alphaR, &alphaI, &beta, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error) // second call takes &work which is a vector
+
+    precondition(error == 0, "Failed to compute eigen vectors")
+
+    // returned eigenvalue parts
+    let DR = diag(alphaR) // diagonal matrix with real parts of eigenvalues
+    let DI = diag(alphaI) // diagonal matrix with imaginary parts of eigenvalues
+    let Dbeta = diag(beta) // diagonal matrix with the beta divisors
+
+    // returned eigenvectors
+    let Vleft = toRows(Matrix(A.rows, A.cols, vr), .Column)
+    let Vright = toRows(Matrix(A.rows, A.cols, vl), .Column)
+
+    return (Vleft, Vright, DR, DI, Dbeta)
+}
