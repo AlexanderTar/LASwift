@@ -136,7 +136,7 @@ public enum Dim {
 
 /// Matrix of Double values
 public class Matrix {
-    internal var flat = Vector()
+    public var flat = Vector()
     internal var _rows: Int = 0
     internal var _cols: Int = 0
     
@@ -150,14 +150,14 @@ public class Matrix {
         return _cols
     }
     
-    internal init(_ r: Int, _ c: Int, _ value: Double = 0.0) {
+    public init(_ r: Int, _ c: Int, _ value: Double = 0.0) {
         precondition(r > 0 && c > 0, "Matrix dimensions must be positive")
         flat = Vector(repeating: value, count: r * c)
         _rows = r
         _cols = c
     }
     
-    internal init(_ r: Int, _ c: Int, _ f: Vector) {
+    public init(_ r: Int, _ c: Int, _ f: Vector) {
         precondition(r * c == f.count, "Matrix dimensions must agree")
         flat = f
         _rows = r
@@ -290,7 +290,7 @@ extension Matrix {
     }
 }
 
-internal func toRows(_ A: Matrix, _ d: Dim) -> Matrix {
+public func toRows(_ A: Matrix, _ d: Dim) -> Matrix {
     switch d {
     case .Row:
         return A
@@ -299,7 +299,7 @@ internal func toRows(_ A: Matrix, _ d: Dim) -> Matrix {
     }
 }
 
-internal func toCols(_ A: Matrix, _ d: Dim) -> Matrix {
+public func toCols(_ A: Matrix, _ d: Dim) -> Matrix {
     switch d {
     case .Row:
         return transpose(A)
