@@ -269,6 +269,55 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     return (toRows(U, .Column), diag(Int(M), Int(N), s), VT)
 }
 
+/// Perform a generalized singular value decomposition of 2 given matrices.
+///
+/// - Parameters:
+///    - A: first matrix
+///    - B: second matrix
+/// - Returns: matrices U, V, and Q, plus vectors alpha and beta
+public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, alpha: Vector, beta: Vector, success: Bool) {
+    /* LAPACK is using column-major order */
+    let _A = toCols(A, .Row)
+    let _B = toCols(B, .Row)
+    
+    var jobu:Int8 = Int8(Array("U".utf8).first!)
+    var jobv:Int8 = Int8(Array("V".utf8).first!)
+    var jobq:Int8 = Int8(Array("Q".utf8).first!)
+    
+    var M = __CLPK_integer(A.rows)
+    var N = __CLPK_integer(A.cols)
+    var P = __CLPK_integer(B.rows)
+    
+    var LDA = M
+    var LDB = P
+    var LDU = M
+    var LDV = P
+    var LDQ = N
+    
+    let lWork = max(max(Int(3*N),Int(M)),Int(P))+Int(N)
+    var iWork = [__CLPK_integer](repeating: 0, count: Int(N))
+    var work = Vector(repeating: 0.0, count: Int(lWork) * 4)
+    var error = __CLPK_integer(0)
+    
+    var k = __CLPK_integer()
+    var l = __CLPK_integer()
+    
+    let U = Matrix(Int(LDU), Int(M))
+    let V = Matrix(Int(LDV), Int(P))
+    let Q = Matrix(Int(LDQ), Int(N))
+    var alpha = Vector(repeating: 0.0, count: Int(N))
+    var beta = Vector(repeating: 0.0, count: Int(N))
+    
+    dggsvd_(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &work, &iWork, &error)
+    
+    //precondition(error == 0, "Failed to compute SVD")
+    if error != 0 {
+        return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), Vector(alpha[Int(k)...Int(k+l)-1]), Vector(beta[Int(k)...Int(k+l)-1]), false)
+    } else {
+        return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), Vector(alpha[Int(k)...Int(k+l)-1]), Vector(beta[Int(k)...Int(k+l)-1]), true)
+    }
+}
+
 /// Compute the Cholesky factorization of a real symmetric positive definite matrix.
 ///
 ///	A precondition error is thrown if the algorithm fails to converge.
