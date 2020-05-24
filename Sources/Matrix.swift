@@ -273,6 +273,129 @@ extension Matrix {
             }
         }
     }
+
+    /// Get and set M(row, col) submatrix of Matrix.
+    ///
+    /// The range-based subscript methods for getting and setting submatricies.
+    ///
+    ///     var M = Matrix([[1,  2,  3,  4],
+    ///                     [5,  6,  7,  8],
+    ///                     [9, 10, 11, 12])
+    ///
+    ///     var K = Matrix([[1, 0],
+    ///                     [0, 1])
+    ///
+    /// - Using bounded ranges, including partial (e.g. `..<3`):
+    ///
+    ///         M[1..<3, 0..1] = K
+    ///         // M is now:
+    ///         // [[1,  2,  3,  4],
+    ///         //  [1,  0,  7,  8],
+    ///         //  [0,  1, 11, 12]]
+    ///
+    ///         K = M[0...1, 2...]
+    ///         // K is now:
+    ///         // [[3, 4]
+    ///         //  [7, 8]]
+    ///
+    /// - Using unbounded ranges:
+    ///
+    ///         K = M[..., 1..2]
+    ///         // K is now:
+    ///         // [[ 2,  3],
+    ///         //  [ 6,  7],
+    ///         //  [10, 11]]
+    ///
+    /// - Parameters:
+    ///   - row: Range for rows (0-based)
+    ///   - col: Range for cols (0-based)
+    ///
+    /// - Returns: submatrix of size `row.count` by  `col.count`
+    ///
+    public subscript<A: RangeExpression, B: RangeExpression>(_ row: A, _ col: B) -> Matrix where A.Bound == Int, B.Bound == Int {
+        get {
+            return self[ClosedRange<Int>(row.relative(to: self[row: 0])), ClosedRange<Int>(col.relative(to: self[col: 0]))]
+        }
+
+        set {
+            self[ClosedRange<Int>(row.relative(to: self[row: 0])), ClosedRange<Int>(col.relative(to: self[col: 0]))] = newValue
+        }
+    }
+
+    public subscript<B: RangeExpression>(_ : UnboundedRange, _ col: B) -> Matrix where B.Bound == Int {
+        get { return self[0..<rows, ClosedRange<Int>(col.relative(to: self[col: 0]))] }
+        set { self[0..<rows, ClosedRange<Int>(col.relative(to: self[col: 0]))] = newValue }
+    }
+
+    public subscript<A: RangeExpression>(_ row: A, _ : UnboundedRange) -> Matrix where A.Bound == Int {
+        get { return self[ClosedRange<Int>(row.relative(to: self[row: 0])), 0..<cols] }
+        set { self[ClosedRange<Int>(row.relative(to: self[row: 0])), 0..<cols] = newValue }
+    }
+
+    public subscript(_ : UnboundedRange, _ : UnboundedRange) -> Matrix {
+        get { return self}
+        set { self[0..<rows, 0..<cols] = newValue}
+    }
+
+    /// Get and set submatrix with a top-left corner at (`row`, `col`).
+    ///
+    /// The method allows to get and set a submatrix using just the coordinates of its top-left corner.
+    ///
+    ///     var M = Matrix([[1,  2,  3,  4],
+    ///                     [5,  6,  7,  8],
+    ///                     [9, 10, 11, 12])
+    ///
+    ///     var K = Matrix([[1, 0],
+    ///                     [0, 1])
+    ///
+    ///     M[1, 2] = K
+    ///     // M is now:
+    ///     // [[1,  2,  3,  4],
+    ///     //  [5,  6,  1,  0],
+    ///     //  [9, 10,  0,  1]]
+    ///
+    /// - Warning: Getter and setter are using submatrices of different dimensions.
+    ///
+    /// - Parameters:
+    ///   - row: row index (0-based)
+    ///   - col: column index (0-based)
+    /// - Returns: Submatrix equivalent to `M[row..., col...]`
+    ///
+    public subscript(_ row: Int, _ col: Int) -> Matrix {
+        get { return self[row..., col...]}
+        set { self[row..<(row + newValue.rows), col..<(col + newValue.cols)] = newValue}
+    }
+
+    public subscript(_ row: ClosedRange<Int>, _ col: ClosedRange<Int>) -> Matrix {
+        get {
+            precondition(indexIsValidForRow(row.lowerBound, col.lowerBound), "Invalid range")
+            precondition(indexIsValidForRow(row.upperBound, col.upperBound), "Invalid range")
+
+            let dst = Matrix(row.count, col.count)
+
+            flat.withUnsafeBufferPointer { srcBuf in
+                let srcPtr = srcBuf.baseAddress! + row.lowerBound * rows + col.lowerBound
+                vDSP_mmovD(srcPtr, &dst.flat,
+                           vDSP_Length(col.count), vDSP_Length(row.count),
+                           vDSP_Length(cols), vDSP_Length(col.count))
+            }
+
+            return dst
+        }
+
+        set {
+            precondition(indexIsValidForRow(row.lowerBound, col.lowerBound), "Invalid range")
+            precondition(indexIsValidForRow(row.upperBound, col.upperBound), "Invalid range")
+            precondition(newValue.cols == col.count && newValue.rows == row.count, "Matrix dimensions must agree")
+
+            flat.withUnsafeMutableBufferPointer { dstBuf in
+                let dstPtr = dstBuf.baseAddress! + row.lowerBound * rows + col.lowerBound
+                vDSP_mmovD(newValue.flat, dstPtr,
+                           vDSP_Length(col.count), vDSP_Length(row.count),
+                           vDSP_Length(newValue.cols), vDSP_Length(cols))
+            }
+        }
+    }
     
     /// Construct new matrix from source using specified extractor.
     ///
