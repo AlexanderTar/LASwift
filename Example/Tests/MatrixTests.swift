@@ -17,33 +17,38 @@ class MatrixSpec: QuickSpec {
         describe("Matrix construction tests") {
             let count = 10
             
-            let m1 = ones(count, count)
+            let m1 = ones(count, count+1)
             
             it("ones matrix has correct dimensions") {
                 expect(m1.rows) == count
-                expect(m1.cols) == count
+                expect(m1.cols) == count+1
             }
             
             it("ones matrix all ones") {
-                for (i, j) in zip(0..<count, 0..<count) {
-                    expect(m1[i, j]).to(beCloseTo(1.0))
+                for i in 0..<count {
+                    for j in 0..<count+1 {
+                        expect(m1[i, j]).to(beCloseTo(1.0))
+                    }
                 }
             }
             
-            let m2 = zeros(count, count)
+            let m2 = zeros(count, count+1)
             
             it("zeros matrix has correct dimensions") {
                 expect(m2.rows) == count
-                expect(m2.cols) == count
+                expect(m2.cols) == count+1
             }
             
             it("zeros matrix all zeros") {
-                for (i, j) in zip(0..<count, 0..<count) {
-                    expect(m2[i, j]).to(beCloseTo(0.0))
+                for i in 0..<count {
+                    for j in 0..<count+1 {
+                        expect(m2[i, j]).to(beCloseTo(0.0))
+                    }
                 }
+
             }
             
-            let m3 = zeros(count, count)
+            let m3 = zeros(count, count+1)
             
             it("zeros vectors are equal") {
                 expect(m3) == m2
@@ -53,6 +58,18 @@ class MatrixSpec: QuickSpec {
                 expect(m2) != m1
             }
             
+            let ones_like_m3 = ones(like: m3)   // input is zeros(count, count+1)
+            
+            it("ones like are equal") {
+                expect(ones_like_m3) == m1      // test against ones(count, count+1)
+            }
+            
+            let zeros_like_m1 = zeros(like: m1) // input is ones(count, count+1)
+            
+            it("zeros like are equal") {
+                expect(zeros_like_m1) == m3     // test against zeros(count, count+1)
+            }
+
             let m4 = eye(count, count)
             
             it("identity matrix has correct dimensions") {
@@ -61,11 +78,13 @@ class MatrixSpec: QuickSpec {
             }
             
             it("identity matrix ones on diag") {
-                for (i, j) in zip(0..<count, 0..<count) {
-                    if i == j {
-                        expect(m4[i, j]).to(beCloseTo(1.0))
-                    } else {
-                        expect(m4[i, j]).to(beCloseTo(0.0))
+                for i in 0..<count {
+                    for j in 0..<count {
+                        if i == j {
+                            expect(m4[i, j]).to(beCloseTo(1.0))
+                        } else {
+                            expect(m4[i, j]).to(beCloseTo(0.0))
+                        }
                     }
                 }
             }
@@ -86,26 +105,31 @@ class MatrixSpec: QuickSpec {
             }
             
             it("diag matrix correct") {
-                for (i, j) in zip(0..<v1.count, 0..<v1.count) {
-                    if i == j {
-                        expect(m5[i, j]).to(beCloseTo(v1[i]))
-                        expect(m6[i, j]).to(beCloseTo(v1[i]))
-                        expect(m7[i, j]).to(beCloseTo(v1[i]))
-                    } else {
-                        expect(m5[i, j]).to(beCloseTo(0.0))
-                        expect(m6[i, j]).to(beCloseTo(0.0))
-                        expect(m7[i, j]).to(beCloseTo(0.0))
+                for i in 0..<v1.count {
+                    for j in 0..<v1.count {
+                        if i == j {
+                            expect(m5[i, j]).to(beCloseTo(v1[i]))
+                            expect(m6[i, j]).to(beCloseTo(v1[i]))
+                            expect(m7[i, j]).to(beCloseTo(v1[i]))
+                        } else {
+                            expect(m5[i, j]).to(beCloseTo(0.0))
+                            expect(m6[i, j]).to(beCloseTo(0.0))
+                            expect(m7[i, j]).to(beCloseTo(0.0))
+                        }
                     }
                 }
             }
             
             it("rand") {
-                let m8 = rand(1000, 1000)
-                expect(m8.rows) == 1000
-                expect(m8.cols) == 1000
-                _ = zip(0..<1000, 0..<1000).map { (i, j) in
-                    expect(m8[i, j]).to(beLessThan(1.0))
-                    expect(m8[i, j]).to(beGreaterThanOrEqualTo(0.0))
+                let size = 100
+                let m8 = rand(size, size)
+                expect(m8.rows) == size
+                expect(m8.cols) == size
+                for i in 0..<size {
+                    for j in 0..<size {
+                        expect(m8[i, j]).to(beLessThan(1.0))
+                        expect(m8[i, j]).to(beGreaterThanOrEqualTo(0.0))
+                    }
                 }
             }
             
@@ -552,6 +576,7 @@ class MatrixSpec: QuickSpec {
                                   [4.0, 2.0]])
                 expect(transpose(m1)) == res
                 expect(m1′) == res
+                expect(m1.T) == res
             }
             it("mtimes") {
                 let m1 = Matrix([[1.0, 3.0, 5.0],
@@ -654,6 +679,51 @@ class MatrixSpec: QuickSpec {
                 expect(u′ * u) == m1
                 let l = chol(m1, .Lower)
                 expect(l * l′) == m1
+            }
+            it("lstsq") {
+                // Setup
+                let a1 = Matrix([[1.44, -7.84, -4.39,  4.53],
+                                 [-9.96, -0.28, -3.24,  3.83],
+                                 [-7.55,  3.24,  6.27, -6.64],
+                                 [8.34,  8.09,  5.28,  2.06],
+                                 [7.08,  2.52,  0.74, -2.47],
+                                 [-5.45, -5.70, -1.19,  4.70]])
+                let b1 = Matrix([[8.58,  9.35],
+                                 [8.26, -4.43],
+                                 [8.48, -0.70],
+                                 [-5.28, -0.26],
+                                 [5.72, -7.36],
+                                 [8.93, -2.52]])
+                let c2 = Matrix([[-0.4506, 0.2497],
+                                 [-0.8491, -0.9020],
+                                 [0.7066, 0.6323],
+                                 [0.1288, 0.1351]])
+                let d2 = Matrix([[195.3616, 107.05746]])
+                
+                // Run function
+                let (c1, d1) = lstsqr(a1, b1)
+                
+                // Check solution matrix
+                expect(c1.rows) == c2.rows
+                expect(c1.cols) == c2.cols
+                for i in 0..<c1.rows {
+                    for j in 0..<c1.cols {
+                        let e1: Double = c1[i, j]
+                        let e2: Double = c2[i, j]
+                        expect(e1).to(beCloseTo(e2, within:0.001))
+                    }
+                }
+                
+                // Check residue matrix
+                expect(d1.rows) == d2.rows
+                expect(d1.cols) == d2.cols
+                for i in 0..<d1.rows {
+                    for j in 0..<d1.cols {
+                        let e1: Double = d1[i, j]
+                        let e2: Double = d2[i, j]
+                        expect(e1).to(beCloseTo(e2, within:0.001))
+                    }
+                }
             }
         }
         
@@ -793,6 +863,26 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[1.0, 5.0, 6.0, 2.0],
                                   [3.0, 7.0, 8.0, 4.0]])
                 expect(insert(m1, cols: m2, at: 1)) == res
+            }
+            it("vstack") {
+                let m1 = Matrix([[1.0, 2.0, 3.0],
+                                 [4.0, 5.0, 6.0]])
+                let m2 = Matrix([[7.0, 8.0, 9.0],
+                                 [10.0, 11.0, 12.0]])
+                let res = Matrix([[1.0, 2.0, 3.0],
+                                  [4.0, 5.0, 6.0],
+                                  [7.0, 8.0, 9.0],
+                                  [10.0, 11.0, 12.0]])
+                expect(vstack([m1, m2])) == res
+            }
+            it("hstack") {
+                let m1 = Matrix([[1.0, 2.0, 3.0],
+                                 [4.0, 5.0, 6.0]])
+                let m2 = Matrix([[7.0, 8.0, 9.0],
+                                 [10.0, 11.0, 12.0]])
+                let res = Matrix([[1.0, 2.0, 3.0, 7.0, 8.0, 9.0],
+                                  [4.0, 5.0, 6.0, 10.0, 11.0, 12.0]])
+                expect(hstack([m1, m2])) == res
             }
         }
         

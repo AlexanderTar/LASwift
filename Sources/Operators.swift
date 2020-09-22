@@ -6,6 +6,13 @@
 // This software may be modified and distributed under the terms
 // of the BSD license. See the LICENSE file for details.
 
+precedencegroup ExponentiationPrecedence {
+    associativity: right
+    higherThan: MultiplicationPrecedence
+}
+
+infix operator .^ : ExponentiationPrecedence
+
 infix operator .* : MultiplicationPrecedence
 infix operator ./ : MultiplicationPrecedence
 infix operator ./. : MultiplicationPrecedence

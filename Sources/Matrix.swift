@@ -21,6 +21,15 @@ public func zeros(_ rows: Int, _ cols: Int) -> Matrix {
     return Matrix(rows, cols, 0.0)
 }
 
+/// Create a matrix of zeros.
+///
+/// - Parameters:
+///    - m: Matrix
+/// - Returns: matrix of zeros with same size as input
+public func zeros(like m: Matrix) -> Matrix {
+    return zeros(m.rows, m.cols)
+}
+
 /// Create a matrix of ones.
 ///
 /// - Parameters:
@@ -30,6 +39,15 @@ public func zeros(_ rows: Int, _ cols: Int) -> Matrix {
 public func ones(_ rows: Int, _ cols: Int) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
     return Matrix(rows, cols, 1.0)
+}
+
+/// Create a matrix of ones.
+///
+/// - Parameters:
+///    - m: Matrix
+/// - Returns: matrix of ones with same size as input
+public func ones(like m: Matrix) -> Matrix {
+    return ones(m.rows, m.cols)
 }
 
 /// Create a matrix of uniformly distributed on [0, 1) interval random values.
@@ -148,6 +166,13 @@ public class Matrix {
     /// Number of columns in Matrix.
     public var cols: Int {
         return _cols
+    }
+    
+    /// Transpose
+    public var T: Matrix {
+        get {
+            return transpose(self)
+        }
     }
     
     public init(_ r: Int, _ c: Int, _ value: Double = 0.0) {
@@ -432,6 +457,40 @@ public func toCols(_ A: Matrix, _ d: Dim) -> Matrix {
 }
 
 // MARK: - Matrix manipulation
+
+/// Vertically stack (top-to-bottom) rows in matrices.
+///
+/// Precondition: All matrices need the same number of columns.
+///
+/// - Parameters:
+///    - ma: [Matrix] (array of matrix)
+/// - Returns: new matrix by vertically stacking rows of input matrices
+public func vstack(_ ma: [Matrix]) -> Matrix {
+    precondition(ma.count > 0, "Must have at least 1 input matrix in array")
+    var m = ma[0]
+    for i in 1..<ma.count {
+        precondition(ma[i].cols == m.cols, "Number of cols must be equal")
+        m = append(m, rows: ma[i])
+    }
+    return m
+}
+
+/// Horizontally stack (left-to-right) columns in matrices.
+///
+/// Precondition: All matrices need the same number of rows.
+///
+/// - Parameters:
+///    - ma: [Matrix] (array of matrix)
+/// - Returns: new matrix by horizontally stacking columns of input matrices
+public func hstack(_ ma: [Matrix]) -> Matrix {
+    precondition(ma.count > 0, "Must have at least 1 input matrix in array")
+    var m = ma[0]
+    for i in 1..<ma.count {
+        precondition(ma[i].rows == m.rows, "Number of rows must be equal")
+        m = append(m, cols: ma[i])
+    }
+    return m
+}
 
 /// Insert row to matrix at specified position.
 ///
