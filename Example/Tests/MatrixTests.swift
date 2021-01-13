@@ -665,7 +665,7 @@ class MatrixSpec: QuickSpec {
                                  [-0.1702,   -0.0135,   -0.4470],
                                  [0.2966,    0.3026,   -0.4566],
                                  [0.0490,    0.6187,   -0.4661]])
-                let (U, V, Q, alpha, beta, success) = gsvd(m1, m2)
+                let (U, _, _, _, _, _) = gsvd(m1, m2)
                 expect(U == m3)
                 
             }
@@ -679,6 +679,15 @@ class MatrixSpec: QuickSpec {
                 expect(u′ * u) == m1
                 let l = chol(m1, .Lower)
                 expect(l * l′) == m1
+            }
+            it("det") {
+                let m = Matrix([[1.44, -7.84, -4.39,  4.53],
+                                [-9.96, -0.28, -3.24,  3.83],
+                                [-7.55,  3.24,  6.27, -6.64],
+                                [8.34,  8.09,  5.28,  2.06]])
+                let d = det(m)
+                
+                expect(d).to(beCloseTo(-4044.7754))
             }
             it("lstsq") {
                 // Setup

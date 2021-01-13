@@ -384,3 +384,35 @@ public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
     }
     return _A
 }
+
+/// Compute the determinant of a given square matrix.
+///
+///    A precondition error is thrown if the given matrix is singular or algorithm fails to converge.
+///
+/// - Parameters:
+///     - A: square matrix=
+/// - Returns: determinant of A matrix
+public func det(_ A: Matrix) -> Double {
+    precondition(A.rows == A.cols, "Matrix dimensions must agree")
+    let B = Matrix(A)
+    
+    var M = __CLPK_integer(A.rows)
+    var N = M
+    var LDA = N
+    var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
+    
+    var error: __CLPK_integer = 0
+    
+    dgetrf_(&M, &N, &(B.flat), &LDA, &pivot, &error)
+    
+    var d = 1.0
+
+    for i in (0..<B.rows) {
+        d *= B[i, i]
+        if (pivot[i] != i + 1) {
+            d *= -1
+        }
+    }
+    
+    return d
+}
