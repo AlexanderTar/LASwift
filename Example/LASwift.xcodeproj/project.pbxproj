@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		006638F15A109C6E1B4B9D97 /* Pods_LASwift_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C7C07F6C2C3A1C56A4F776 /* Pods_LASwift_tvOS.framework */; };
+		0787F5C39569F17391B19D50 /* Pods_LASwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1CD6042258D4EE0073C207 /* Pods_LASwift_Tests.framework */; };
 		3611B5C921E96CD1004E0EF8 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BA21E96CD1004E0EF8 /* Random.swift */; };
 		3611B5CA21E96CD1004E0EF8 /* VectorStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */; };
 		3611B5CB21E96CD1004E0EF8 /* VectorArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */; };
@@ -61,7 +62,6 @@
 		36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117B21E9704600B11E01 /* Foundation.framework */; };
 		36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B64221E96E08004E0EF8 /* Accelerate.framework */; };
 		36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117E21E9705600B11E01 /* Foundation.framework */; };
-		8BC160942517B84C00E240A3 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
 		B1EC68B8EA0F226DEEFAE493 /* Pods_LASwift_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */; };
 		FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */; };
 		FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */; };
@@ -85,6 +85,10 @@
 		FB1CD6152258D5310073C207 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C621E96CD1004E0EF8 /* Numeric.swift */; };
 		FB1CD6162258D5310073C207 /* VectorTrigonometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C721E96CD1004E0EF8 /* VectorTrigonometry.swift */; };
 		FB1CD6172258D5310073C207 /* MatrixAlgebra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611B5C821E96CD1004E0EF8 /* MatrixAlgebra.swift */; };
+		FBE9377C25AF361400C16575 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
+		FBE9378225AF361800C16575 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
+		FBE9378825AF361C00C16575 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
+		FBE9378E25AF362000C16575 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -203,6 +207,7 @@
 			files = (
 				FB1CD6082258D5150073C207 /* LASwift.framework in Frameworks */,
 				FB1CD5FC2258D0DF0073C207 /* Pods_LASwift_Tests.framework in Frameworks */,
+				0787F5C39569F17391B19D50 /* Pods_LASwift_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +702,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE9377C25AF361400C16575 /* MatrixLeastSquare.swift in Sources */,
 				3611B5D321E96CD1004E0EF8 /* Util.swift in Sources */,
 				3611B5D021E96CD1004E0EF8 /* MatrixArithmetic.swift in Sources */,
 				3611B5CB21E96CD1004E0EF8 /* VectorArithmetic.swift in Sources */,
@@ -719,6 +725,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE9378225AF361800C16575 /* MatrixLeastSquare.swift in Sources */,
 				3611B66821E96EBA004E0EF8 /* Util.swift in Sources */,
 				3611B66521E96EBA004E0EF8 /* MatrixArithmetic.swift in Sources */,
 				3611B66021E96EBA004E0EF8 /* VectorArithmetic.swift in Sources */,
@@ -741,6 +748,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE9378825AF361C00C16575 /* MatrixLeastSquare.swift in Sources */,
 				3611B67721E96EBB004E0EF8 /* Util.swift in Sources */,
 				3611B67421E96EBB004E0EF8 /* MatrixArithmetic.swift in Sources */,
 				3611B66F21E96EBB004E0EF8 /* VectorArithmetic.swift in Sources */,
@@ -763,6 +771,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE9378E25AF362000C16575 /* MatrixLeastSquare.swift in Sources */,
 				FB1CD6092258D5310073C207 /* Random.swift in Sources */,
 				FB1CD60A2258D5310073C207 /* VectorStatistics.swift in Sources */,
 				FB1CD60B2258D5310073C207 /* VectorArithmetic.swift in Sources */,
@@ -786,7 +795,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */,
-				8BC160942517B84C00E240A3 /* MatrixLeastSquare.swift in Sources */,
 				FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */,
 				FAD2257E1E7925C40012219D /* PerformanceTests.swift in Sources */,
 			);
@@ -1233,7 +1241,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1251,7 +1259,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
