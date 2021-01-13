@@ -61,6 +61,7 @@
 		36EF117C21E9704600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117B21E9704600B11E01 /* Foundation.framework */; };
 		36EF117D21E9704D00B11E01 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3611B64221E96E08004E0EF8 /* Accelerate.framework */; };
 		36EF117F21E9705600B11E01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EF117E21E9705600B11E01 /* Foundation.framework */; };
+		8BC160942517B84C00E240A3 /* MatrixLeastSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */; };
 		B1EC68B8EA0F226DEEFAE493 /* Pods_LASwift_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */; };
 		FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC4071E5E3EF000D5F51F /* VectorTests.swift */; };
 		FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4AC40D1E6614EC00D5F51F /* MatrixTests.swift */; };
@@ -127,6 +128,7 @@
 		7AA417EDFA0CA2E0992CCB12 /* Pods_LASwift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C7C07F6C2C3A1C56A4F776 /* Pods_LASwift_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8982C2AF1B7A836D1583B9D4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixLeastSquare.swift; sourceTree = "<group>"; };
 		8C2FD693A9DA150F043CE3C2 /* Pods-LASwift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-macOS/Pods-LASwift-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		AA60353EB7DC503309D0D1CB /* Pods-LASwift-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LASwift-tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-LASwift-tvOS/Pods-LASwift-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		D3EF3DBBB6EE48D4BEE9D991 /* Pods_LASwift_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LASwift_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +231,7 @@
 		3611B5B921E96CD1004E0EF8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8BC160932517B84C00E240A3 /* MatrixLeastSquare.swift */,
 				3611B5BA21E96CD1004E0EF8 /* Random.swift */,
 				3611B5BB21E96CD1004E0EF8 /* VectorStatistics.swift */,
 				3611B5BC21E96CD1004E0EF8 /* VectorArithmetic.swift */,
@@ -783,6 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA4AC4081E5E3EF000D5F51F /* VectorTests.swift in Sources */,
+				8BC160942517B84C00E240A3 /* MatrixLeastSquare.swift in Sources */,
 				FA4AC40E1E6614EC00D5F51F /* MatrixTests.swift in Sources */,
 				FAD2257E1E7925C40012219D /* PerformanceTests.swift in Sources */,
 			);
