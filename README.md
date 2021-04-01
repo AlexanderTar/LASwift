@@ -68,7 +68,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
 use_frameworks!
-pod 'LASwift', '~> 0.2.5'
+pod 'LASwift', '~> 0.2.6'
 ```
 
 Install into your project:
@@ -99,7 +99,7 @@ $ brew install carthage
 To integrate `LASwift` into your Xcode project using Carthage, specify it in your `Cartfile` file:
 
 ```ogdl
-github "alexandertar/LASwift" >= 0.2.5
+github "alexandertar/LASwift" >= 0.2.6
 ```
 
 #### Swift Package Manager
@@ -111,7 +111,7 @@ let package = Package(
 name: "YOUR_PROJECT_NAME",
 targets: [],
 dependencies: [
-.Package(url: "https://github.com/alexandertar/LASwift", versions: "0.2.5" ..< Version.max)
+.Package(url: "https://github.com/alexandertar/LASwift", versions: "0.2.6" ..< Version.max)
 ]
 )
 ```
