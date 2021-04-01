@@ -399,7 +399,7 @@ extension Matrix {
             let dst = Matrix(row.count, col.count)
 
             flat.withUnsafeBufferPointer { srcBuf in
-                let srcPtr = srcBuf.baseAddress! + row.lowerBound * rows + col.lowerBound
+                let srcPtr = srcBuf.baseAddress! + row.lowerBound * cols + col.lowerBound
                 vDSP_mmovD(srcPtr, &dst.flat,
                            vDSP_Length(col.count), vDSP_Length(row.count),
                            vDSP_Length(cols), vDSP_Length(col.count))
@@ -414,7 +414,7 @@ extension Matrix {
             precondition(newValue.cols == col.count && newValue.rows == row.count, "Matrix dimensions must agree")
 
             flat.withUnsafeMutableBufferPointer { dstBuf in
-                let dstPtr = dstBuf.baseAddress! + row.lowerBound * rows + col.lowerBound
+                let dstPtr = dstBuf.baseAddress! + row.lowerBound * cols + col.lowerBound
                 vDSP_mmovD(newValue.flat, dstPtr,
                            vDSP_Length(col.count), vDSP_Length(row.count),
                            vDSP_Length(newValue.cols), vDSP_Length(cols))

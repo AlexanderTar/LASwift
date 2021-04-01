@@ -14,8 +14,8 @@ let package = Package(
         .library(name: "LASwift", targets: ["LASwift"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Quick.git", from: "2.0.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.1")
+        .package(url: "https://github.com/Quick/Quick.git", from: "3.0.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0")
     ],
     targets: [
         .target(
