@@ -895,6 +895,48 @@ class MatrixSpec: QuickSpec {
             }
         }
         
+        describe("matrix convolution") {
+            it("should return same matrix if convolving a matrix of 0's") {
+                let m1 = Matrix([[0,  0,  0,  0,  0],
+                                 [0,  0,  0,  0,  0],
+                                 [0,  0,  0,  0,  0],
+                                 [0,  0,  0,  0,  0]])
+                let kernel = Matrix([[1,  1,  1],
+                                     [1,  1,  1],
+                                     [1,  1,  1]])
+                let result = convolve(m1, kernel)
+                expect(result) == m1
+            }
+            it("should throw precondition failure if trying to convolve a matrix with a larger kernel") {
+                expect {
+                    let kernel = Matrix([[0,  0,  0,  0,  0],
+                                     [0,  0,  0,  0,  0],
+                                     [0,  0,  0,  0,  0],
+                                     [0,  0,  0,  0,  0]])
+                    let m1 = Matrix([[1,  1,  1],
+                                     [1,  1,  1],
+                                     [1,  1,  1]])
+                    _ = convolve(m1, kernel)
+                }.to(throwAssertion())
+            }
+            it("should convolve a matrix correctly") {
+                let m1 = Matrix([[1,  0,  0,  0,  0],
+                                 [0,  1,  0,  0,  0],
+                                 [0,  0,  1,  0,  0],
+                                 [0,  0,  0,  1,  0],
+                                 [0,  0,  0,  0,  1]])
+                let kernel = Matrix([[1,  1,  1],
+                                     [1,  1,  1],
+                                     [1,  1,  1]])
+                let result = convolve(m1, kernel)
+                expect(result) == Matrix([[0.0,  0.0,  0.0,  0.0,  0.0],
+                                          [0.0,  3.0,  2.0,  1.0,  0.0],
+                                          [0.0,  2.0,  3.0,  2.0,  0.0],
+                                          [0.0,  1.0,  2.0,  3.0,  0.0],
+                                          [0.0,  0.0,  0.0,  0.0,  0.0]])
+            }
+        }
+        
         describe("matrix slicing") {
             it("basic tests") {
                 let m1 = Matrix([[0,  1,  2,  3,  4],
