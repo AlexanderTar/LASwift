@@ -411,3 +411,24 @@ public func det(_ A: Matrix) -> Double {
     
     return d
 }
+
+/// Return the result of convolving the given matrix with the provided kernel.
+///
+/// - Parameters:
+///    - A: Matrix
+///    - K: Matrix (needs to be a square matrix)
+/// - Returns: Matrix result of the convolution
+@available(iOS 13.0, macOS 15.0, *)
+public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
+    precondition(K._rows == K._cols, "K needs to be an NxN matrix")
+    
+    let result: [Double]
+    
+    if K.rows == 3 {
+        result = Accelerate.vDSP.convolve(A.flat, rowCount: A._rows, columnCount: A._cols, with3x3Kernel: K.flat)
+    } else {
+        result = Accelerate.vDSP.convolve(A.flat, rowCount: A._rows, columnCount: A._cols, withKernel: K.flat, kernelRowCount: K._rows, kernelColumnCount: K._cols)
+    }
+    
+    return Matrix(A._rows, A._cols, result)
+}
