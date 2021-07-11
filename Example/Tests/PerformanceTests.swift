@@ -87,4 +87,11 @@ class PerformanceTests: XCTestCase {
             _ = maxi(self.a, .Column)
         }
     }
+    
+    func testConvolution() {
+        let k = rand(5, 7)
+        measure {
+            _ = convolve(self.a, k)
+        }
+    }
 }

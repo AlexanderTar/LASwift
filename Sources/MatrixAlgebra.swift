@@ -416,11 +416,11 @@ public func det(_ A: Matrix) -> Double {
 ///
 /// - Parameters:
 ///    - A: Matrix
-///    - K: Matrix (needs to be a square matrix)
+///    - K: Matrix (Needs to be smaller in dimension than A)
 /// - Returns: Matrix result of the convolution
-@available(iOS 13.0, macOS 15.0, *)
+@available(iOS 13.0, macOS 10.15, *)
 public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
-    precondition(K._rows == K._cols, "K needs to be an NxN matrix")
+    precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
     
     let result: [Double]
     
