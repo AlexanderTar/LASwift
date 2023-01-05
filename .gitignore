@@ -19,6 +19,7 @@ profile
 DerivedData
 *.hmap
 *.ipa
+.swiftpm
 
 # Bundler
 .bundle
@@ -28,8 +29,4 @@ DerivedData
 Carthage
 
 Package.resolved
-
-Example/Pods/Nimble
-Example/Pods/Quick
-"Example/Pods/Local Podspecs"
 

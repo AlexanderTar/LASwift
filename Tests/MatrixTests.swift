@@ -16,14 +16,14 @@ class MatrixSpec: QuickSpec {
     override func spec() {
         describe("Matrix construction tests") {
             let count = 10
-            
+
             let m1 = ones(count, count+1)
-            
+
             it("ones matrix has correct dimensions") {
                 expect(m1.rows) == count
                 expect(m1.cols) == count+1
             }
-            
+
             it("ones matrix all ones") {
                 for i in 0..<count {
                     for j in 0..<count+1 {
@@ -31,14 +31,14 @@ class MatrixSpec: QuickSpec {
                     }
                 }
             }
-            
+
             let m2 = zeros(count, count+1)
-            
+
             it("zeros matrix has correct dimensions") {
                 expect(m2.rows) == count
                 expect(m2.cols) == count+1
             }
-            
+
             it("zeros matrix all zeros") {
                 for i in 0..<count {
                     for j in 0..<count+1 {
@@ -47,36 +47,36 @@ class MatrixSpec: QuickSpec {
                 }
 
             }
-            
+
             let m3 = zeros(count, count+1)
-            
+
             it("zeros vectors are equal") {
                 expect(m3) == m2
             }
-            
+
             it("zeros and ones vectors are not equal") {
                 expect(m2) != m1
             }
-            
+
             let ones_like_m3 = ones(like: m3)   // input is zeros(count, count+1)
-            
+
             it("ones like are equal") {
                 expect(ones_like_m3) == m1      // test against ones(count, count+1)
             }
-            
+
             let zeros_like_m1 = zeros(like: m1) // input is ones(count, count+1)
-            
+
             it("zeros like are equal") {
                 expect(zeros_like_m1) == m3     // test against zeros(count, count+1)
             }
 
             let m4 = eye(count, count)
-            
+
             it("identity matrix has correct dimensions") {
                 expect(m4.rows) == count
                 expect(m4.cols) == count
             }
-            
+
             it("identity matrix ones on diag") {
                 for i in 0..<count {
                     for j in 0..<count {
@@ -88,13 +88,13 @@ class MatrixSpec: QuickSpec {
                     }
                 }
             }
-            
+
             let v1 = [1.0, 2.0, 3.0, 4.0, 5.0]
             let v2 = Matrix(v1)
             let m5 = diag(v1)
             let m6 = diag(v2)
             let m7 = diag(v1.count + 2, v1.count, v2)
-            
+
             it("diag matrix has correct dimensions") {
                 expect(m5.rows) == v1.count
                 expect(m5.cols) == v1.count
@@ -103,7 +103,7 @@ class MatrixSpec: QuickSpec {
                 expect(m7.rows) == v1.count + 2
                 expect(m7.cols) == v1.count
             }
-            
+
             it("diag matrix correct") {
                 for i in 0..<v1.count {
                     for j in 0..<v1.count {
@@ -119,7 +119,7 @@ class MatrixSpec: QuickSpec {
                     }
                 }
             }
-            
+
             it("rand") {
                 let size = 100
                 let m8 = rand(size, size)
@@ -132,7 +132,7 @@ class MatrixSpec: QuickSpec {
                     }
                 }
             }
-            
+
             it("randn") {
                 let m8 = randn(1000, 1000)
                 expect(m8.rows) == 1000
@@ -144,7 +144,7 @@ class MatrixSpec: QuickSpec {
                     expect(s[i]).to(beCloseTo(1.0, within: 0.2))
                 }
             }
-            
+
         }
         describe("Matrix arithmetic tests") {
             it("addition") {
@@ -153,35 +153,37 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[6.0, 8.0], [10.0, 12.0]])
                 expect(m1 + m2) == res
             }
-            
+
             it("substraction") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let m2 = Matrix([[5.0, 6.0], [7.0, 8.0]])
                 let res = Matrix([[-4.0, -4.0], [-4.0, -4.0]])
                 expect(m1 - m2) == res
             }
-            
+
             it("multiplication") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let m2 = Matrix([[5.0, 6.0], [7.0, 8.0]])
                 let res = Matrix([[5.0, 12.0], [21.0, 32.0]])
                 expect(m1 .* m2) == res
             }
-            
+
             it("right division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let m2 = Matrix([[5.0, 6.0], [7.0, 8.0]])
                 let res = Matrix([[1.0 / 5.0, 2.0 / 6.0], [3.0 / 7.0, 4.0 / 8.0]])
-                expect(m1 ./ m2) == res
+                let div: Matrix = m1 ./ m2
+                expect(div) == res
             }
-            
+
             it("left division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let m2 = Matrix([[5.0, 6.0], [7.0, 8.0]])
                 let res = Matrix([[5.0 / 1.0, 6.0 / 2.0], [7.0 / 3.0, 8.0 / 4.0]])
-                expect(m1 ./. m2) == res
+                let div: Matrix = m1 ./. m2
+                expect(div) == res
             }
-            
+
             it("vector addition") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let v = [5.0, 6.0]
@@ -189,7 +191,7 @@ class MatrixSpec: QuickSpec {
                 expect(m1 + v) == res
                 expect(v + m1) == res
             }
-            
+
             it("vector substraction") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let v = [5.0, 6.0]
@@ -198,7 +200,27 @@ class MatrixSpec: QuickSpec {
                 expect(m1 - v) == res1
                 expect(v - m1) == res2
             }
-            
+
+            it("negation") {
+                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
+                let res = Matrix([[-1.0, 2.0], [3.0, -4.0]])
+                expect(-m1) == res
+            }
+
+            it("absolute") {
+                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
+                let res = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                expect(abs(m1)) == res
+            }
+
+            it("threshold") {
+                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
+                let res = Matrix([[1.0, 0.0], [0.0, 4.0]])
+                expect(thr(m1, 0.0)) == res
+            }
+        }
+
+        describe("Matrix-vector arithmetic tests") {
             it("vector multiplication") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let v = [5.0, 6.0]
@@ -206,25 +228,31 @@ class MatrixSpec: QuickSpec {
                 expect(m1 .* v) == res
                 expect(v .* m1) == res
             }
-            
+
             it("vector right division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let v = [5.0, 6.0]
                 let res1 = Matrix([[1.0 / 5.0, 2.0 / 6.0], [3.0 / 5.0, 4.0 / 6.0]])
                 let res2 = Matrix([[5.0 / 1.0, 6.0 / 2.0], [5.0 / 3.0, 6.0 / 4.0]])
-                expect(m1 ./ v) == res1
-                expect(v ./ m1) == res2
+                let div1: Matrix = m1 ./ v
+                let div2: Matrix = v ./ m1
+                expect(div1) == res1
+                expect(div2) == res2
             }
-            
+
             it("vector left division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let v = [5.0, 6.0]
                 let res1 = Matrix([[5.0 / 1.0, 6.0 / 2.0], [5.0 / 3.0, 6.0 / 4.0]])
                 let res2 = Matrix([[1.0 / 5.0, 2.0 / 6.0], [3.0 / 5.0, 4.0 / 6.0]])
-                expect(m1 ./. v) == res1
-                expect(v ./. m1) == res2
+                let div1: Matrix = m1 ./. v
+                let div2: Matrix = v ./. m1
+                expect(div1) == res1
+                expect(div2) == res2
             }
-            
+        }
+
+        describe("Matrix-scalar arithmetic tests") {
             it("scalar addition") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let s = 5.0
@@ -232,7 +260,7 @@ class MatrixSpec: QuickSpec {
                 expect(m1 + s) == res
                 expect(s + m1) == res
             }
-            
+
             it("scalar substraction") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let s = 5.0
@@ -241,7 +269,7 @@ class MatrixSpec: QuickSpec {
                 expect(m1 - s) == res1
                 expect(s - m1) == res2
             }
-            
+
             it("scalar multiplication") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let s = 5.0
@@ -249,44 +277,30 @@ class MatrixSpec: QuickSpec {
                 expect(m1 .* s) == res
                 expect(s .* m1) == res
             }
-            
+
             it("scalar right division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let s = 5.0
                 let res1 = Matrix([[1.0 / 5.0, 2.0 / 5.0], [3.0 / 5.0, 4.0 / 5.0]])
                 let res2 = Matrix([[5.0 / 1.0, 5.0 / 2.0], [5.0 / 3.0, 5.0 / 4.0]])
-                expect(m1 ./ s) == res1
-                expect(s ./ m1) == res2
+                let div1: Matrix = m1 ./ s
+                let div2: Matrix = s ./ m1
+                expect(div1) == res1
+                expect(div2) == res2
             }
-            
+
             it("scalar left division") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
                 let s = 5.0
                 let res1 = Matrix([[5.0 / 1.0, 5.0 / 2.0], [5.0 / 3.0, 5.0 / 4.0]])
                 let res2 = Matrix([[1.0 / 5.0, 2.0 / 5.0], [3.0 / 5.0, 4.0 / 5.0]])
-                expect(m1 ./. s) == res1
-                expect(s ./. m1) == res2
-            }
-            
-            it("negation") {
-                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
-                let res = Matrix([[-1.0, 2.0], [3.0, -4.0]])
-                expect(-m1) == res
-            }
-            
-            it("absolute") {
-                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
-                let res = Matrix([[1.0, 2.0], [3.0, 4.0]])
-                expect(abs(m1)) == res
-            }
-            
-            it("threshold") {
-                let m1 = Matrix([[1.0, -2.0], [-3.0, 4.0]])
-                let res = Matrix([[1.0, 0.0], [0.0, 4.0]])
-                expect(thr(m1, 0.0)) == res
+                let div1: Matrix = m1 ./. s
+                let div2: Matrix = s ./. m1
+                expect(div1) == res1
+                expect(div2) == res2
             }
         }
-        
+
         describe("Matrix comparison") {
             it("equal") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -314,7 +328,7 @@ class MatrixSpec: QuickSpec {
                 expect(m2) <= m3
             }
         }
-        
+
         describe("Matrix subscript") {
             it("[i,j]") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -422,7 +436,7 @@ class MatrixSpec: QuickSpec {
                 expect(reduce(m1, sum, .Column)) == res
             }
         }
-        
+
         describe("Matrix power and exponential tests") {
             it("power") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -463,7 +477,7 @@ class MatrixSpec: QuickSpec {
                 expect(log2(m1)) == res
             }
         }
-        
+
         describe("Matrix trigonometric tests") {
             it("sin") {
                 let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -481,7 +495,7 @@ class MatrixSpec: QuickSpec {
                 expect(tan(m1)) == res
             }
         }
-        
+
         describe("Matrix statistics tests") {
             it("max") {
                 let m1 = Matrix([[1.0, 4.0], [3.0, 2.0]])
@@ -560,7 +574,7 @@ class MatrixSpec: QuickSpec {
                 expect(sumsq(m1, .Column)).to(beCloseTo(res2))
             }
         }
-        
+
         describe("Matrix linear algebra tests") {
             it("trace") {
                 let m1 = Matrix([[1.0, 0.0, 2.0],
@@ -613,12 +627,12 @@ class MatrixSpec: QuickSpec {
                 expect(mpower(m1, -1)) == res
                 expect(m1 ^ -1) == res
                 let m2 = Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]])
-                
+
                 #if !SWIFT_PACKAGE
                     expect { () -> Void in _ = inv(m2) }.to(throwAssertion())
                     expect { () -> Void in _ = inv(ones(3, 3)) }.to(throwAssertion())
                 #endif
-                
+
                 expect(inv(m1) * m1) == eye(3, 3)
             }
             it("eigen") {
@@ -630,7 +644,7 @@ class MatrixSpec: QuickSpec {
                 expect(m1 * e1.V) == e1.V * e1.D
                 let m2 = Matrix([[1.0, 0.0, 2.0],
                                  [-1.0, 5.0, 0.0]])
-                
+
                 #if !SWIFT_PACKAGE
                     expect { () -> Void in _ = eig(m2) }.to(throwAssertion())
                 #endif
@@ -667,7 +681,7 @@ class MatrixSpec: QuickSpec {
                                  [0.0490,    0.6187,   -0.4661]])
                 let (U, _, _, _, _, _) = gsvd(m1, m2)
                 expect(U == m3)
-                
+
             }
             it("chol") {
                 let m1 = Matrix([[1, 1, 1, 1, 1],
@@ -686,7 +700,7 @@ class MatrixSpec: QuickSpec {
                                 [-7.55,  3.24,  6.27, -6.64],
                                 [8.34,  8.09,  5.28,  2.06]])
                 let d = det(m)
-                
+
                 expect(d).to(beCloseTo(-4044.7754))
             }
             it("lstsq") {
@@ -708,10 +722,10 @@ class MatrixSpec: QuickSpec {
                                  [0.7066, 0.6323],
                                  [0.1288, 0.1351]])
                 let d2 = Matrix([[195.3616, 107.05746]])
-                
+
                 // Run function
                 let (c1, d1) = lstsqr(a1, b1)
-                
+
                 // Check solution matrix
                 expect(c1.rows) == c2.rows
                 expect(c1.cols) == c2.cols
@@ -722,7 +736,7 @@ class MatrixSpec: QuickSpec {
                         expect(e1).to(beCloseTo(e2, within:0.001))
                     }
                 }
-                
+
                 // Check residue matrix
                 expect(d1.rows) == d2.rows
                 expect(d1.cols) == d2.cols
@@ -735,7 +749,7 @@ class MatrixSpec: QuickSpec {
                 }
             }
         }
-        
+
         describe("Matrix concatenation") {
             it("horizontal scalar append") {
                 let m1 = Matrix([[1.0, 2.0],
@@ -894,7 +908,7 @@ class MatrixSpec: QuickSpec {
                 expect(hstack([m1, m2])) == res
             }
         }
-        
+
         describe("matrix slicing") {
             it("basic tests") {
                 let m1 = Matrix([[0,  1,  2,  3,  4],
