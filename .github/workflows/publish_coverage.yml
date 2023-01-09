@@ -1,0 +1,22 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run tests
+      run: swift test --enable-code-coverage
+    - name: Prepare code coverage
+      run: xcrun llvm-cov export -format="lcov" .build/debug/LASwiftPackageTests.xctest/Contents/MacOS/LASwiftPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+    - name: Upload to codecov.io
+      run: bash <(curl https://codecov.io/bash)
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

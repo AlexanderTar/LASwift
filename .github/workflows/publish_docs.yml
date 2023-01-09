@@ -1,4 +1,4 @@
-name: PublishDocumentation
+name: Documentation
 
 on:
   release:
