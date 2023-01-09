@@ -494,6 +494,21 @@ class MatrixSpec: QuickSpec {
                 let res = Matrix([[tan(1.0), tan(2.0)], [tan(3.0), tan(4.0)]])
                 expect(tan(m1)) == res
             }
+            it("asin") {
+                let m1 = Matrix([[0.5, -0.5], [1.0, -1.0]])
+                let res = Matrix([[asin(0.5), asin(-0.5)], [asin(1.0), asin(-1.0)]])
+                expect(asin(m1)) == res
+            }
+            it("acos") {
+                let m1 = Matrix([[0.5, -0.5], [1.0, -1.0]])
+                let res = Matrix([[acos(0.5), acos(-0.5)], [acos(1.0), acos(-1.0)]])
+                expect(acos(m1)) == res
+            }
+            it("atan") {
+                let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+                let res = Matrix([[atan(1.0), atan(2.0)], [atan(3.0), atan(4.0)]])
+                expect(atan(m1)) == res
+            }
         }
 
         describe("Matrix statistics tests") {

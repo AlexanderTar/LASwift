@@ -40,3 +40,32 @@ public func cos(_ A: Matrix) -> Matrix {
 public func tan(_ A: Matrix) -> Matrix {
     return matrixFunction(tan, A)
 }
+
+/// Return the arcsine of `A`, where return value is
+/// in the range -pi/2 to pi/2.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: arcsine of a matrix values
+public func asin(_ A: Matrix) -> Matrix {
+    return matrixFunction(asin, A)
+}
+
+/// Return the arccosine of `A`, where return value is
+/// in the range 0 to pi.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: arccosine of a matrix values
+public func acos(_ A: Matrix) -> Matrix {
+    return matrixFunction(acos, A)
+}
+
+/// Return the arctangent of `a`.
+///
+/// - Parameters
+///     - A: matrix
+/// - Returns: arctangent of a matrix values
+public func atan(_ A: Matrix) -> Matrix {
+    return matrixFunction(atan, A)
+}

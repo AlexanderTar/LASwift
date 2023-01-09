@@ -245,6 +245,21 @@ class VectorSpec: QuickSpec {
                 let res = [tan(1.0), tan(2.0), tan(3.0)]
                 expect(tan(vec)).to(beCloseTo(res))
             }
+            it("asin") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [asin(1.0), asin(2.0), asin(3.0)]
+                expect(asin(vec)).to(beCloseTo(res))
+            }
+            it("acos") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [acos(1.0), acos(2.0), acos(3.0)]
+                expect(acos(vec)).to(beCloseTo(res))
+            }
+            it("atan") {
+                let vec = [1.0, 2.0, 3.0]
+                let res = [atan(1.0), atan(2.0), atan(3.0)]
+                expect(atan(vec)).to(beCloseTo(res))
+            }
         }
         
         describe("Vector statistics tests") {
