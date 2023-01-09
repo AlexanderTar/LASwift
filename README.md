@@ -108,11 +108,11 @@ You can use [The Swift Package Manager](https://swift.org/package-manager) to in
 import PackageDescription
 
 let package = Package(
-name: "YOUR_PROJECT_NAME",
-targets: [],
-dependencies: [
-.Package(url: "https://github.com/alexandertar/LASwift", versions: "0.3.2" ..< Version.max)
-]
+    name: "YOUR_PROJECT_NAME",
+    targets: [],
+    dependencies: [
+        .Package(url: "https://github.com/alexandertar/LASwift", versions: "0.3.2" ..< Version.max)
+    ]
 )
 ```
 
