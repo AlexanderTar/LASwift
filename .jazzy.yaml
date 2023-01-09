@@ -1,8 +1,15 @@
-podspec: LASwift.podspec
+# podspec: LASwift.podspec
 
+author: Alexander Taraymovich
 github_url: https://github.com/AlexanderTar/LASwift/
 
-swift_version: 5.0
+module: LASwift
+swift_build_tool: spm
+build_tool_arguments:
+  - -Xswiftc
+  - -swift-version
+  - -Xswiftc
+  - "5"
 
 min_acl: public
 skip_undocumented: true

@@ -1,9 +1,9 @@
 # LASwift
 
-[![CI Status](https://travis-ci.org/AlexanderTar/LASwift.svg?branch=master)](https://travis-ci.org/AlexanderTar/LASwift)
+[![Build](https://github.com/AlexanderTar/LASwift/actions/workflows/build_test.yml/badge.svg?branch=master)](https://github.com/AlexanderTar/LASwift/actions/workflows/build_test.yml)
 [![codecov](https://codecov.io/gh/AlexanderTar/LASwift/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderTar/LASwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Documentation](https://img.shields.io/badge/LASwift-documentation-blue.svg)](https://alexandertar.github.io/LASwift-docs/index.html)
+[![Documentation](https://img.shields.io/badge/LASwift-documentation-blue.svg)](https://alexandertar.github.io/LASwift/index.html)
 [![License](https://img.shields.io/cocoapods/l/LASwift.svg?style=flat)](https://raw.githubusercontent.com/AlexanderTar/LASwift/master/LICENSE)
 [![Version](https://img.shields.io/cocoapods/v/LASwift.svg?style=flat)](http://cocoapods.org/pods/LASwift)
 [![Platform](https://img.shields.io/cocoapods/p/LASwift.svg?style=flat)](http://cocoapods.org/pods/LASwift)
