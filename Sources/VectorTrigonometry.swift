@@ -42,3 +42,32 @@ public func cos(_ a: Vector) -> Vector {
 public func tan(_ a: Vector) -> Vector {
     return vectorFunction(vvtan, a)
 }
+
+/// Return the arcsine of `a`, where return value is
+/// in the range -pi/2 to pi/2.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: arcsine of a vector values
+public func asin(_ a: Vector) -> Vector {
+    return vectorFunction(vvasin, a)
+}
+
+/// Return the arccosine of `a`, where return value is
+/// in the range 0 to pi.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: arccosine of a vector values
+public func acos(_ a: Vector) -> Vector {
+    return vectorFunction(vvacos, a)
+}
+
+/// Return the arctangent of `a`.
+///
+/// - Parameters
+///     - a: vector
+/// - Returns: arctangent of a vector values
+public func atan(_ a: Vector) -> Vector {
+    return vectorFunction(vvatan, a)
+}
