@@ -1,0 +1,159 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 151,
+      "symbol": "Dim.Row",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 152,
+      "symbol": "Dim.Column",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 157,
+      "symbol": "Matrix.flat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 178,
+      "symbol": "Matrix.init(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 185,
+      "symbol": "Matrix.init(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 350,
+      "symbol": "Matrix.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 355,
+      "symbol": "Matrix.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 360,
+      "symbol": "Matrix.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 394,
+      "symbol": "Matrix.subscript(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.subscript",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 441,
+      "symbol": "toRows(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 450,
+      "symbol": "toCols(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 937,
+      "symbol": "Extractor.All",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 938,
+      "symbol": "Extractor.Range(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 939,
+      "symbol": "Extractor.Pos(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 940,
+      "symbol": "Extractor.PosCyc(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 941,
+      "symbol": "Extractor.Take(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 942,
+      "symbol": "Extractor.TakeLast(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 943,
+      "symbol": "Extractor.Drop(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 944,
+      "symbol": "Extractor.DropLast(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/Matrix.swift",
+      "line": 1089,
+      "symbol": "Matrix.MatrixIterator",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/MatrixAlgebra.swift",
+      "line": 16,
+      "symbol": "Triangle.Upper",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/LASwift/LASwift/Sources/MatrixAlgebra.swift",
+      "line": 17,
+      "symbol": "Triangle.Lower",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/runner/work/LASwift/LASwift"
+}
