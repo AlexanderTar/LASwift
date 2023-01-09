@@ -412,13 +412,13 @@ public func det(_ A: Matrix) -> Double {
     return d
 }
 
-/// Return the result of convolving the given matrix with the provided kernel.
+ /// Return the result of convolving the given matrix with the provided kernel.
  ///
  /// - Parameters:
  ///    - A: Matrix
  ///    - K: Matrix (Needs to be smaller in dimension than A)
  /// - Returns: Matrix result of the convolution
- @available(iOS 13.0, macOS 10.15, *)
+ @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
  public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
      precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
 
