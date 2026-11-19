@@ -1,128 +1,115 @@
-# LASwift
+<p align="center">
+  <img src="assets/icon.png" width="128" alt="LASwift icon: a matrix in square brackets">
+</p>
 
-[![Build](https://github.com/AlexanderTar/LASwift/actions/workflows/build_test.yml/badge.svg?branch=master)](https://github.com/AlexanderTar/LASwift/actions/workflows/build_test.yml)
-[![codecov](https://codecov.io/gh/AlexanderTar/LASwift/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderTar/LASwift)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Documentation](https://img.shields.io/badge/LASwift-documentation-blue.svg)](https://alexandertar.github.io/LASwift/index.html)
-[![License](https://img.shields.io/cocoapods/l/LASwift.svg?style=flat)](https://raw.githubusercontent.com/AlexanderTar/LASwift/master/LICENSE)
-[![Version](https://img.shields.io/cocoapods/v/LASwift.svg?style=flat)](http://cocoapods.org/pods/LASwift)
-[![Platform](https://img.shields.io/cocoapods/p/LASwift.svg?style=flat)](http://cocoapods.org/pods/LASwift)
+<h1 align="center">LASwift</h1>
 
-LASwift provides most of linear algebra operations on vectors and matrices
-required to implement machine learning algorithms. Library syntax is inspired by
-Matlab matrix manipulation and Haskell linear algebra library 'hmatrix'. LASwift is
-using high-performant calculations provided by LAPACK, BLAS and vDSP through Apple
-Accelerate framework.
+<p align="center">Fast linear algebra for Swift, powered by Accelerate.</p>
 
-## Currently supported
+<p align="center">
+  <a href="https://github.com/AlexanderTar/LASwift/actions/workflows/ci.yml"><img src="https://github.com/AlexanderTar/LASwift/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"></a>
+  <a href="https://codecov.io/gh/AlexanderTar/LASwift"><img src="https://codecov.io/gh/AlexanderTar/LASwift/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://swiftpackageindex.com/AlexanderTar/LASwift"><img src="https://img.shields.io/endpoint?url=https://swiftpackageindex.com/api/packages/AlexanderTar/LASwift/badge?type=swift-versions" alt="Swift versions"></a>
+  <a href="https://swiftpackageindex.com/AlexanderTar/LASwift"><img src="https://img.shields.io/endpoint?url=https://swiftpackageindex.com/api/packages/AlexanderTar/LASwift/badge?type=platforms" alt="Platforms"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/AlexanderTar/LASwift" alt="BSD-3-Clause license"></a>
+  <a href="https://alexandertar.github.io/LASwift/documentation/laswift/"><img src="https://img.shields.io/badge/docs-DocC-blue.svg" alt="Documentation"></a>
+</p>
 
-Following operations are fully supported for both vectors and matrices:
+LASwift gives Swift a `Matrix` type and a `Vector` (an array of `Double`) with the
+operations you need for numerical code and machine learning. The syntax follows
+Matlab and the Haskell library [hmatrix](https://hackage.haskell.org/package/hmatrix).
+The work is done by Apple's Accelerate framework (vDSP, BLAS and LAPACK), so LASwift
+runs on Apple platforms only.
 
-- Arithmetic operations (addition, substraction, multiplication, division, absolute value)
-- Exponential functions (raise to power, exponent, logarithms)
-- Trigonometric functions (sine, cosine, tangent)
-- Statistics functions (max, min, mean value, standard deviation)
+## Features
 
-Linear algebra operations on matrices:
+For vectors and matrices:
 
-- Inversion
-- Transposition
-- Matrix power (integer values)
-- Eigenvectors and eigenvalues
-- Singular value decomposition
+- Arithmetic: `+`, `-`, `*`, element-wise `.*` and `./`, `abs`
+- Exponents and logarithms: `**` and `.**` powers, `exp`, `log`, `log2`, `log10`, `sqrt`, `square`
+- Trigonometry: `sin`, `cos`, `tan`, `asin`, `acos`, `atan`
+- Statistics: `sum`, `mean`, `min`, `max`, `std` (sample by default), `normalize`
+- `isApproximatelyEqual` for comparing floating-point results with a tolerance
+- Seedable `rand` and `randn`
 
-Following matrix manipulation operations are supported:
+For matrices:
 
-- Concatenation
-- Slicing
+- Inverse, determinant, transpose and integer powers
+- Eigenvalues and eigenvectors, including complex ones (`eig`, `eigvals`)
+- Singular value decomposition (`svd`), generalized SVD (`gsvd`), Cholesky (`chol`)
+- Least squares (`lstsqr`), `rank`, `unique`, 2-D `convolve`
+- Slicing, concatenation, insertion and `diag`/`eye`/`zeros`/`ones` constructors
+
+`Matrix` is a value type: `Sendable`, `Hashable` and compared exactly with `==`.
+
+## Example
+
+```swift
+import LASwift
+
+let A = Matrix([[2, 1], [1, 3]])
+let b = Vector([1, 2])
+
+let x = inv(A) * Matrix(b)          // solve A·x = b
+let quadratic = A ** 2 + 3.0 .* eye(2, 2)
+let squares = [1.0, 2.0, 3.0] .** 2 // [1, 4, 9]
+
+let (V, D, _, _) = eig(A)           // right eigenvectors in the columns of V
+isApproximatelyEqual(A * V, V * D)  // true
+```
+
+`**` and `.**` bind tighter than `*`, like exponentiation in maths. The old `^` and
+`.^` still work in 1.0 but are deprecated, because `^` has the wrong precedence.
 
 ## Requirements
 
-- iOS 12.0+ / Mac OS X 10.13+ / tvOS 12.0+ / watchOS 2.0+
-- Xcode 12.0+
-- Swift 5.0+
+| Platform | Minimum |
+| --- | --- |
+| macOS | 13.3 |
+| iOS | 16.4 |
+| tvOS | 16.4 |
+| watchOS | 9.4 |
+| visionOS | 1.0 |
 
-## Benchmarks
-
-Refer to [linalg-benchmarks](https://github.com/Alexander-Ignatyev/linalg-benchmarks) project
-regarding basic benchmarking of latest version of LASwift against most popular linear
-algebra libraries (Haskell hmatrix, Python NumPy, Octave, Go gonum-matrix).
+Building needs Xcode 26 or later (Swift 6.2 tools). These match [Package.swift](Package.swift).
 
 ## Installation
 
-#### CocoaPods
+LASwift supports Swift Package Manager only. CocoaPods and Carthage were dropped in 1.0.
 
-Install CocoaPods if not already available:
+In a `Package.swift`:
 
-``` bash
-$ [sudo] gem install cocoapods
-$ pod setup
-```
-Go to the directory of your Xcode project, and Create and Edit your *Podfile* and add _LASwift_:
-
-``` bash
-$ cd /path/to/MyProject
-$ touch Podfile
-$ edit Podfile
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
-
-use_frameworks!
-pod 'LASwift', '~> 0.3.2'
-```
-
-Install into your project:
-
-``` bash
-$ pod install
-```
-
-Open your project in Xcode from the .xcworkspace file (not the usual project file):
-
-``` bash
-$ open MyProject.xcworkspace
-```
-
-You can now `import LASwift` framework into your files.
-
-#### Carthage
-
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that automates the process of adding frameworks to your Cocoa application.
-
-You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
-
-```bash
-$ brew update
-$ brew install carthage
-```
-
-To integrate `LASwift` into your Xcode project using Carthage, specify it in your `Cartfile` file:
-
-```ogdl
-github "alexandertar/LASwift" >= 0.3.2
-```
-
-#### Swift Package Manager
-You can use [The Swift Package Manager](https://swift.org/package-manager) to install `LASwift` by adding the proper description to your `Package.swift` file:
 ```swift
-import PackageDescription
-
-let package = Package(
-    name: "YOUR_PROJECT_NAME",
-    targets: [],
-    dependencies: [
-        .Package(url: "https://github.com/alexandertar/LASwift", versions: "0.3.2" ..< Version.max)
-    ]
-)
+dependencies: [
+    .package(url: "https://github.com/AlexanderTar/LASwift.git", from: "1.0.0")
+],
+targets: [
+    .target(name: "YourTarget", dependencies: ["LASwift"])
+]
 ```
 
-Note that the [Swift Package Manager](https://swift.org/package-manager) is still in early design and development, for more information checkout its [GitHub Page](https://github.com/apple/swift-package-manager).
+In Xcode, choose File > Add Package Dependencies, paste
+`https://github.com/AlexanderTar/LASwift.git` and pick "Up to Next Major Version" from 1.0.0.
 
-## Contribution
+## Upgrading from 0.3
 
-Currently implemented functionality should be sufficient enough to implement machine learning
-algorithms (as this was an initial purpose). However, if you find something missing or wish to add
-extra features, feel free to submit pull-requests or create issues with proposals.
+1.0 is a breaking release. See [Migrating from 0.3](CHANGELOG.md#migrating-from-03).
+
+## Documentation
+
+API documentation is on [GitHub Pages](https://alexandertar.github.io/LASwift/documentation/laswift/)
+and the [Swift Package Index](https://swiftpackageindex.com/AlexanderTar/LASwift/documentation/laswift).
+
+## Benchmarks
+
+The [linalg-benchmarks](https://github.com/Alexander-Ignatyev/linalg-benchmarks) project
+compares LASwift with Haskell hmatrix, Python NumPy, Octave and Go gonum.
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+first, and follow the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems as
+described in [SECURITY.md](SECURITY.md).
 
 ## Author
 
@@ -130,4 +117,4 @@ Alexander Taraymovich, taraymovich@me.com
 
 ## License
 
-LASwift is available under the BSD-3-Clause license. See the LICENSE file for more info.
+LASwift is available under the BSD-3-Clause license. See [LICENSE](LICENSE).
