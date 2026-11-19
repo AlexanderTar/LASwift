@@ -115,14 +115,16 @@ func vDSP_meanvD(_ a: UnsafePointer<Double>, _ ia: vDSP_Stride, _ c: UnsafeMutab
     c.pointee = n == 0 ? .nan : s / Double(n)
 }
 
-/// Largest non-NaN element; NaN when every element is NaN (as Accelerate returns).
+/// Largest non-NaN element; NaN when every element is NaN. (Accelerate also returns NaN for a
+/// contiguous all-NaN vector of 2+ elements, but -inf for a strided or one-element one.)
 func vDSP_maxvD(_ a: UnsafePointer<Double>, _ ia: vDSP_Stride, _ c: UnsafeMutablePointer<Double>, _ n: vDSP_Length) {
     var m = Double.nan
     for i in 0..<Int(n) where m.isNaN || a[i * ia] > m { m = a[i * ia] }
     c.pointee = m
 }
 
-/// Smallest non-NaN element; NaN when every element is NaN (as Accelerate returns).
+/// Smallest non-NaN element; NaN when every element is NaN. (Accelerate also returns NaN for a
+/// contiguous all-NaN vector of 2+ elements, but +inf for a strided or one-element one.)
 func vDSP_minvD(_ a: UnsafePointer<Double>, _ ia: vDSP_Stride, _ c: UnsafeMutablePointer<Double>, _ n: vDSP_Length) {
     var m = Double.nan
     for i in 0..<Int(n) where m.isNaN || a[i * ia] < m { m = a[i * ia] }
@@ -146,7 +148,7 @@ func vDSP_minviD(_ a: UnsafePointer<Double>, _ ia: vDSP_Stride, _ c: UnsafeMutab
 
 /// Mean, population standard deviation, and C = (A - mean) / deviation.
 /// With NaN or infinite input the deviation is NaN here, where Accelerate reports 0;
-/// `std` documents that difference.
+/// `std(_: Vector)` documents that difference.
 func vDSP_normalizeD(_ a: UnsafePointer<Double>, _ ia: vDSP_Stride, _ c: UnsafeMutablePointer<Double>?,
                      _ ic: vDSP_Stride, _ mean: UnsafeMutablePointer<Double>, _ sd: UnsafeMutablePointer<Double>,
                      _ n: vDSP_Length) {

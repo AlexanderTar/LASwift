@@ -25,7 +25,9 @@ import Musl
 ///
 /// `NaN` elements are not handled consistently: depending on where the `NaN` sits,
 /// `max` returns either `NaN` or the largest non-`NaN` element. Use `maxi` and `mini`,
-/// which skip `NaN` elements, or remove `NaN` before calling.
+/// which skip `NaN` elements, or remove `NaN` before calling. When every element is `NaN`,
+/// Linux returns `NaN`; Apple platforms return `NaN` for a vector or matrix row, but `-inf`
+/// (`+inf` for `min`) for a one-element vector or a matrix column.
 ///
 /// - Returns: largest element of vector a
 public func max(_ a: Vector) -> Double {
