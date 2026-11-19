@@ -1137,3 +1137,15 @@ extension Matrix: CustomStringConvertible {
         return "\((0..<rows).map{"\(self[row: $0])"}.joined(separator: "\n"))"
     }
 }
+
+// MARK: - Approximate comparison
+
+/// Check if two matrices have the same shape and are equal elementwise within a tolerance.
+///
+/// See `isApproximatelyEqual(_:_:absoluteTolerance:relativeTolerance:)` for Double values.
+public func isApproximatelyEqual(_ a: Matrix, _ b: Matrix,
+                                 absoluteTolerance: Double = 1e-14,
+                                 relativeTolerance: Double = 0) -> Bool {
+    return a.rows == b.rows && a.cols == b.cols
+        && isApproximatelyEqual(a.flat, b.flat, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance)
+}
