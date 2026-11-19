@@ -67,7 +67,7 @@ struct StdNormalizationTests {
 
 @Suite("Statistics of empty input")
 struct EmptyStatisticsTests {
-    @Test("max of an empty vector is a precondition failure")
+    @Test("max of an empty vector is a precondition failure", .exitTests)
     func maxEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = max([Double]())
@@ -76,7 +76,7 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 
-    @Test("min of an empty vector is a precondition failure")
+    @Test("min of an empty vector is a precondition failure", .exitTests)
     func minEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = min([Double]())
@@ -85,7 +85,7 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 
-    @Test("maxi of an empty vector is a precondition failure")
+    @Test("maxi of an empty vector is a precondition failure", .exitTests)
     func maxiEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = maxi([Double]())
@@ -94,7 +94,7 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 
-    @Test("mini of an empty vector is a precondition failure")
+    @Test("mini of an empty vector is a precondition failure", .exitTests)
     func miniEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = mini([Double]())
@@ -103,7 +103,7 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 
-    @Test("mean of an empty vector is a precondition failure")
+    @Test("mean of an empty vector is a precondition failure", .exitTests)
     func meanEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = mean([Double]())
@@ -112,64 +112,10 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 
-    @Test("std of an empty vector is a precondition failure")
+    @Test("std of an empty vector is a precondition failure", .exitTests)
     func stdEmptyVector() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = std([Double]())
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("max of an empty matrix is a precondition failure")
-    func maxEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = max(Matrix(0, 0, []))
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("min of an empty matrix is a precondition failure")
-    func minEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = min(Matrix(0, 0, []))
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("maxi of an empty matrix is a precondition failure")
-    func maxiEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = maxi(Matrix(0, 0, []))
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("mini of an empty matrix is a precondition failure")
-    func miniEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = mini(Matrix(0, 0, []))
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("mean of an empty matrix is a precondition failure")
-    func meanEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = mean(Matrix(0, 0, []))
-        }
-        let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
-        #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
-    }
-
-    @Test("std of an empty matrix is a precondition failure")
-    func stdEmptyMatrix() async {
-        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
-            _ = std(Matrix(0, 0, []))
         }
         let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")

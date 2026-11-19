@@ -72,7 +72,7 @@ struct ConvolutionTests {
             [32.0, 34.0, 36.0, 38.0, 40.0]]))
     }
 
-    @Test("kernel with even rows is rejected")
+    @Test("kernel with even rows is rejected", .exitTests)
     func evenRows() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             let K = Matrix(2, 3, 1.0)
@@ -83,7 +83,7 @@ struct ConvolutionTests {
         #expect(stderr.contains("odd"), "stderr was: \(stderr)")
     }
 
-    @Test("kernel with even columns is rejected")
+    @Test("kernel with even columns is rejected", .exitTests)
     func evenColumns() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             let K = Matrix(3, 2, 1.0)
@@ -94,7 +94,7 @@ struct ConvolutionTests {
         #expect(stderr.contains("odd"), "stderr was: \(stderr)")
     }
 
-    @Test("kernel with even both is rejected")
+    @Test("kernel with even both is rejected", .exitTests)
     func evenBoth() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             let K = Matrix(2, 2, 1.0)
