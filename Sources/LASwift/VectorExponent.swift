@@ -12,7 +12,7 @@ import Accelerate
 
 /// Exponentiation function, returning vector raised to power.
 ///
-/// Alternatively, `power(a, p)` can be executed with `a .^ p`.
+/// Alternatively, `power(a, p)` can be executed with `a .** p`.
 ///
 /// Mathematically, `power` would return a complex number when base is negative and
 /// power is not an integral value. `power` can’t do that,
@@ -32,16 +32,26 @@ public func power(_ a: Vector, _ p: Double) -> Vector {
 
 /// Exponentiation function, returning vector raised to power.
 ///
-/// Alternatively, `a .^ p` can be executed with `power(a, p)`.
+/// Binds tighter than `*`, `.*` and `+`, so `2 .* a .** 2` is `2 .* power(a, 2)`.
+///
+/// Alternatively, `a .** p` can be executed with `power(a, p)`.
 ///
 /// Mathematically, `power` would return a complex number when base is negative and
-/// power is not an integral value. `power` can’t do that, 
+/// power is not an integral value. `power` can’t do that,
 /// so instead it signals domain error (returns `±NaN`).
 ///
 /// - Parameters
 ///     - a: vector
 ///     - p: power to raise vector to
 /// - Returns: elementwise vector power of a raised to p
+public func .** (_ a: Vector, _ p: Double) -> Vector {
+    return power(a, p)
+}
+
+/// Exponentiation function, returning vector raised to power.
+///
+/// Deprecated: `.^` binds looser than `.*` and `+`. Use `.**`.
+@available(*, deprecated, renamed: ".**")
 public func .^ (_ a: Vector, _ p: Double) -> Vector {
     return power(a, p)
 }

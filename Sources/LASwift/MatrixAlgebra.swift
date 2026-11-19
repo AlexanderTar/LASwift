@@ -85,11 +85,12 @@ public func * (_ A: Matrix, _ B: Matrix) -> Matrix {
 ///
 /// If power is 1, source matrix is returned
 /// If power is -1, inverted matrix is returned
-/// If power is > 1, continuous matrix product result is returned (eg `mpower(A, 2) = mtimes(A, A)`)
+/// If power is > 1, continuous matrix product result is returned (eg `mpower(A, 2) = mtimes(A, A)`),
+/// computed by repeated squaring
 /// If power is < -1, continuous matrix product of inverted matrix result is returned
-/// All other values are invalid
+/// If power is 0, identity matrix is returned
 ///
-/// Alternatively, `mpower(A, p)` can be executed with `A ^ p`.
+/// Alternatively, `mpower(A, p)` can be executed with `A ** p`.
 ///
 /// - Parameters
 ///     - A: matrix
@@ -103,13 +104,18 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     case -1:
         return inv(A)
     case _ where p > 1:
-        var C = Matrix(A)
+        // Exponentiation by squaring: O(log p) products instead of p - 1.
+        var result: Matrix? = nil
+        var base = A
         var p = p
-        while (p > 1) {
-            C = mtimes(A, C)
-            p -= 1
+        while p > 0 {
+            if p & 1 == 1 {
+                result = result.map { mtimes($0, base) } ?? base
+            }
+            p >>= 1
+            if p > 0 { base = mtimes(base, base) }
         }
-        return C
+        return result!
     case _ where p < -1:
         return inv(mpower(A, -p))
     default:
@@ -121,16 +127,27 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
 ///
 /// If power is 1, source matrix is returned
 /// If power is -1, inverted matrix is returned
-/// If power is > 1, continuous matrix product result is returned (eg `A ^ 2 = mtimes(A, A)`)
+/// If power is > 1, continuous matrix product result is returned (eg `A ** 2 = mtimes(A, A)`)
 /// If power is < -1, continuous matrix product of inverted matrix result is returned
-/// All other values are invalid
+/// If power is 0, identity matrix is returned
 ///
-/// Alternatively, `A ^ p` can be executed with `mpower(A, p)`.
+/// Binds tighter than `*`, `.*` and `+`, so `A + A ** 2` is `A + mpower(A, 2)`.
+///
+/// Alternatively, `A ** p` can be executed with `mpower(A, p)`.
 ///
 /// - Parameters
 ///     - A: matrix
 ///     - p: power to raise matrix to (integer)
 /// - Returns: matrix A raised to power p
+public func ** (_ A: Matrix, _ p: Int) -> Matrix {
+    return mpower(A, p)
+}
+
+/// Raise matrix to specified power (integer value).
+///
+/// Deprecated: `^` binds looser than `*` and `+` (it keeps the precedence of the
+/// standard library's bitwise XOR), so `A + A ^ 2` is `(A + A) ^ 2`. Use `**`.
+@available(*, deprecated, renamed: "**")
 public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
     return mpower(a, p)
 }

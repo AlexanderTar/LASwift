@@ -10,7 +10,7 @@
 
 /// Exponentiation function, returning matrix raised to power.
 ///
-/// Alternatively, `power(A, p)` can be executed with `A .^ p`.
+/// Alternatively, `power(A, p)` can be executed with `A .** p`.
 ///
 /// Mathematically, `power` would return a complex number when base is negative and
 /// power is not an integral value. `power` can’t do that,
@@ -26,7 +26,9 @@ public func power(_ A: Matrix, _ b: Double) -> Matrix {
 
 /// Exponentiation function, returning matrix raised to power.
 ///
-/// Alternatively, `A .^ p` can be executed with `power(A, p)`.
+/// Binds tighter than `*`, `.*` and `+`, so `2 .* A .** 2` is `2 .* power(A, 2)`.
+///
+/// Alternatively, `A .** p` can be executed with `power(A, p)`.
 ///
 /// Mathematically, `power` would return a complex number when base is negative and
 /// power is not an integral value. `power` can’t do that,
@@ -36,6 +38,14 @@ public func power(_ A: Matrix, _ b: Double) -> Matrix {
 ///     - A: matrix
 ///     - p: power to raise matrix to
 /// - Returns: elementwise matrix power of a raised to p
+public func .** (_ A: Matrix, _ p: Double) -> Matrix {
+    return power(A, p)
+}
+
+/// Exponentiation function, returning matrix raised to power.
+///
+/// Deprecated: `.^` binds looser than `.*` and `+`. Use `.**`.
+@available(*, deprecated, renamed: ".**")
 public func .^ (_ A: Matrix, _ p: Double) -> Matrix {
     return power(A, p)
 }
