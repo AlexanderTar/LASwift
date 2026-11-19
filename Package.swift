@@ -16,10 +16,6 @@ let package = Package(
     products: [
         .library(name: "LASwift", targets: ["LASwift"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/Quick/Quick.git", from: "5.0.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "10.0.0")
-    ],
     targets: [
         // C shim over Accelerate's new LAPACK interface; see its header for why it is a C target.
         .target(
@@ -30,7 +26,7 @@ let package = Package(
             dependencies: ["CLASwiftLAPACK"]),
         .testTarget(
             name: "LASwiftTests",
-            dependencies: ["LASwift", "Quick", "Nimble"])
+            dependencies: ["LASwift"])
     ],
     swiftLanguageModes: [.v6]
 )

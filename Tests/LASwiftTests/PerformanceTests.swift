@@ -2,13 +2,19 @@
 //  PerformanceTests.swift
 //  LASwift
 //
-//  Created by Alexander Taraymovich on 15/03/2017.
-//  Copyright © 2017 CocoaPods. All rights reserved.
+//  Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
+//  All rights reserved.
+//
+//  This software may be modified and distributed under the terms
+//  of the BSD license. See the LICENSE file for details.
 //
 
 import LASwift
 import XCTest
 
+// Benchmarks stay on XCTest: Swift Testing has no `measure`, and these tests exist to
+// time the operations, not to check results. XCTest ships with the toolchain, so the
+// package still has no external dependency.
 class PerformanceTests: XCTestCase {
     let a = rand(1000, 1000)
     let b = rand(1000, 1000)
