@@ -430,23 +430,51 @@ public func det(_ A: Matrix) -> Double {
     return d
 }
 
- /// Return the result of convolving the given matrix with the provided kernel.
- ///
- /// - Parameters:
- ///    - A: Matrix
- ///    - K: Matrix (Needs to be smaller in dimension than A)
- /// - Returns: Matrix result of the convolution
- @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
- public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
-     precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
+/// Return the 2-D convolution of the given matrix with the provided kernel, the same size as `A`.
+///
+/// This is true convolution (the kernel is flipped in both directions), equal to
+/// Matlab's `conv2(A, K, 'same')` and `scipy.signal.convolve2d(A, K, mode: 'same')`.
+/// `A` is treated as zero outside its edges, so border elements are computed from the
+/// part of the kernel that overlaps `A`; they are not zeroed.
+///
+/// A precondition error is thrown if the kernel is not smaller than `A` in both dimensions,
+/// or if the kernel has an even number of rows or columns (it has no centre element).
+///
+/// - Parameters:
+///    - A: Matrix
+///    - K: Matrix with an odd number of rows and columns, smaller in dimension than A
+/// - Returns: Matrix result of the convolution
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
+public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
+    precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
+    precondition(K.rows % 2 == 1 && K.cols % 2 == 1, "The kernel matrix needs an odd number of rows and columns.")
 
-     let result: [Double]
+    // Zero-pad A by half the kernel on each side. vDSP leaves a border of half a kernel
+    // unfilled, so the interior of the padded result is exactly the zero-padded 'same' result.
+    let padRows = K.rows / 2
+    let padCols = K.cols / 2
+    let paddedCols = A.cols + 2 * padCols
+    var padded = Matrix(A.rows + 2 * padRows, paddedCols)
+    for r in 0..<A.rows {
+        for c in 0..<A.cols {
+            padded.flat[(r + padRows) * paddedCols + c + padCols] = A[r, c]
+        }
+    }
 
-     if K.rows == 3 {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, with3x3Kernel: K.flat)
-     } else {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, withKernel: K.flat, kernelRowCount: K.rows, kernelColumnCount: K.cols)
-     }
+    // vDSP correlates; reversing the flat kernel rotates it by 180 degrees, which makes it convolve.
+    let flipped = Array(K.flat.reversed())
+    let filtered: [Double]
+    if K.rows == 3 && K.cols == 3 {
+        filtered = Accelerate.vDSP.convolve(padded.flat, rowCount: padded.rows, columnCount: padded.cols, with3x3Kernel: flipped)
+    } else {
+        filtered = Accelerate.vDSP.convolve(padded.flat, rowCount: padded.rows, columnCount: padded.cols, withKernel: flipped, kernelRowCount: K.rows, kernelColumnCount: K.cols)
+    }
 
-     return Matrix(A.rows, A.cols, result)
- }
+    var result = Matrix(A.rows, A.cols)
+    for r in 0..<A.rows {
+        for c in 0..<A.cols {
+            result.flat[r * A.cols + c] = filtered[(r + padRows) * paddedCols + c + padCols]
+        }
+    }
+    return result
+}
