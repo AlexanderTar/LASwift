@@ -347,28 +347,30 @@ extension Matrix {
     /// - Returns: submatrix of size `row.count` by  `col.count`
     ///
     public subscript<A: RangeExpression, B: RangeExpression>(_ row: A, _ col: B) -> Matrix where A.Bound == Int, B.Bound == Int {
-        get {
-            return self[ClosedRange<Int>(row.relative(to: self[row: 0])), ClosedRange<Int>(col.relative(to: self[col: 0]))]
-        }
-
-        set {
-            self[ClosedRange<Int>(row.relative(to: self[row: 0])), ClosedRange<Int>(col.relative(to: self[col: 0]))] = newValue
-        }
+        get { return self[resolve(row, count: rows), resolve(col, count: cols)] }
+        set { self[resolve(row, count: rows), resolve(col, count: cols)] = newValue }
     }
 
     public subscript<B: RangeExpression>(_ : UnboundedRange, _ col: B) -> Matrix where B.Bound == Int {
-        get { return self[0..<rows, ClosedRange<Int>(col.relative(to: self[col: 0]))] }
-        set { self[0..<rows, ClosedRange<Int>(col.relative(to: self[col: 0]))] = newValue }
+        get { return self[0..<rows, resolve(col, count: cols)] }
+        set { self[0..<rows, resolve(col, count: cols)] = newValue }
     }
 
     public subscript<A: RangeExpression>(_ row: A, _ : UnboundedRange) -> Matrix where A.Bound == Int {
-        get { return self[ClosedRange<Int>(row.relative(to: self[row: 0])), 0..<cols] }
-        set { self[ClosedRange<Int>(row.relative(to: self[row: 0])), 0..<cols] = newValue }
+        get { return self[resolve(row, count: rows), 0..<cols] }
+        set { self[resolve(row, count: rows), 0..<cols] = newValue }
     }
 
     public subscript(_ : UnboundedRange, _ : UnboundedRange) -> Matrix {
         get { return self }
         set { self[0..<rows, 0..<cols] = newValue}
+    }
+
+    /// Resolve a range expression against the `0..<count` indices of one axis (rows or columns).
+    private func resolve<R: RangeExpression>(_ range: R, count: Int) -> ClosedRange<Int> where R.Bound == Int {
+        let r = range.relative(to: 0..<count)
+        precondition(!r.isEmpty, "Range must not be empty")
+        return r.lowerBound...(r.upperBound - 1)
     }
 
     /// Get and set submatrix with a top-left corner at (`row`, `col`).

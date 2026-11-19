@@ -106,6 +106,90 @@ struct SliceBoundsTests {
     }
 }
 
+@Suite("range subscripts on non-square matrices")
+struct RangeSubscriptShapeTests {
+    let wide = Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]])
+    let tall = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]])
+
+    @Test("column range on a wide matrix")
+    func columnsOfWide() {
+        expectClose(wide[..., 1...], Matrix([[2.0, 3.0, 4.0], [6.0, 7.0, 8.0]]))
+        expectClose(wide[0..<2, 1..<3], Matrix([[2.0, 3.0], [6.0, 7.0]]))
+        expectClose(wide[..., ...3], Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]]))
+    }
+
+    @Test("row range on a tall matrix")
+    func rowsOfTall() {
+        expectClose(tall[1..., ...], Matrix([[3.0, 4.0], [5.0, 6.0], [7.0, 8.0]]))
+        expectClose(tall[...2, ...], Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]))
+    }
+
+    @Test("row range on a wide matrix")
+    func rowsOfWide() {
+        expectClose(wide[1..., ...], Matrix([[5.0, 6.0, 7.0, 8.0]]))
+    }
+
+    @Test("column range on a tall matrix")
+    func columnsOfTall() {
+        expectClose(tall[..., 1...], Matrix([[2.0], [4.0], [6.0], [8.0]]))
+    }
+
+    @Test("both ranges bounded on non-square matrices")
+    func bothRanges() {
+        expectClose(tall[1..., 0...], Matrix([[3.0, 4.0], [5.0, 6.0], [7.0, 8.0]]))
+        expectClose(wide[1..., 2...], Matrix([[7.0, 8.0]]))
+    }
+
+    @Test("writing through range subscripts on non-square matrices")
+    func writing() {
+        var t = tall
+        t[1..., ...] = Matrix([[0.0, 0.0], [0.0, 0.0], [0.0, 0.0]])
+        expectClose(t, Matrix([[1.0, 2.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0]]))
+        var w = wide
+        w[..., 1...] = Matrix([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+        expectClose(w, Matrix([[1.0, 0.0, 0.0, 0.0], [5.0, 0.0, 0.0, 0.0]]))
+    }
+}
+
+#if os(macOS) || os(Linux)
+@Suite("range subscript preconditions")
+struct RangeSubscriptPreconditionTests {
+    @Test("an empty row range fails the precondition")
+    func emptyRows() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[0..<0, ...]
+        }
+        expectStderr(result, contains: "Range must not be empty")
+    }
+
+    @Test("an empty column range fails the precondition")
+    func emptyColumns() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[..., 1..<1]
+        }
+        expectStderr(result, contains: "Range must not be empty")
+    }
+
+    @Test("an empty range fails the precondition when writing")
+    func emptyWrite() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = Matrix([[1.0, 2.0], [3.0, 4.0]])
+            m[0..<0, 0..<2] = Matrix([[1.0, 2.0]])
+        }
+        expectStderr(result, contains: "Range must not be empty")
+    }
+
+    @Test("a range past the last column fails the precondition")
+    func pastEnd() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[0..<2, 0..<3]
+        }
+        expectStderr(result, contains: "Invalid range")
+    }
+}
+
+#endif
+
 #if os(macOS) || os(Linux)
 @Suite("slice preconditions")
 struct SlicePreconditionTests {
