@@ -38,7 +38,7 @@ public func trace(_ A: Matrix) -> Double {
 ///     - A: matrix
 /// - Returns: transposed matrix
 public func transpose(_ A: Matrix) -> Matrix {
-    let C: Matrix = zeros(A.cols, A.rows)
+    var C: Matrix = zeros(A.cols, A.rows)
     vDSP_mtransD(A.flat, 1, &(C.flat), 1, vDSP_Length(A.cols), vDSP_Length(A.rows))
     return C
 }
@@ -64,7 +64,7 @@ public postfix func ′ (_ a: Matrix) -> Matrix {
 /// - Returns: matrix product of A and B
 public func mtimes(_ A: Matrix, _ B: Matrix) -> Matrix {
     precondition(A.cols == B.rows, "Matrix dimensions must agree")
-    let C: Matrix = zeros(A.rows, B.cols)
+    var C: Matrix = zeros(A.rows, B.cols)
     vDSP_mmulD(A.flat, 1, B.flat, 1, &(C.flat), 1, vDSP_Length(A.rows), vDSP_Length(B.cols), vDSP_Length(A.cols))
     return C
 }
@@ -144,7 +144,7 @@ public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
 /// - Returns: inverse of A matrix
 public func inv(_ A: Matrix) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
-    let B = Matrix(A)
+    var B = Matrix(A)
     
     var M = Int(A.rows)
     var N = M
@@ -186,7 +186,7 @@ public func inv(_ A: Matrix) -> Matrix {
 public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     
-    let V = Matrix(A)
+    var V = Matrix(A)
     
     var N = Int(A.rows)
     
@@ -235,7 +235,7 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
 /// - Returns: matrices U, S, and V such that `A = U * S * transpose(V)`
 public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     /* LAPACK is using column-major order */
-    let _A = toCols(A, .Row)
+    var _A = toCols(A, .Row)
     
     var jobz: Int8 = 65 // 'A'
     
@@ -253,8 +253,8 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     var error = Int(0)
     
     var s = Vector(repeating: 0.0, count: Int(min(M, N)))
-    let U = Matrix(Int(LDU), Int(M))
-    let VT = Matrix(Int(LDVT), Int(N))
+    var U = Matrix(Int(LDU), Int(M))
+    var VT = Matrix(Int(LDVT), Int(N))
     
     /* Query and allocate the optimal workspace */
     laswift_dgesdd(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &wkOpt, &lWork, &iWork, &error)
@@ -278,8 +278,8 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
 /// - Returns: matrices U, V, and Q, plus vectors alpha and beta
 public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, alpha: Vector, beta: Vector, success: Bool) {
     /* LAPACK is using column-major order */
-    let _A = toCols(A, .Row)
-    let _B = toCols(B, .Row)
+    var _A = toCols(A, .Row)
+    var _B = toCols(B, .Row)
     
     var jobu:Int8 = Int8(Array("U".utf8).first!)
     var jobv:Int8 = Int8(Array("V".utf8).first!)
@@ -303,9 +303,9 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var k = Int()
     var l = Int()
     
-    let U = Matrix(Int(LDU), Int(M))
-    let V = Matrix(Int(LDV), Int(P))
-    let Q = Matrix(Int(LDQ), Int(N))
+    var U = Matrix(Int(LDU), Int(M))
+    var V = Matrix(Int(LDV), Int(P))
+    var Q = Matrix(Int(LDQ), Int(N))
     var alpha = Vector(repeating: 0.0, count: Int(N))
     var beta = Vector(repeating: 0.0, count: Int(N))
     
@@ -361,7 +361,7 @@ public func chol(_ A: Matrix, _ t: Triangle = .Upper) -> Matrix {
 ///     - t: Triangle value (.Upper, .Lower)
 /// - Returns: upper/lower triangular part
 public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
-    let _A = zeros(A.rows, A.cols)
+    var _A = zeros(A.rows, A.cols)
     switch t {
     case .Upper:
         for i in (0..<A.rows) {
@@ -390,7 +390,7 @@ public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
 /// - Returns: determinant of A matrix
 public func det(_ A: Matrix) -> Double {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
-    let B = Matrix(A)
+    var B = Matrix(A)
     
     var M = Int(A.rows)
     var N = M
@@ -426,10 +426,10 @@ public func det(_ A: Matrix) -> Double {
      let result: [Double]
 
      if K.rows == 3 {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A._rows, columnCount: A._cols, with3x3Kernel: K.flat)
+         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, with3x3Kernel: K.flat)
      } else {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A._rows, columnCount: A._cols, withKernel: K.flat, kernelRowCount: K._rows, kernelColumnCount: K._cols)
+         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, withKernel: K.flat, kernelRowCount: K.rows, kernelColumnCount: K.cols)
      }
 
-     return Matrix(A._rows, A._cols, result)
+     return Matrix(A.rows, A.cols, result)
  }

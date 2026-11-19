@@ -61,34 +61,40 @@ public func randn(_ count: Int) -> Vector {
     return x
 }
 
-// MARK: - Vector comparison
+// MARK: - Approximate comparison
 
-/// Check if two vectors are equal using Double value approximate comparison
-public func == (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs ==~ rhs
+/// Check if two values are equal within a tolerance.
+///
+/// The values are equal when `|a - b| <= max(absoluteTolerance, relativeTolerance * max(|a|, |b|))`.
+/// Equal infinities are equal, an infinity is never close to a finite value,
+/// and NaN is never equal to anything.
+///
+/// - Parameters:
+///    - a: first value
+///    - b: second value
+///    - absoluteTolerance: largest accepted absolute difference (1e-14 by default)
+///    - relativeTolerance: largest accepted difference relative to the larger magnitude (0 by default)
+/// - Returns: `true` if the values are equal within the tolerance
+public func isApproximatelyEqual(_ a: Double, _ b: Double,
+                                 absoluteTolerance: Double = 1e-14,
+                                 relativeTolerance: Double = 0) -> Bool {
+    precondition(absoluteTolerance >= 0 && relativeTolerance >= 0, "Tolerances must be non-negative")
+    if a == b {
+        return true
+    }
+    guard a.isFinite && b.isFinite else {
+        return false
+    }
+    return abs(a - b) <= max(absoluteTolerance, relativeTolerance * max(abs(a), abs(b)))
 }
 
-/// Check if two vectors are not equal using Double value approximate comparison
-public func != (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs !=~ rhs
-}
-
-/// Check if one vector is greater than another using Double value approximate comparison
-public func > (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs >~ rhs
-}
-
-/// Check if one vector is less than another using Double value approximate comparison
-public func < (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs <~ rhs
-}
-
-/// Check if one vector is greater than or equal to another using Double value approximate comparison
-public func >= (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs >=~ rhs
-}
-
-/// Check if one vector is less than or equal to another using Double value approximate comparison
-public func <= (lhs: Vector, rhs: Vector) -> Bool {
-    return lhs <=~ rhs
+/// Check if two vectors have the same length and are equal elementwise within a tolerance.
+///
+/// See `isApproximatelyEqual(_:_:absoluteTolerance:relativeTolerance:)` for Double values.
+public func isApproximatelyEqual(_ a: Vector, _ b: Vector,
+                                 absoluteTolerance: Double = 1e-14,
+                                 relativeTolerance: Double = 0) -> Bool {
+    return a.count == b.count && zip(a, b).allSatisfy {
+        isApproximatelyEqual($0, $1, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance)
+    }
 }

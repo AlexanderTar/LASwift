@@ -56,39 +56,25 @@ struct VectorConstructionTests {
 
 // These specs exercise the library's own tolerance-based comparison operators on
 // vectors, so they use the operators directly. They go away with the operators.
-@Suite("Vector comparison")
-struct VectorComparisonTests {
+@Suite("Vector equality")
+struct VectorEqualityTests {
     @Test("equal")
     func equal() {
-        let v1 = [1.0, 2.0]
-        let v2 = [1.0, 2.0]
-        #expect(v1 == v2)
+        #expect([1.0, 2.0] == [1.0, 2.0])
     }
 
     @Test("not equal")
     func notEqual() {
-        let v1 = [1.0, 2.0]
-        let v2 = [1.0, 4.0]
-        #expect(v1 != v2)
+        #expect([1.0, 2.0] != [1.0, 4.0])
     }
 
-    @Test("greater/less than")
-    func greaterLess() {
-        let v1 = [11.0, 12.0]
-        let v2 = [1.0, 2.0]
-        #expect(v1 > v2)
-        #expect(v2 < v1)
-    }
-
-    @Test("greater/less than or equal")
-    func greaterLessOrEqual() {
-        let v1 = [11.0, 12.0]
-        let v2 = [1.0, 2.0]
-        let v3 = [1.0, 2.0]
-        #expect(v1 >= v2)
-        #expect(v2 <= v1)
-        #expect(v2 >= v3)
-        #expect(v2 <= v3)
+    @Test("equality is the standard exact elementwise comparison")
+    func exact() {
+        #expect([0.1 + 0.2] != [0.3])
+        #expect([1.0 + 1e-15] != [1.0])
+        #expect([Double.infinity] == [Double.infinity])
+        #expect([Double.nan] != [Double.nan])
+        #expect([1.0, 2.0] != [1.0, 2.0, 3.0])
     }
 }
 
@@ -290,5 +276,70 @@ struct VectorStatisticsTests {
         let s = LASwift.std(vec)
         let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
         expectClose(LASwift.normalize(vec), res, tol: closeTolerance)
+    }
+}
+
+@Suite("Approximate equality")
+struct ApproximateEqualityTests {
+    @Test("absolute tolerance")
+    func absolute() {
+        #expect(isApproximatelyEqual(1.0, 1.0 + 5e-15))
+        #expect(!isApproximatelyEqual(1.0, 1.0 + 1e-13))
+        #expect(isApproximatelyEqual(1.0, 1.05, absoluteTolerance: 0.1))
+        #expect(isApproximatelyEqual(1.0, 1.1, absoluteTolerance: 0.1000001))
+        #expect(!isApproximatelyEqual(1.0, 1.2, absoluteTolerance: 0.1))
+    }
+
+    @Test("relative tolerance scales with the larger magnitude")
+    func relative() {
+        #expect(!isApproximatelyEqual(1e12, 1e12 + 1))
+        #expect(isApproximatelyEqual(1e12, 1e12 + 1, relativeTolerance: 1e-9))
+        #expect(isApproximatelyEqual(1e12 + 1, 1e12, relativeTolerance: 1e-9))
+        #expect(!isApproximatelyEqual(1e12, 1.1e12, relativeTolerance: 1e-9))
+        // the larger of the two tolerances wins
+        #expect(isApproximatelyEqual(1e-20, 5e-15, absoluteTolerance: 1e-14, relativeTolerance: 1e-9))
+        #expect(isApproximatelyEqual(0.0, 1e-15, relativeTolerance: 1e-3))
+    }
+
+    @Test("infinities are equal only to the same infinity")
+    func infinity() {
+        #expect(isApproximatelyEqual(.infinity, .infinity))
+        #expect(isApproximatelyEqual(-.infinity, -.infinity))
+        #expect(!isApproximatelyEqual(.infinity, -.infinity))
+        #expect(!isApproximatelyEqual(.infinity, Double.greatestFiniteMagnitude,
+                                      absoluteTolerance: .infinity, relativeTolerance: 1))
+        #expect(!isApproximatelyEqual(1.0, .infinity, absoluteTolerance: .infinity))
+    }
+
+    @Test("NaN is never equal")
+    func nan() {
+        #expect(!isApproximatelyEqual(.nan, .nan))
+        #expect(!isApproximatelyEqual(.nan, 1.0, absoluteTolerance: .infinity))
+        #expect(!isApproximatelyEqual([Double.nan], [Double.nan]))
+        #expect(!isApproximatelyEqual(Matrix([[Double.nan]]), Matrix([[Double.nan]])))
+    }
+
+    @Test("vectors compare elementwise and need equal lengths")
+    func vectors() {
+        #expect(isApproximatelyEqual([1.0, 2.0], [1.0 + 1e-15, 2.0]))
+        #expect(!isApproximatelyEqual([1.0, 2.0], [1.0, 2.1]))
+        #expect(isApproximatelyEqual([1.0, 2.0], [1.0, 2.1], absoluteTolerance: 0.2))
+        #expect(isApproximatelyEqual([100.0, 2e9], [100.0, 2e9 + 1], relativeTolerance: 1e-6))
+        #expect(!isApproximatelyEqual([1.0, 2.0], [1.0, 2.0, 3.0]))
+        #expect(!isApproximatelyEqual([1.0, 2.0, 3.0], [1.0, 2.0]))
+        #expect(isApproximatelyEqual([Double](), [Double]()))
+        #expect(isApproximatelyEqual([Double.infinity, 1.0], [Double.infinity, 1.0]))
+    }
+
+    @Test("matrices compare elementwise and need equal shapes")
+    func matrices() {
+        let m = sample2x2()
+        #expect(isApproximatelyEqual(m, Matrix([[1.0 + 1e-15, 2.0], [3.0, 4.0]])))
+        #expect(!isApproximatelyEqual(m, Matrix([[1.0 + 1e-13, 2.0], [3.0, 4.0]])))
+        #expect(isApproximatelyEqual(m, Matrix([[1.0 + 1e-13, 2.0], [3.0, 4.0]]), absoluteTolerance: 1e-12))
+        #expect(isApproximatelyEqual(m, Matrix([[1.0, 2.0], [3.0, 4.0 + 1e-8]]), relativeTolerance: 1e-8))
+        #expect(!isApproximatelyEqual(Matrix(2, 2, [1, 2, 3, 4]), Matrix(1, 4, [1, 2, 3, 4])))
+        #expect(!isApproximatelyEqual(Matrix(2, 2, [1, 2, 3, 4]), Matrix(4, 1, [1, 2, 3, 4])))
+        #expect(isApproximatelyEqual(Matrix([[Double.infinity]]), Matrix([[Double.infinity]])))
     }
 }

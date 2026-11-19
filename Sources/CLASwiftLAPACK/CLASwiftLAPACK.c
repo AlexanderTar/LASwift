@@ -56,3 +56,7 @@ void laswift_dgels(const char *trans, const laswift_int *m, const laswift_int *n
 void laswift_dlarnv(const laswift_int *idist, laswift_int *iseed, const laswift_int *n, double *x) {
     dlarnv_(CI(idist), MI(iseed), CI(n), x);
 }
+
+void laswift_cblas_dcopy(laswift_int n, const double *x, laswift_int incx, double *y, laswift_int incy) {
+    cblas_dcopy((__LAPACK_int)n, x, (__LAPACK_int)incx, y, (__LAPACK_int)incy);
+}

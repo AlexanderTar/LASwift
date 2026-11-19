@@ -296,13 +296,11 @@ struct MatrixScalarArithmeticTests {
 
 // These specs exercise the library's own tolerance-based comparison operators on
 // matrices, so they use the operators directly. They go away with the operators.
-@Suite("Matrix comparison")
-struct MatrixComparisonTests {
+@Suite("Matrix equality")
+struct MatrixEqualityTests {
     @Test("equal")
     func equal() {
-        let m1 = sample2x2()
-        let m2 = sample2x2()
-        #expect(m1 == m2)
+        #expect(sample2x2() == sample2x2())
     }
 
     @Test("not equal")
@@ -312,23 +310,43 @@ struct MatrixComparisonTests {
         #expect(m1 != m2)
     }
 
-    @Test("greater/less than")
-    func greaterLess() {
-        let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
-        let m2 = sample2x2()
-        #expect(m1 > m2)
-        #expect(m2 < m1)
+    @Test("equality is exact, not tolerance based")
+    func exact() {
+        let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+        let m2 = Matrix([[1.0 + 1e-15, 2.0], [3.0, 4.0]])
+        #expect(m1 != m2)
+        #expect(Matrix([[0.1 + 0.2]]) != Matrix([[0.3]]))
     }
 
-    @Test("greater/less than or equal")
-    func greaterLessOrEqual() {
-        let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
-        let m2 = sample2x2()
-        let m3 = sample2x2()
-        #expect(m1 >= m2)
-        #expect(m2 <= m1)
-        #expect(m2 >= m3)
-        #expect(m2 <= m3)
+    @Test("same elements with a different shape are not equal")
+    func shapeMatters() {
+        let flat = [1.0, 2.0, 3.0, 4.0]
+        #expect(Matrix(2, 2, flat) != Matrix(1, 4, flat))
+        #expect(Matrix(2, 2, flat) != Matrix(4, 1, flat))
+    }
+
+    @Test("a matrix holding infinities equals itself")
+    func infinity() {
+        let m = Matrix([[Double.infinity, -Double.infinity], [1.0, 2.0]])
+        #expect(m == m)
+        #expect(m == Matrix([[Double.infinity, -Double.infinity], [1.0, 2.0]]))
+    }
+
+    @Test("equal matrices hash equally and work as set members and dictionary keys")
+    func hashable() {
+        let a = sample2x2()
+        let b = sample2x2()
+        #expect(a.hashValue == b.hashValue)
+        let set: Set<Matrix> = [a, b, Matrix([[1.0, 2.0, 3.0, 5.0]])]
+        #expect(set.count == 2)
+        #expect([a: "x"][b] == "x")
+        #expect(Matrix([[0.0]]).hashValue == Matrix([[-0.0]]).hashValue)
+    }
+
+    @Test("a matrix holding NaN never equals anything")
+    func nan() {
+        let m = Matrix([[Double.nan, 1.0]])
+        #expect(m != m)
     }
 }
 
@@ -336,7 +354,7 @@ struct MatrixComparisonTests {
 struct MatrixSubscriptTests {
     @Test("[i,j]")
     func elementSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         #expect(m1[1, 1] == 4.0)
         m1[1, 0] = 10.0
         #expect(m1[1, 0] == 10.0)
@@ -344,7 +362,7 @@ struct MatrixSubscriptTests {
 
     @Test("index")
     func indexSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         #expect(m1[3] == 4.0)
         m1[2] = 10.0
         #expect(m1[2] == 10.0)
@@ -353,7 +371,7 @@ struct MatrixSubscriptTests {
 
     @Test("row")
     func rowSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         expectClose(m1[row: 1], [3.0, 4.0])
         m1[row: 0] = [10.0, 20.0]
         expectClose(m1[row: 0], [10.0, 20.0])
@@ -363,7 +381,7 @@ struct MatrixSubscriptTests {
 
     @Test("column")
     func columnSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         expectClose(m1[col: 1], [2.0, 4.0])
         m1[col: 0] = [10.0, 30.0]
         expectClose(m1[col: 0], [10.0, 30.0])
@@ -379,7 +397,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("[i,j] -> Matrix")
     func submatrix() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[0, 1].flat, [2.0, 3.0, 5.0, 6.0, 8.0, 9.0])
         m1[1, 0] = m2
         expectClose(m1[1..<3, 0...1].flat, [10.0, 11.0, 12.0, 13.0])
@@ -387,7 +405,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("closed")
     func closed() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1...2, 0...1].flat, [4.0, 5.0, 7.0, 8.0])
         m1[0...1, 1...2] = m2
         expectClose(m1.flat, [1.0, 10.0, 11.0, 4.0, 12.0, 13.0, 7.0, 8.0, 9.0])
@@ -395,7 +413,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("open")
     func open() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1..<3, 0..<2].flat, [4.0, 5.0, 7.0, 8.0])
         m1[0..<2, 1..<3] = m2
         expectClose(m1.flat, [1.0, 10.0, 11.0, 4.0, 12.0, 13.0, 7.0, 8.0, 9.0])
@@ -403,7 +421,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("partial")
     func partial() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1..., ..<2].flat, [4.0, 5.0, 7.0, 8.0])
         m1[1..., 1...] = m2
         expectClose(m1.flat, [1.0, 2.0, 3.0, 4.0, 10.0, 11.0, 7.0, 12.0, 13.0])
@@ -411,7 +429,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("unbounded")
     func unbounded() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         let row = Matrix([[10.0, 11.0, 12.0]])
         expectClose(m1[..., 2...2].flat, [3.0, 6.0, 9.0])
         m1[1...1, ...] = row
@@ -585,6 +603,67 @@ struct MatrixStatisticsTests {
         expectClose(sumsq(m1), [17.0, 13.0], tol: closeTolerance)
         expectClose(sumsq(m1, .Row), [17.0, 13.0], tol: closeTolerance)
         expectClose(sumsq(m1, .Column), [10.0, 20.0], tol: closeTolerance)
+    }
+}
+
+@Suite("Matrix column statistics on non-square matrices")
+struct MatrixColumnStatisticsTests {
+    /// 3x4, no ties, so the index results are unambiguous.
+    let wide = Matrix([[3.0, -1.0, 4.0, 1.0],
+                       [5.0, 9.0, 2.0, 6.0],
+                       [7.0, 3.0, 5.0, 8.0]])
+
+    @Test("column results on a wide matrix")
+    func wideColumns() {
+        #expect(max(wide, .Column) == [7.0, 9.0, 5.0, 8.0])
+        #expect(min(wide, .Column) == [3.0, -1.0, 2.0, 1.0])
+        #expect(maxi(wide, .Column) == [2, 1, 2, 2])
+        #expect(mini(wide, .Column) == [0, 0, 1, 0])
+        #expect(sum(wide, .Column) == [15.0, 11.0, 11.0, 15.0])
+        #expect(sumsq(wide, .Column) == [83.0, 91.0, 45.0, 101.0])
+        expectClose(mean(wide, .Column), [5.0, 11.0 / 3.0, 11.0 / 3.0, 5.0])
+        expectClose(std(wide, .Column), [
+            sqrt((4.0 + 0.0 + 4.0) / 3.0),
+            sqrt((pow(-1.0 - 11.0 / 3.0, 2) + pow(9.0 - 11.0 / 3.0, 2) + pow(3.0 - 11.0 / 3.0, 2)) / 3.0),
+            sqrt((pow(4.0 - 11.0 / 3.0, 2) + pow(2.0 - 11.0 / 3.0, 2) + pow(5.0 - 11.0 / 3.0, 2)) / 3.0),
+            sqrt((pow(1.0 - 5.0, 2) + pow(6.0 - 5.0, 2) + pow(8.0 - 5.0, 2)) / 3.0),
+        ])
+    }
+
+    @Test("column results on a tall matrix")
+    func tallColumns() {
+        let tall = transpose(wide)
+        #expect(max(tall, .Column) == [4.0, 9.0, 8.0])
+        #expect(min(tall, .Column) == [-1.0, 2.0, 3.0])
+        #expect(maxi(tall, .Column) == [2, 1, 3])
+        #expect(mini(tall, .Column) == [1, 2, 1])
+        #expect(sum(tall, .Column) == [7.0, 22.0, 23.0])
+        #expect(sumsq(tall, .Column) == [27.0, 146.0, 147.0])
+    }
+
+    @Test("column results agree with the row results of the transpose on random data")
+    func randomAgreesWithTranspose() {
+        for (r, c) in [(7, 5), (5, 7), (1, 6), (6, 1)] {
+            let m = rand(r, c)
+            let t = transpose(m)
+            expectClose(max(m, .Column), max(t, .Row), tol: 1e-12)
+            expectClose(min(m, .Column), min(t, .Row), tol: 1e-12)
+            expectClose(mean(m, .Column), mean(t, .Row), tol: 1e-12)
+            expectClose(sum(m, .Column), sum(t, .Row), tol: 1e-12)
+            expectClose(sumsq(m, .Column), sumsq(t, .Row), tol: 1e-12)
+            expectClose(std(m, .Column), std(t, .Row), tol: 1e-12)
+            #expect(maxi(m, .Column) == maxi(t, .Row))
+            #expect(mini(m, .Column) == mini(t, .Row))
+        }
+    }
+
+    @Test("column statistics do not change the matrix")
+    func inputUntouched() {
+        let before = wide
+        _ = mean(wide, .Column)
+        _ = std(wide, .Column)
+        _ = maxi(wide, .Column)
+        #expect(wide == before)
     }
 }
 
@@ -956,6 +1035,86 @@ func expectStderr(_ result: ExitTest.Result?, contains text: String,
     #expect(stderr.contains(text), "stderr was: \(stderr)", sourceLocation: sourceLocation)
 }
 
+@Suite("Matrix column access")
+struct MatrixColumnAccessTests {
+    @Test("reads columns of a wide matrix")
+    func readWide() {
+        let m = Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]])
+        #expect(m[col: 0] == [1.0, 5.0])
+        #expect(m[col: 2] == [3.0, 7.0])
+        #expect(m[col: 3] == [4.0, 8.0])
+    }
+
+    @Test("reads columns of a tall matrix")
+    func readTall() {
+        let m = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]])
+        #expect(m[col: 0] == [1.0, 3.0, 5.0, 7.0])
+        #expect(m[col: 1] == [2.0, 4.0, 6.0, 8.0])
+    }
+
+    @Test("writes a column of a wide matrix and leaves the others alone")
+    func writeWide() {
+        var m = Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]])
+        m[col: 2] = [30.0, 70.0]
+        #expect(m == Matrix([[1.0, 2.0, 30.0, 4.0], [5.0, 6.0, 70.0, 8.0]]))
+        m[col: 0] = [-1.0, -5.0]
+        #expect(m == Matrix([[-1.0, 2.0, 30.0, 4.0], [-5.0, 6.0, 70.0, 8.0]]))
+        m[col: 3] = [0.0, 0.0]
+        #expect(m == Matrix([[-1.0, 2.0, 30.0, 0.0], [-5.0, 6.0, 70.0, 0.0]]))
+    }
+
+    @Test("writes a column of a tall matrix and leaves the others alone")
+    func writeTall() {
+        var m = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]])
+        m[col: 1] = [20.0, 40.0, 60.0, 80.0]
+        #expect(m == Matrix([[1.0, 20.0], [3.0, 40.0], [5.0, 60.0], [7.0, 80.0]]))
+        m[col: 0] = [0.0, 0.0, 0.0, 0.0]
+        #expect(m == Matrix([[0.0, 20.0], [0.0, 40.0], [0.0, 60.0], [0.0, 80.0]]))
+    }
+
+    @Test("writing a column does not change a copy")
+    func writeCopy() {
+        let original = sample2x2()
+        var copy = original
+        copy[col: 1] = [9.0, 9.0]
+        #expect(original == sample2x2())
+    }
+
+    @Test("a negative column index fails the precondition when reading")
+    func negativeRead() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = sample2x2()[col: -1]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("a negative column index fails the precondition when writing")
+    func negativeWrite() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = sample2x2()
+            m[col: -1] = [1.0, 2.0]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("a column index past the last column fails the precondition")
+    func pastEnd() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = sample2x2()[col: 2]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("writing a column of the wrong length fails the precondition")
+    func wrongLength() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = sample2x2()
+            m[col: 0] = [1.0, 2.0, 3.0]
+        }
+        expectStderr(result, contains: "Input dimensions must agree")
+    }
+}
+
 @Suite("Matrix precondition failures")
 struct MatrixPreconditionTests {
     @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel")
@@ -1035,3 +1194,75 @@ struct MatrixPreconditionTests {
     }
 }
 #endif
+
+private func requireSendable<T: Sendable>(_: T) {}
+
+@Suite("Matrix value semantics")
+struct MatrixValueSemanticsTests {
+    @Test("Matrix is Sendable")
+    func isSendable() {
+        requireSendable(sample2x2())
+    }
+
+    @Test("mutating a copy leaves the original unchanged")
+    func copyThenMutate() {
+        let original = sample2x2()
+        var copy = original
+        copy[0, 0] = 99.0
+        copy[row: 1] = [7.0, 8.0]
+        #expect(original[0, 0] == 1.0)
+        #expect(original[row: 1] == [3.0, 4.0])
+        #expect(copy[0, 0] == 99.0)
+    }
+
+    @Test("unbounded range subscript returns an independent matrix")
+    func unboundedSubscriptCopies() {
+        let source = sample3x3()
+        var result = source[..., ...]
+        result[0, 0] = 99.0
+        #expect(source[0, 0] == 1.0)
+        #expect(result[0, 0] == 99.0)
+    }
+
+    @Test("slice with all rows and columns returns an independent matrix")
+    func allAllSliceCopies() {
+        let source = sample3x3()
+        var result = slice(source, (.All, .All))
+        result[1, 1] = 99.0
+        #expect(source[1, 1] == 5.0)
+        #expect(result[1, 1] == 99.0)
+    }
+
+    @Test("vstack of one matrix returns an independent matrix")
+    func singleVstackCopies() {
+        let source = sample2x2()
+        var result = vstack([source])
+        result[0, 1] = 99.0
+        #expect(source[0, 1] == 2.0)
+        #expect(result[0, 1] == 99.0)
+    }
+
+    @Test("hstack of one matrix returns an independent matrix")
+    func singleHstackCopies() {
+        let source = sample2x2()
+        var result = hstack([source])
+        result[1, 0] = 99.0
+        #expect(source[1, 0] == 3.0)
+        #expect(result[1, 0] == 99.0)
+    }
+
+    @Test("vstack and hstack of several matrices keep every input unchanged")
+    func multiStackLeavesInputs() {
+        let a = sample2x2()
+        let b = Matrix([[5.0, 6.0]])
+        let c = Matrix([[7.0, 8.0], [9.0, 10.0]])
+        let tall = vstack([a, b, a])
+        #expect(tall.rows == 5 && tall.cols == 2)
+        #expect(tall.flat == [1, 2, 3, 4, 5, 6, 1, 2, 3, 4])
+        let wide = hstack([a, c, a])
+        #expect(wide.rows == 2 && wide.cols == 6)
+        #expect(wide.flat == [1, 2, 7, 8, 1, 2, 3, 4, 9, 10, 3, 4])
+        #expect(a.flat == [1, 2, 3, 4])
+        #expect(c.flat == [7, 8, 9, 10])
+    }
+}

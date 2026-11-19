@@ -33,8 +33,8 @@ public func lstsqr(_ A: Matrix, _ B: Matrix) -> (X: Matrix, R: Matrix) {
     // and then columns thus the next transposes.  I tried changing TRANS to 'T'
     // to eliminate the transpose but could not find the correct set of other changes
     // to produce the correct solution.
-    let at = Matrix(A.T)
-    let bt = Matrix(B.T)
+    var at = Matrix(A.T)
+    var bt = Matrix(B.T)
     
     var TRANS: Int8 = Int8(Array("N".utf8).first!)  // No transpose
     var M = Int(A.rows)
@@ -61,7 +61,7 @@ public func lstsqr(_ A: Matrix, _ B: Matrix) -> (X: Matrix, R: Matrix) {
     precondition(info == 0, "Error")
     
     let X = bt.T[0..<Int(N), 0..<Int(NRHS)]
-    let R = zeros(1, Int(NRHS))
+    var R = zeros(1, Int(NRHS))
     for i in 0..<Int(NRHS) {
         var norm = 0.0
         for j in 0..<Int(M-N) {
