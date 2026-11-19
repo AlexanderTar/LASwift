@@ -348,3 +348,28 @@ struct GSVDPreconditionTests {
     }
 }
 #endif
+
+@Suite("whole-matrix assignment and orientation helpers")
+struct WholeMatrixAndOrientationTests {
+    @Test("assigning through M[..., ...] replaces every element")
+    func unboundedAssignment() {
+        var m = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+        let replacement = Matrix([[7.0, 8.0, 9.0], [10.0, 11.0, 12.0]])
+        m[..., ...] = replacement
+        #expect(m == replacement)
+    }
+
+    @Test("toRows with .Row and toCols with .Column return the matrix unchanged")
+    func orientationIdentity() {
+        let m = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+        #expect(toRows(m, .Row) == m)
+        #expect(toCols(m, .Column) == m)
+    }
+
+    @Test("toRows with .Column and toCols with .Row transpose")
+    func orientationTranspose() {
+        let m = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+        #expect(toRows(m, .Column) == transpose(m))
+        #expect(toCols(m, .Row) == transpose(m))
+    }
+}
