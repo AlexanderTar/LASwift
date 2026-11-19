@@ -7,6 +7,10 @@
 // `unsafeFlags` (needed for `-Xcc -D...` on a Swift target) in packages used
 // as versioned dependencies, but a C target's `cSettings` `.define` is allowed.
 // The header stays free of Accelerate so Swift imports it with plain C types.
+//
+// Off Apple platforms the same functions call the system LAPACK/BLAS (OpenBLAS or the
+// reference libraries) through their 32-bit integer interface; see the #else branch of
+// CLASwiftLAPACK.c.
 
 #ifndef CLASWIFTLAPACK_H
 #define CLASWIFTLAPACK_H
@@ -44,5 +48,10 @@ void laswift_dlarnv(const laswift_int *idist, laswift_int *iseed, const laswift_
 // CBLAS dcopy (strided vector copy), wrapped for the same reason: the non-deprecated
 // CBLAS declarations need the same defines.
 void laswift_cblas_dcopy(laswift_int n, const double *x, laswift_int incx, double *y, laswift_int incy);
+
+// Row-major, non-transposed C (m x n) = A (m x k) * B (k x n) through CBLAS dgemm.
+// Used off Apple platforms, where vDSP_mmulD is not available.
+void laswift_cblas_dgemm_rowmajor(laswift_int m, laswift_int n, laswift_int k, const double *a,
+                                  const double *b, double *c);
 
 #endif

@@ -1,13 +1,15 @@
 # ``LASwift``
 
-Linear algebra for Swift, built on Accelerate.
+Linear algebra for Swift, on Apple platforms and Linux.
 
 ## Overview
 
 LASwift provides a `Matrix` type and `Vector` (an array of `Double`) with
 element-wise and linear algebra operations: arithmetic, exponents, trigonometry,
-statistics, decompositions, least squares and more. The operations run on
-Apple's Accelerate framework (vDSP, BLAS and LAPACK).
+statistics, decompositions, least squares and more. On Apple platforms the
+operations run on the Accelerate framework (vDSP, BLAS and LAPACK). On Linux they
+use the system LAPACK and BLAS (install `libopenblas-dev` and `liblapack-dev` on
+Debian or Ubuntu) and portable Swift for the vector operations.
 
 Add the package with Swift Package Manager:
 

@@ -41,6 +41,28 @@ jobs:
           files: info.lcov
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  linux:
+    name: Linux ${{ matrix.arch }} (build, test)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    container: swift:6.2-noble
+    steps:
+      - uses: actions/checkout@v7
+      # Accelerate's LAPACK and BLAS come from the system on Linux (see README "Linux").
+      - name: Install LAPACK and BLAS
+        run: apt-get update && apt-get install -y --no-install-recommends libopenblas-dev liblapack-dev
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test
+
   platforms:
     name: Build library and tests for iOS, tvOS, watchOS and visionOS
     runs-on: macos-26

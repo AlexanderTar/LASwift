@@ -9,7 +9,13 @@
 //  of the BSD license. See the LICENSE file for details.
 //
 
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 import LASwift
 import Testing
 

@@ -6,7 +6,13 @@
 // This software may be modified and distributed under the terms
 // of the BSD license. See the LICENSE file for details.
 
+#if canImport(Accelerate)
 import Accelerate
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 
 // MARK: - Statistic functions on matrix
 
@@ -79,7 +85,8 @@ public func mean(_ A: Matrix, _ d: Dim = .Row) -> Vector {
 /// By default these are sample standard deviations (divide by N - 1), like Matlab's `std`;
 /// pass `normalization: .population` to divide by N.
 ///
-/// A precondition error is thrown if the matrix is empty.
+/// A precondition error is thrown if the matrix is empty. See `std(_: Vector)` for input
+/// holding `NaN` or an infinity.
 ///
 /// - Parameters
 ///     - A: matrix

@@ -6,7 +6,13 @@
 // This software may be modified and distributed under the terms
 // of the BSD license. See the LICENSE file for details.
 
+#if canImport(Accelerate)
 import Accelerate
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 
 // MARK: - Statistical operations on vector
 
@@ -19,7 +25,9 @@ import Accelerate
 ///
 /// `NaN` elements are not handled consistently: depending on where the `NaN` sits,
 /// `max` returns either `NaN` or the largest non-`NaN` element. Use `maxi` and `mini`,
-/// which skip `NaN` elements, or remove `NaN` before calling.
+/// which skip `NaN` elements, or remove `NaN` before calling. When every element is `NaN`,
+/// Linux returns `NaN`; Apple platforms return `NaN` for a vector or matrix row, but `-inf`
+/// (`+inf` for `min`) for a one-element vector or a matrix column.
 ///
 /// - Returns: largest element of vector a
 public func max(_ a: Vector) -> Double {
@@ -97,6 +105,10 @@ public enum Normalization: Sendable {
 ///
 /// By default this is the sample standard deviation (divides by N - 1), like Matlab's `std`.
 /// Pass `normalization: .population` to divide by N. A vector of one element has deviation 0.
+///
+/// If the vector holds `NaN` or an infinity, the result depends on the platform: `NaN` on
+/// Linux, and on Apple platforms whatever Accelerate returns (often 0). Remove such elements
+/// first if you need a defined answer.
 ///
 /// A precondition error is thrown if the vector is empty.
 ///

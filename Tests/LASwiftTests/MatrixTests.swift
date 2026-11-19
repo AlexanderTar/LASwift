@@ -9,7 +9,13 @@
 //  of the BSD license. See the LICENSE file for details.
 //
 
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 import LASwift
 import Testing
 
@@ -623,12 +629,14 @@ struct MatrixColumnStatisticsTests {
         #expect(sum(wide, .Column) == [15.0, 11.0, 11.0, 15.0])
         #expect(sumsq(wide, .Column) == [83.0, 91.0, 45.0, 101.0])
         expectClose(mean(wide, .Column), [5.0, 11.0 / 3.0, 11.0 / 3.0, 5.0])
-        expectClose(std(wide, .Column), [
-            sqrt((4.0 + 0.0 + 4.0) / 2.0),
-            sqrt((pow(-1.0 - 11.0 / 3.0, 2) + pow(9.0 - 11.0 / 3.0, 2) + pow(3.0 - 11.0 / 3.0, 2)) / 2.0),
-            sqrt((pow(4.0 - 11.0 / 3.0, 2) + pow(2.0 - 11.0 / 3.0, 2) + pow(5.0 - 11.0 / 3.0, 2)) / 2.0),
-            sqrt((pow(1.0 - 5.0, 2) + pow(6.0 - 5.0, 2) + pow(8.0 - 5.0, 2)) / 2.0),
-        ])
+        // Split into typed steps: the one-expression form exceeds the type checker's budget on Linux.
+        let m: Double = 11.0 / 3.0
+        let sq: (Double) -> Double = { $0 * $0 }
+        let col0: Double = ((4.0 + 0.0 + 4.0) / 2.0).squareRoot()
+        let col1: Double = ((sq(-1.0 - m) + sq(9.0 - m) + sq(3.0 - m)) / 2.0).squareRoot()
+        let col2: Double = ((sq(4.0 - m) + sq(2.0 - m) + sq(5.0 - m)) / 2.0).squareRoot()
+        let col3: Double = ((sq(1.0 - 5.0) + sq(6.0 - 5.0) + sq(8.0 - 5.0)) / 2.0).squareRoot()
+        expectClose(std(wide, .Column), [col0, col1, col2, col3])
     }
 
     @Test("column results on a tall matrix")
