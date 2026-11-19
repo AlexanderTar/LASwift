@@ -15,7 +15,7 @@ typealias Scalar = Double
 typealias VectorVectorOperation = ((_: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafePointer<Double>, _: vDSP_Stride, _: UnsafeMutablePointer<Double>, _: vDSP_Stride, _: vDSP_Length) -> ())
 
 func vectorVectorOperation(_ op: VectorVectorOperation, _ a: Vector, _ b: Vector) -> Vector {
-    precondition(a.count == b.count, "Vectors must have equal lenghts")
+    precondition(a.count == b.count, "Vectors must have equal lengths")
     var c = Vector(repeating: 0.0, count: a.count)
     op(a, 1, b, 1, &c, 1, vDSP_Length(a.count))
     return c
@@ -95,6 +95,7 @@ func invMatrixScalarOperation(_ op: InvMatrixScalarOperation, _ a: Double, _ B: 
 }
 
 func matrixVectorOperation(_ op: MatrixMatrixOperation, _ A: Matrix, _ b: Vector) -> Matrix {
+    precondition(b.count == A.cols, "Matrix and vector dimensions must agree")
     let B = Matrix((0..<A.rows).map { _ -> [Double] in
         return b
     })
@@ -102,6 +103,7 @@ func matrixVectorOperation(_ op: MatrixMatrixOperation, _ A: Matrix, _ b: Vector
 }
 
 func invMatrixVectorOperation(_ op: MatrixMatrixOperation, _ a: Vector, _ B: Matrix) -> Matrix {
+    precondition(a.count == B.cols, "Matrix and vector dimensions must agree")
     let A = Matrix((0..<B.rows).map { _ -> [Double] in
         return a
     })

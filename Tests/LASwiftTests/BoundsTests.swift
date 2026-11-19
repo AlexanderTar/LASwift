@@ -151,10 +151,31 @@ struct RangeSubscriptShapeTests {
     }
 }
 
+@Suite("insert at valid edges")
+struct InsertEdgeTests {
+    @Test("rows inserted at the first and last position")
+    func insertRowsAtEdges() {
+        let m = Matrix([[1.0, 2.0], [3.0, 4.0]])
+        let r = Matrix([[5.0, 6.0]])
+        expectClose(insert(m, rows: r, at: 0), Matrix([[5.0, 6.0], [1.0, 2.0], [3.0, 4.0]]))
+        expectClose(insert(m, rows: r, at: 1), Matrix([[1.0, 2.0], [5.0, 6.0], [3.0, 4.0]]))
+        expectClose(insert(m, rows: r, at: 2), Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]))
+    }
+
+    @Test("columns inserted at the first and last position")
+    func insertColumnsAtEdges() {
+        let m = Matrix([[1.0, 2.0], [3.0, 4.0]])
+        let c = Matrix([[5.0], [6.0]])
+        expectClose(insert(m, cols: c, at: 0), Matrix([[5.0, 1.0, 2.0], [6.0, 3.0, 4.0]]))
+        expectClose(insert(m, cols: c, at: 1), Matrix([[1.0, 5.0, 2.0], [3.0, 6.0, 4.0]]))
+        expectClose(insert(m, cols: c, at: 2), Matrix([[1.0, 2.0, 5.0], [3.0, 4.0, 6.0]]))
+    }
+}
+
 #if os(macOS) || os(Linux)
 @Suite("range subscript preconditions")
 struct RangeSubscriptPreconditionTests {
-    @Test("an empty row range fails the precondition")
+    @Test("an empty row range fails the precondition", .exitTests)
     func emptyRows() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[0..<0, ...]
@@ -162,7 +183,7 @@ struct RangeSubscriptPreconditionTests {
         expectStderr(result, contains: "Range must not be empty")
     }
 
-    @Test("an empty column range fails the precondition")
+    @Test("an empty column range fails the precondition", .exitTests)
     func emptyColumns() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[..., 1..<1]
@@ -170,7 +191,7 @@ struct RangeSubscriptPreconditionTests {
         expectStderr(result, contains: "Range must not be empty")
     }
 
-    @Test("an empty range fails the precondition when writing")
+    @Test("an empty range fails the precondition when writing", .exitTests)
     func emptyWrite() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             var m = Matrix([[1.0, 2.0], [3.0, 4.0]])
@@ -179,7 +200,7 @@ struct RangeSubscriptPreconditionTests {
         expectStderr(result, contains: "Range must not be empty")
     }
 
-    @Test("a range past the last column fails the precondition")
+    @Test("a range past the last column fails the precondition", .exitTests)
     func pastEnd() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[0..<2, 0..<3]
@@ -193,7 +214,7 @@ struct RangeSubscriptPreconditionTests {
 #if os(macOS) || os(Linux)
 @Suite("slice preconditions")
 struct SlicePreconditionTests {
-    @Test("a row position equal to the row count fails the precondition")
+    @Test("a row position equal to the row count fails the precondition", .exitTests)
     func rowPositionAtCount() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.Pos([2]), .All))
@@ -201,7 +222,7 @@ struct SlicePreconditionTests {
         expectStderr(result, contains: "Range out of bounds")
     }
 
-    @Test("a column position equal to the column count fails the precondition")
+    @Test("a column position equal to the column count fails the precondition", .exitTests)
     func columnPositionAtCount() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.All, .Pos([2])))
@@ -214,7 +235,7 @@ struct SlicePreconditionTests {
         expectClose(slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.PosCyc([2]), .PosCyc([-1]))), Matrix([[2.0]]))
     }
 
-    @Test("a range with step 0 fails the precondition")
+    @Test("a range with step 0 fails the precondition", .exitTests)
     func rangeStepZero() async {
         let rows = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.Range(0, 0, 1), .All))
@@ -227,9 +248,81 @@ struct SlicePreconditionTests {
     }
 }
 
+@Suite("input validation preconditions")
+struct InputValidationPreconditionTests {
+    @Test("a matrix with negative dimensions fails the precondition", .exitTests)
+    func negativeDimensions() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix(-1, -1, [7.0])
+        }
+        expectStderr(result, contains: "Matrix dimensions must be positive")
+    }
+
+    @Test("a matrix with zero rows fails the precondition", .exitTests)
+    func zeroDimensions() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix(0, 3, [])
+        }
+        expectStderr(result, contains: "Matrix dimensions must be positive")
+    }
+
+    @Test("a diagonal from a vector that is too short fails the precondition", .exitTests)
+    func shortDiagonal() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = diag(3, 3, [1.0, 2.0])
+        }
+        expectStderr(result, contains: "Vector must have at least min(rows, cols) elements")
+    }
+
+    @Test("inserting rows at a negative index fails the precondition", .exitTests)
+    func insertRowsNegative() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = insert(Matrix([[1.0, 2.0], [3.0, 4.0]]), rows: Matrix([[5.0, 6.0]]), at: -1)
+        }
+        expectStderr(result, contains: "Index out of bounds")
+    }
+
+    @Test("a negative flat index fails the precondition when reading and writing", .exitTests)
+    func negativeFlatIndex() async {
+        let read = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]])[-1]
+        }
+        expectStderr(read, contains: "Invalid index")
+        let write = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = Matrix([[1.0, 2.0], [3.0, 4.0]])
+            m[-1] = 0.0
+        }
+        expectStderr(write, contains: "Invalid index")
+    }
+
+    @Test("a matrix and a vector of different widths fail the precondition", .exitTests)
+    func matrixVectorMismatch() async {
+        let plus = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]]) + [1.0, 2.0, 3.0]
+        }
+        expectStderr(plus, contains: "Matrix and vector dimensions must agree")
+        let minus = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix([[1.0, 2.0], [3.0, 4.0]]) - [1.0]
+        }
+        expectStderr(minus, contains: "Matrix and vector dimensions must agree")
+        let reversed = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = [1.0, 2.0, 3.0] - Matrix([[1.0, 2.0], [3.0, 4.0]])
+        }
+        expectStderr(reversed, contains: "Matrix and vector dimensions must agree")
+    }
+
+    @Test("two vectors of different lengths fail with a correctly spelled message", .exitTests)
+    func vectorLengthMismatch() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = plus([1.0, 2.0], [1.0])
+        }
+        expectStderr(result, contains: "Vectors must have equal lengths")
+    }
+}
+
 @Suite("gsvd preconditions")
 struct GSVDPreconditionTests {
-    @Test("matrices with different column counts fail the precondition")
+    @Test("matrices with different column counts fail the precondition", .exitTests)
     func columnMismatch() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = gsvd(zeros(3, 4), zeros(2, 2))

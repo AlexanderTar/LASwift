@@ -135,6 +135,7 @@ public func diag(_ rows: Int, _ cols: Int, _ v: Matrix) -> Matrix {
 /// - Returns: diagonal matrix with specified values and size
 public func diag(_ rows: Int, _ cols: Int, _ v: Vector) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
+    precondition(v.count >= min(rows, cols), "Vector must have at least min(rows, cols) elements")
     return Matrix((0..<rows).map { (i: Int) -> Vector in
         var row = Vector(repeating: 0.0, count: cols)
         if (i < cols) {
@@ -194,6 +195,7 @@ public struct Matrix: Sendable, Hashable {
     }
 
     public init(_ r: Int, _ c: Int, _ f: Vector) {
+        precondition(r > 0 && c > 0, "Matrix dimensions must be positive")
         precondition(r * c == f.count, "Matrix dimensions must agree")
         flat = f
         rows = r
@@ -252,12 +254,12 @@ extension Matrix {
     ///    - index: index of element (0-based, 0 <= index < M.rows * M.cols)
     public subscript(_ index: Int) -> Double {
         get {
-            precondition(index < rows * cols, "Invalid index")
+            precondition(index >= 0 && index < rows * cols, "Invalid index")
             return flat[index]
         }
         
         set {
-            precondition(index < rows * cols, "Invalid index")
+            precondition(index >= 0 && index < rows * cols, "Invalid index")
             flat[index] = newValue
         }
     }
@@ -540,20 +542,23 @@ public func insert(_ m: Matrix, row: Vector, at index: Int) -> Matrix {
 /// - Returns: new matrix with inserted rows
 public func insert(_ m: Matrix, rows: Matrix, at index: Int) -> Matrix {
     precondition(rows.cols == m.cols, "Input dimensions must agree")
-    precondition(index <= m.rows, "Index out of bounds")
+    precondition(index <= m.rows && index >= 0, "Index out of bounds")
     
     var res = zeros(m.rows + rows.rows, m.cols)
+    let resCols = res.cols
     
-    if (index > 0) {
-        vDSP_mmovD(m.flat, &res.flat, vDSP_Length(m.cols), vDSP_Length(index), vDSP_Length(m.cols), vDSP_Length(res.cols))
-    }
-    
-    vDSP_mmovD(rows.flat, &res.flat[index * res.cols], vDSP_Length(m.cols), vDSP_Length(rows.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
-    
-    if (index < m.rows) {
-        m.flat.withUnsafeBufferPointer { bufPtr in
-            let p = bufPtr.baseAddress! + index * m.cols
-            vDSP_mmovD(p, &res.flat[(index + rows.rows) * res.cols], vDSP_Length(m.cols), vDSP_Length(m.rows - index), vDSP_Length(m.cols), vDSP_Length(res.cols))
+    res.flat.withUnsafeMutableBufferPointer { dst in
+        if (index > 0) {
+            vDSP_mmovD(m.flat, dst.baseAddress!, vDSP_Length(m.cols), vDSP_Length(index), vDSP_Length(m.cols), vDSP_Length(resCols))
+        }
+        
+        vDSP_mmovD(rows.flat, dst.baseAddress! + index * resCols, vDSP_Length(m.cols), vDSP_Length(rows.rows), vDSP_Length(m.cols), vDSP_Length(resCols))
+        
+        if (index < m.rows) {
+            m.flat.withUnsafeBufferPointer { bufPtr in
+                let p = bufPtr.baseAddress! + index * m.cols
+                vDSP_mmovD(p, dst.baseAddress! + (index + rows.rows) * resCols, vDSP_Length(m.cols), vDSP_Length(m.rows - index), vDSP_Length(m.cols), vDSP_Length(resCols))
+            }
         }
     }
     
@@ -757,17 +762,20 @@ public func insert(_ m: Matrix, cols: Matrix, at index: Int) -> Matrix {
     precondition(index <= m.cols && index >= 0, "Index out of bounds")
     
     var res = zeros(m.rows, m.cols + cols.cols)
+    let resCols = res.cols
     
-    if (index > 0) {
-        vDSP_mmovD(m.flat, &res.flat, vDSP_Length(index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
-    }
-    
-    vDSP_mmovD(cols.flat, &res.flat[index], vDSP_Length(cols.cols), vDSP_Length(m.rows), vDSP_Length(cols.cols), vDSP_Length(res.cols))
-    
-    if (index < m.cols) {
-        m.flat.withUnsafeBufferPointer { bufPtr in
-            let p = bufPtr.baseAddress! + index
-            vDSP_mmovD(p, &res.flat[index + cols.cols], vDSP_Length(m.cols - index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
+    res.flat.withUnsafeMutableBufferPointer { dst in
+        if (index > 0) {
+            vDSP_mmovD(m.flat, dst.baseAddress!, vDSP_Length(index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(resCols))
+        }
+        
+        vDSP_mmovD(cols.flat, dst.baseAddress! + index, vDSP_Length(cols.cols), vDSP_Length(m.rows), vDSP_Length(cols.cols), vDSP_Length(resCols))
+        
+        if (index < m.cols) {
+            m.flat.withUnsafeBufferPointer { bufPtr in
+                let p = bufPtr.baseAddress! + index
+                vDSP_mmovD(p, dst.baseAddress! + index + cols.cols, vDSP_Length(m.cols - index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(resCols))
+            }
         }
     }
     

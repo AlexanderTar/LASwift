@@ -1055,7 +1055,7 @@ struct MatrixColumnAccessTests {
         #expect(original == sample2x2())
     }
 
-    @Test("a negative column index fails the precondition when reading")
+    @Test("a negative column index fails the precondition when reading", .exitTests)
     func negativeRead() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = sample2x2()[col: -1]
@@ -1063,7 +1063,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("a negative column index fails the precondition when writing")
+    @Test("a negative column index fails the precondition when writing", .exitTests)
     func negativeWrite() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             var m = sample2x2()
@@ -1072,7 +1072,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("a column index past the last column fails the precondition")
+    @Test("a column index past the last column fails the precondition", .exitTests)
     func pastEnd() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = sample2x2()[col: 2]
@@ -1080,7 +1080,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("writing a column of the wrong length fails the precondition")
+    @Test("writing a column of the wrong length fails the precondition", .exitTests)
     func wrongLength() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             var m = sample2x2()
@@ -1092,7 +1092,7 @@ struct MatrixColumnAccessTests {
 
 @Suite("Matrix precondition failures")
 struct MatrixPreconditionTests {
-    @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel")
+    @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel", .exitTests)
     func convolveWithLargerKernel() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             let kernel = Matrix([[0, 0, 0, 0, 0],
@@ -1107,7 +1107,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "The kernel matrix needs to be smaller")
     }
 
-    @Test("inverse of a non-square matrix")
+    @Test("inverse of a non-square matrix", .exitTests)
     func inverseNonSquare() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = inv(Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]]))
@@ -1115,7 +1115,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "Matrix dimensions must agree")
     }
 
-    @Test("inverse of a singular matrix")
+    @Test("inverse of a singular matrix", .exitTests)
     func inverseSingular() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = inv(ones(3, 3))
@@ -1123,7 +1123,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "Matrix is non invertible")
     }
 
-    @Test("eigen of a non-square matrix")
+    @Test("eigen of a non-square matrix", .exitTests)
     func eigenNonSquare() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = eig(Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]]))
@@ -1132,7 +1132,7 @@ struct MatrixPreconditionTests {
     }
 
     // The slicing inputs in "basic tests": rows 0..<4, columns 0..<5.
-    @Test("slicing with out-of-range extractors")
+    @Test("slicing with out-of-range extractors", .exitTests)
     func slicingOutOfRange() async {
         expectStderr(await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) { _ = slicingSample() ?? (.Range(4, -2, 0), .All) },
                      contains: "Range out of bounds")
