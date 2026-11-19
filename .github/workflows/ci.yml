@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: macOS (build, test, coverage)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test --enable-code-coverage
+      - name: Export coverage
+        run: |
+          bin_path="$(swift build --show-bin-path)"
+          bundle="$(find "$bin_path" -maxdepth 1 -name '*.xctest' | head -n 1)"
+          binary="$bundle/Contents/MacOS/$(basename "$bundle" .xctest)"
+          profdata="$(dirname "$(swift test --show-codecov-path)")/default.profdata"
+          xcrun llvm-cov export -format=lcov "$binary" -instr-profile "$profdata" > info.lcov
+      - name: Upload coverage
+        uses: codecov/codecov-action@v7
+        with:
+          files: info.lcov
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  address-sanitizer:
+    name: macOS (address sanitizer)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Test with AddressSanitizer
+        run: swift test --sanitize=address
+
+  simulators:
+    name: ${{ matrix.name }} simulator
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iOS
+            runtime: iOS
+            destination: iOS Simulator
+          - name: tvOS
+            runtime: tvOS
+            destination: tvOS Simulator
+          - name: watchOS
+            runtime: watchOS
+            destination: watchOS Simulator
+          - name: visionOS
+            runtime: xrOS
+            destination: visionOS Simulator
+    steps:
+      - uses: actions/checkout@v7
+      - name: Pick simulator
+        run: |
+          udid="$(xcrun simctl list devices available -j | jq -r --arg rt 'SimRuntime\.${{ matrix.runtime }}-' \
+            '[.devices | to_entries[] | select(.key | test($rt))] | sort_by(.key) | last | .value[0].udid')"
+          test -n "$udid" && test "$udid" != null
+          echo "DESTINATION=platform=${{ matrix.destination }},id=$udid" >> "$GITHUB_ENV"
+      - name: Build
+        run: xcodebuild build -scheme LASwift -destination "$DESTINATION"
+      - name: Test
+        run: xcodebuild test -scheme LASwift -destination "$DESTINATION"
