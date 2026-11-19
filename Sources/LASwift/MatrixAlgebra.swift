@@ -176,56 +176,105 @@ public func inv(_ A: Matrix) -> Matrix {
     return B
 }
 
-/// Compute eigen values and vectors of a given square matrix.
+/// Compute eigenvalues and right eigenvectors of a given square matrix.
 ///
-///	A precondition error is thrown if the algorithm fails to converge.
+/// Eigenvalue `j` is `D[j, j] + i * Di[j, j]` and the matching right eigenvector
+/// (`A * v = lambda * v`) is column `j` of `V` plus `i` times column `j` of `Vi`.
+/// Complex eigenvalues of a real matrix come in conjugate pairs, stored in adjacent
+/// positions with the positive imaginary part first; their eigenvectors are conjugates
+/// of each other. For a real spectrum `Vi` and `Di` are all zeros.
+///
+/// Every eigenvector is normalised to unit 2-norm (the norm of `V[:, j] + i * Vi[:, j]`),
+/// as LAPACK does. Only right eigenvectors are computed.
+///
+/// A precondition error is thrown if the algorithm fails to converge.
 ///
 /// - Parameters:
-///     - A: square matrix to calculate eigen values and vectors of
-/// - Returns: eigenvectors matrix (by rows) and diagonal matrix with eigenvalues on the main diagonal
-public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
+///     - A: square matrix to calculate eigenvalues and eigenvectors of
+/// - Returns: eigenvectors in the columns of `V` (real parts) and `Vi` (imaginary parts),
+///   and diagonal matrices `D` (real parts) and `Di` (imaginary parts) of the eigenvalues
+public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix, Vi: Matrix, Di: Matrix) {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
-    
-    var V = Matrix(A)
-    
+
+    /* LAPACK is using column-major order */
+    var _A = toCols(A, .Row)
+
     var N = Int(A.rows)
-    
+
     var LDA = N
-    
+
     var wkOpt = Double(0.0)
     var lWork = Int(-1)
-    
-    var jobvl: Int8 = 86 // 'V'
+
+    var jobvl: Int8 = 78 // 'N'
     var jobvr: Int8 = 86 // 'V'
-    
+
     var error = Int(0)
-    
+
     // Real parts of eigenvalues
     var wr = Vector(repeating: 0.0, count: Int(N))
     // Imaginary parts of eigenvalues
     var wi = Vector(repeating: 0.0, count: Int(N))
-    // Left eigenvectors
-    var vl = [Double](repeating: 0.0, count: Int(N * N))
-    // Right eigenvectors
+    // Left eigenvectors (not computed)
+    var vl = [Double](repeating: 0.0, count: 1)
+    // Right eigenvectors, column-major
     var vr = [Double](repeating: 0.0, count: Int(N * N))
-    
-    var ldvl = N
+
+    var ldvl = Int(1)
     var ldvr = N
-    
+
     /* Query and allocate the optimal workspace */
-    
-    laswift_dgeev(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error)
-    
+
+    laswift_dgeev(&jobvl, &jobvr, &N, &_A.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error)
+
     lWork = Int(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
-    
-    /* Compute eigen vectors */
-    
-    laswift_dgeev(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error)
-    
+
+    /* Compute eigenvectors */
+
+    laswift_dgeev(&jobvl, &jobvr, &N, &_A.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error)
+
     precondition(error == 0, "Failed to compute eigen vectors")
-    
-    return (toRows(Matrix(A.rows, A.cols, vl), .Column), diag(wr))
+
+    /* Unpack LAPACK's storage: a complex pair (j, j+1) is held as the real part in
+       column j and the imaginary part in column j+1 of the first vector. */
+
+    var V = Matrix(A.rows, A.cols)
+    var Vi = Matrix(A.rows, A.cols)
+    var j = 0
+    while j < N {
+        if wi[j] == 0.0 {
+            for i in 0..<N {
+                V.flat[i * N + j] = vr[j * N + i]
+            }
+            j += 1
+        } else {
+            for i in 0..<N {
+                let re = vr[j * N + i]
+                let im = vr[(j + 1) * N + i]
+                V.flat[i * N + j] = re
+                Vi.flat[i * N + j] = im
+                V.flat[i * N + j + 1] = re
+                Vi.flat[i * N + j + 1] = -im
+            }
+            j += 2
+        }
+    }
+
+    return (V, diag(wr), Vi, diag(wi))
+}
+
+/// Compute eigenvalues of a given square matrix.
+///
+/// A precondition error is thrown if the algorithm fails to converge.
+///
+/// - Parameters:
+///     - A: square matrix to calculate eigenvalues of
+/// - Returns: real and imaginary parts of the eigenvalues, in the order of the main diagonals
+///   of `D` and `Di` returned by `eig`
+public func eigvals(_ A: Matrix) -> (re: Vector, im: Vector) {
+    let e = eig(A)
+    return ((0..<A.rows).map { e.D.flat[$0 * A.cols + $0] }, (0..<A.rows).map { e.Di.flat[$0 * A.cols + $0] })
 }
 
 /// Perform a singular value decomposition of a given matrix.
@@ -268,6 +317,23 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     precondition(error == 0, "Failed to compute SVD")
     
     return (toRows(U, .Column), diag(Int(M), Int(N), s), VT)
+}
+
+/// Compute the numerical rank of a given matrix: the number of singular values greater than a tolerance.
+///
+/// The default tolerance is the one NumPy uses in `matrix_rank`:
+/// `max(singular values) * max(rows, cols) * eps`, where `eps` is the double precision machine epsilon.
+///
+/// - Parameters:
+///    - A: matrix to find the rank of
+///    - tol: singular values less than or equal to this value are treated as zero (optional)
+/// - Returns: number of singular values of `A` greater than the tolerance
+public func rank(_ A: Matrix, tol: Double? = nil) -> Int {
+    let s = svd(A).S
+    let n = min(s.rows, s.cols)
+    let sv = (0..<n).map { s.flat[$0 * s.cols + $0] }
+    let threshold = tol ?? (sv.max() ?? 0.0) * Double(max(A.rows, A.cols)) * Double.ulpOfOne
+    return sv.filter { $0 > threshold }.count
 }
 
 /// Perform a generalized singular value decomposition of 2 given matrices.
