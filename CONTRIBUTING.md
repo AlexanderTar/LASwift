@@ -29,10 +29,12 @@ for platform in iOS tvOS watchOS visionOS; do
 done
 ```
 
-CI also builds and tests on Linux (x86_64 and arm64). To run that job on a Mac with Docker:
+CI also builds and tests on Linux (x86_64 and arm64). To run that job on an Apple silicon Mac
+with Docker (keep `--platform linux/arm64`: under x86_64 emulation the exit tests fail with
+"Interrupted system call"):
 
 ```sh
-docker run --rm -v "$PWD":/src -w /src swift:6.2-noble sh -c \
+docker run --rm --platform linux/arm64 -v "$PWD":/src -w /src swift:6.2-noble sh -c \
   'apt-get update && apt-get install -y --no-install-recommends libopenblas-dev liblapack-dev &&
    swift build --scratch-path /tmp/build && swift test --scratch-path /tmp/build'
 ```

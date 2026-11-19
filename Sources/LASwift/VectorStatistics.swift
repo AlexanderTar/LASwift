@@ -104,6 +104,10 @@ public enum Normalization: Sendable {
 /// By default this is the sample standard deviation (divides by N - 1), like Matlab's `std`.
 /// Pass `normalization: .population` to divide by N. A vector of one element has deviation 0.
 ///
+/// If the vector holds `NaN` or an infinity, the result depends on the platform: `NaN` on
+/// Linux, and on Apple platforms whatever Accelerate returns (often 0). Remove such elements
+/// first if you need a defined answer.
+///
 /// A precondition error is thrown if the vector is empty.
 ///
 /// - Parameters

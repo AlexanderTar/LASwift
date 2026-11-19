@@ -137,6 +137,18 @@ struct NaNIndexTests {
     }
 }
 
+@Suite("NaN in value statistics")
+struct NaNValueTests {
+    @Test("max and min of an all-NaN vector are NaN")
+    func allNaN() {
+        let n = Double.nan
+        #expect(max([n, n]).isNaN)
+        #expect(min([n, n]).isNaN)
+        #expect(max(Matrix([[n, n], [1.0, n]]), .Row)[0].isNaN)
+        #expect(min(Matrix([[n, n], [1.0, n]]), .Row)[0].isNaN)
+    }
+}
+
 @Suite("Signed zeros")
 struct SignedZeroTests {
     @Test("det of a singular matrix is +0", arguments: [

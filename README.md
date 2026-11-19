@@ -85,7 +85,8 @@ apt-get install libopenblas-dev liblapack-dev
 ```
 
 OpenBLAS is recommended. The reference `liblapack-dev` and `libblas-dev` without OpenBLAS
-also work, but matrix operations are about 10 times slower. LASwift calls LAPACK through
+also work, but matrix multiply, inverse and Cholesky ran 6 to 20 times slower in the
+package's performance tests. LASwift calls LAPACK through
 its 32-bit integer interface on Linux, so a matrix dimension above 2,147,483,647 stops the
 program. CI tests Linux on x86_64 and arm64 in the `swift:6.2-noble` image.
 
