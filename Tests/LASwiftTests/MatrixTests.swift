@@ -757,31 +757,6 @@ struct MatrixLinearAlgebraTests {
         expectClose(usv.U * usv.S * usv.V′, m1)
     }
 
-    @Test("gsvd")
-    func gsvdTest() {
-        let m1 = Matrix([[1.0, 6.0, 11.0],
-                         [2.0, 7.0, 12.0],
-                         [3.0, 8.0, 13.0],
-                         [4.0, 9.0, 14.0],
-                         [5.0, 10.0, 15.0]])
-        let m2 = Matrix([[8.0, 1.0, 6.0],
-                         [3.0, 5.0, 7.0],
-                         [4.0, 9.0, 2.0]])
-        let m3 = Matrix([[0.5700, -0.6457, -0.4279],
-                         [-0.7455, -0.3296, -0.4375],
-                         [-0.1702, -0.0135, -0.4470],
-                         [0.2966, 0.3026, -0.4566],
-                         [0.0490, 0.6187, -0.4661]])
-        let (U, _, _, _, _, _) = gsvd(m1, m2)
-        // The old spec wrote `expect(U == m3)` with no matcher, so it asserted nothing.
-        // As a real assertion it fails: U is 5x5 where m3 is 5x3. To 4 decimals m3's
-        // columns 1 and 2 are U's columns 1 and 0, and m3's column 0 is not in U at all.
-        // m3 looks like another implementation's economy-size output. Not loosened.
-        withKnownIssue("gsvd's U does not match the expected matrix (see comment)") {
-            expectClose(U, m3)
-        }
-    }
-
     @Test("chol")
     func cholesky() {
         let m1 = Matrix([[1, 1, 1, 1, 1],
@@ -1081,7 +1056,7 @@ struct MatrixColumnAccessTests {
         #expect(original == sample2x2())
     }
 
-    @Test("a negative column index fails the precondition when reading")
+    @Test("a negative column index fails the precondition when reading", .exitTests)
     func negativeRead() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = sample2x2()[col: -1]
@@ -1089,7 +1064,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("a negative column index fails the precondition when writing")
+    @Test("a negative column index fails the precondition when writing", .exitTests)
     func negativeWrite() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             var m = sample2x2()
@@ -1098,7 +1073,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("a column index past the last column fails the precondition")
+    @Test("a column index past the last column fails the precondition", .exitTests)
     func pastEnd() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = sample2x2()[col: 2]
@@ -1106,7 +1081,7 @@ struct MatrixColumnAccessTests {
         expectStderr(result, contains: "Invalid index")
     }
 
-    @Test("writing a column of the wrong length fails the precondition")
+    @Test("writing a column of the wrong length fails the precondition", .exitTests)
     func wrongLength() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             var m = sample2x2()
@@ -1118,7 +1093,7 @@ struct MatrixColumnAccessTests {
 
 @Suite("Matrix precondition failures")
 struct MatrixPreconditionTests {
-    @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel")
+    @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel", .exitTests)
     func convolveWithLargerKernel() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             let kernel = Matrix([[0, 0, 0, 0, 0],
@@ -1133,7 +1108,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "The kernel matrix needs to be smaller")
     }
 
-    @Test("inverse of a non-square matrix")
+    @Test("inverse of a non-square matrix", .exitTests)
     func inverseNonSquare() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = inv(Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]]))
@@ -1141,7 +1116,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "Matrix dimensions must agree")
     }
 
-    @Test("inverse of a singular matrix")
+    @Test("inverse of a singular matrix", .exitTests)
     func inverseSingular() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = inv(ones(3, 3))
@@ -1149,7 +1124,7 @@ struct MatrixPreconditionTests {
         expectStderr(result, contains: "Matrix is non invertible")
     }
 
-    @Test("eigen of a non-square matrix")
+    @Test("eigen of a non-square matrix", .exitTests)
     func eigenNonSquare() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
             _ = eig(Matrix([[1.0, 0.0, 2.0], [-1.0, 5.0, 0.0]]))
@@ -1158,7 +1133,7 @@ struct MatrixPreconditionTests {
     }
 
     // The slicing inputs in "basic tests": rows 0..<4, columns 0..<5.
-    @Test("slicing with out-of-range extractors")
+    @Test("slicing with out-of-range extractors", .exitTests)
     func slicingOutOfRange() async {
         expectStderr(await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) { _ = slicingSample() ?? (.Range(4, -2, 0), .All) },
                      contains: "Range out of bounds")

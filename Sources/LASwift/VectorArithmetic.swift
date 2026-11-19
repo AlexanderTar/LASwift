@@ -142,7 +142,7 @@ public func ./. (_ a: Vector, _ b: Vector) -> Vector {
 ///     - b: right vector
 /// - Returns: dot product of a and b
 public func dot(_ a: Vector, _ b: Vector) -> Double {
-    precondition(a.count == b.count, "Vectors must have equal lenghts")
+    precondition(a.count == b.count, "Vectors must have equal lengths")
     var c: Double = 0.0
     vDSP_dotprD(a, 1, b, 1, &c, vDSP_Length(a.count))
     return c
