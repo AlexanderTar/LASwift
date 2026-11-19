@@ -25,11 +25,12 @@ swift build
 swift test --enable-code-coverage
 swift test --sanitize=address
 for platform in iOS tvOS watchOS visionOS; do
-  xcodebuild build -scheme LASwift -destination "generic/platform=$platform" -quiet
+  xcodebuild build-for-testing -scheme LASwift -destination "generic/platform=$platform" -quiet
 done
 ```
 
-CI builds for iOS, tvOS, watchOS and visionOS but does not run tests there. Before a release,
+CI compiles the library and the tests for iOS, tvOS, watchOS and visionOS but does not run
+the tests there. Before a release,
 run the tests on simulators. For example, on iOS:
 
 ```sh
@@ -64,6 +65,10 @@ xcodebuild docbuild -scheme LASwift -destination "generic/platform=macOS"
   "Interceptors are not working ... AddressSanitizer is loaded too late", and
   `DYLD_INSERT_LIBRARIES` does not help. The trait skips these tests when AddressSanitizer is
   loaded. A new exit test without the trait fails in the CI sanitizer step, which is the guard.
+- **Exit tests are macOS and Linux only.** Wrap them in `#if os(macOS) || os(Linux)` (a whole
+  suite, or the test functions inside a suite). On iOS, tvOS, watchOS and visionOS
+  `#expect(processExitsWith:)` is unavailable and the test target fails to compile. The CI
+  `build-for-testing` step for those platforms is the guard.
 
 ## Style
 

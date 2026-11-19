@@ -42,7 +42,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   platforms:
-    name: Build for iOS, tvOS, watchOS and visionOS
+    name: Build library and tests for iOS, tvOS, watchOS and visionOS
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
@@ -50,6 +50,6 @@ jobs:
         run: |
           for platform in iOS tvOS watchOS visionOS; do
             echo "::group::$platform"
-            xcodebuild build -scheme LASwift -destination "generic/platform=$platform" -quiet
+            xcodebuild build-for-testing -scheme LASwift -destination "generic/platform=$platform" -quiet
             echo "::endgroup::"
           done

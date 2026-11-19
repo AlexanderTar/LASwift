@@ -72,6 +72,8 @@ struct ConvolutionTests {
             [32.0, 34.0, 36.0, 38.0, 40.0]]))
     }
 
+    // Exit tests only exist on macOS and Linux.
+    #if os(macOS) || os(Linux)
     @Test("kernel with even rows is rejected", .exitTests)
     func evenRows() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
@@ -104,4 +106,5 @@ struct ConvolutionTests {
         let stderr = String(decoding: result?.standardErrorContent ?? [], as: UTF8.self)
         #expect(stderr.contains("odd"), "stderr was: \(stderr)")
     }
+    #endif
 }

@@ -65,6 +65,8 @@ struct StdNormalizationTests {
     }
 }
 
+// Exit tests only exist on macOS and Linux.
+#if os(macOS) || os(Linux)
 @Suite("Statistics of empty input")
 struct EmptyStatisticsTests {
     @Test("max of an empty vector is a precondition failure", .exitTests)
@@ -121,6 +123,7 @@ struct EmptyStatisticsTests {
         #expect(stderr.contains("non-empty"), "stderr was: \(stderr)")
     }
 }
+#endif
 
 @Suite("NaN in index statistics")
 struct NaNIndexTests {
