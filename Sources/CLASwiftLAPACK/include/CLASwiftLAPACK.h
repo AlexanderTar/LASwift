@@ -40,4 +40,8 @@ void laswift_dgels(const char *trans, const laswift_int *m, const laswift_int *n
                    const laswift_int *lwork, laswift_int *info);
 void laswift_dlarnv(const laswift_int *idist, laswift_int *iseed, const laswift_int *n, double *x);
 
+// CBLAS dcopy (strided vector copy), wrapped for the same reason: the non-deprecated
+// CBLAS declarations need the same defines.
+void laswift_cblas_dcopy(laswift_int n, const double *x, laswift_int incx, double *y, laswift_int incy);
+
 #endif

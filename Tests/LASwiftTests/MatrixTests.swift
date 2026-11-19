@@ -974,6 +974,86 @@ func expectStderr(_ result: ExitTest.Result?, contains text: String,
     #expect(stderr.contains(text), "stderr was: \(stderr)", sourceLocation: sourceLocation)
 }
 
+@Suite("Matrix column access")
+struct MatrixColumnAccessTests {
+    @Test("reads columns of a wide matrix")
+    func readWide() {
+        let m = Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]])
+        #expect(m[col: 0] == [1.0, 5.0])
+        #expect(m[col: 2] == [3.0, 7.0])
+        #expect(m[col: 3] == [4.0, 8.0])
+    }
+
+    @Test("reads columns of a tall matrix")
+    func readTall() {
+        let m = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]])
+        #expect(m[col: 0] == [1.0, 3.0, 5.0, 7.0])
+        #expect(m[col: 1] == [2.0, 4.0, 6.0, 8.0])
+    }
+
+    @Test("writes a column of a wide matrix and leaves the others alone")
+    func writeWide() {
+        var m = Matrix([[1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0]])
+        m[col: 2] = [30.0, 70.0]
+        #expect(m == Matrix([[1.0, 2.0, 30.0, 4.0], [5.0, 6.0, 70.0, 8.0]]))
+        m[col: 0] = [-1.0, -5.0]
+        #expect(m == Matrix([[-1.0, 2.0, 30.0, 4.0], [-5.0, 6.0, 70.0, 8.0]]))
+        m[col: 3] = [0.0, 0.0]
+        #expect(m == Matrix([[-1.0, 2.0, 30.0, 0.0], [-5.0, 6.0, 70.0, 0.0]]))
+    }
+
+    @Test("writes a column of a tall matrix and leaves the others alone")
+    func writeTall() {
+        var m = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]])
+        m[col: 1] = [20.0, 40.0, 60.0, 80.0]
+        #expect(m == Matrix([[1.0, 20.0], [3.0, 40.0], [5.0, 60.0], [7.0, 80.0]]))
+        m[col: 0] = [0.0, 0.0, 0.0, 0.0]
+        #expect(m == Matrix([[0.0, 20.0], [0.0, 40.0], [0.0, 60.0], [0.0, 80.0]]))
+    }
+
+    @Test("writing a column does not change a copy")
+    func writeCopy() {
+        let original = sample2x2()
+        var copy = original
+        copy[col: 1] = [9.0, 9.0]
+        #expect(original == sample2x2())
+    }
+
+    @Test("a negative column index fails the precondition when reading")
+    func negativeRead() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = sample2x2()[col: -1]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("a negative column index fails the precondition when writing")
+    func negativeWrite() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = sample2x2()
+            m[col: -1] = [1.0, 2.0]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("a column index past the last column fails the precondition")
+    func pastEnd() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = sample2x2()[col: 2]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
+    @Test("writing a column of the wrong length fails the precondition")
+    func wrongLength() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            var m = sample2x2()
+            m[col: 0] = [1.0, 2.0, 3.0]
+        }
+        expectStderr(result, contains: "Input dimensions must agree")
+    }
+}
+
 @Suite("Matrix precondition failures")
 struct MatrixPreconditionTests {
     @Test("should throw precondition failure if trying to convolve a matrix with a larger kernel")

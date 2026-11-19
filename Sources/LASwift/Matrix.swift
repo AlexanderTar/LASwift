@@ -7,6 +7,7 @@
 // of the BSD license. See the LICENSE file for details.
 
 import Accelerate
+import CLASwiftLAPACK
 
 // MARK: - One-line creators for matrices
 
@@ -288,21 +289,21 @@ extension Matrix {
     ///    - col: column index (0-based)
     public subscript(col col: Int) -> Vector {
         get {
-            precondition(col < cols, "Invalid index")
+            precondition(col >= 0 && col < cols, "Invalid index")
             var result = Vector(repeating: 0.0, count: rows)
-            _ = (0..<rows).map { i -> () in
-                let index = i * cols + col
-                result[i] = flat[index]
+            flat.withUnsafeBufferPointer { src in
+                laswift_cblas_dcopy(rows, src.baseAddress! + col, cols, &result, 1)
             }
             return result
         }
-        
+
         set {
-            precondition(col < cols, "Invalid index")
+            precondition(col >= 0 && col < cols, "Invalid index")
             precondition(newValue.count == rows, "Input dimensions must agree")
-            _ = (0..<rows).map { i -> () in
-                let index = i * cols + col
-                flat[index] = newValue[i]
+            let rows = self.rows
+            let cols = self.cols
+            flat.withUnsafeMutableBufferPointer { dst in
+                laswift_cblas_dcopy(rows, newValue, 1, dst.baseAddress! + col, cols)
             }
         }
     }
