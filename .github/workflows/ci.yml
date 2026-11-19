@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: macOS (build, test, sanitizer, coverage)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test --enable-code-coverage
+      - name: Export coverage
+        run: |
+          bin_path="$(swift build --show-bin-path)"
+          bundle="$(find "$bin_path" -maxdepth 1 -name '*.xctest' | head -n 1)"
+          binary="$bundle/Contents/MacOS/$(basename "$bundle" .xctest)"
+          profdata="$(dirname "$(swift test --show-codecov-path)")/default.profdata"
+          xcrun llvm-cov export -format=lcov "$binary" -instr-profile "$profdata" > info.lcov
+      # Exit tests cannot run under ASan (the child process fails with "Interceptors are not
+      # working"), so tests that contain one carry the `.exitTests` trait, which skips them here.
+      # See Tests/LASwiftTests/ExitTestSupport.swift.
+      - name: Test with AddressSanitizer
+        run: swift test --sanitize=address
+      - name: Upload coverage
+        uses: codecov/codecov-action@v7
+        with:
+          files: info.lcov
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  platforms:
+    name: Build library and tests for iOS, tvOS, watchOS and visionOS
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build for each platform
+        run: |
+          for platform in iOS tvOS watchOS visionOS; do
+            echo "::group::$platform"
+            xcodebuild build-for-testing -scheme LASwift -destination "generic/platform=$platform" -quiet
+            echo "::endgroup::"
+          done

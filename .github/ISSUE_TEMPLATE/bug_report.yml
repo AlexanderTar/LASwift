@@ -1,0 +1,35 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a security problem, use the private advisory link on the issue chooser instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what you saw.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Code that reproduces it
+      description: The smallest snippet that shows the problem, with the input values.
+      render: swift
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: LASwift version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform, OS and Xcode version
+      placeholder: macOS 26, Xcode 26.1

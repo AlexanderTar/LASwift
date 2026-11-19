@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest a change or a new function.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you want to do
+      description: The problem, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you would like LASwift to do
+      description: If a Matlab or NumPy function does it, name it.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
