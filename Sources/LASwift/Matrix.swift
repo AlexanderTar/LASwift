@@ -56,10 +56,12 @@ public func ones(like m: Matrix) -> Matrix {
 /// - Parameters:
 ///    - rows: number of rows
 ///    - cols: number of columns
+///    - seed: optional seed; the same seed always gives the same values
+///            (the elements of the matrix are `rand(rows * cols, seed:)` in row-major order)
 /// - Returns: random values matrix of specified size
-public func rand(_ rows: Int, _ cols: Int) -> Matrix {
+public func rand(_ rows: Int, _ cols: Int, seed: UInt64? = nil) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
-    return Matrix(rows, cols, rand(rows * cols))
+    return Matrix(rows, cols, rand(rows * cols, seed: seed))
 }
 
 /// Create a matrix of normally distibuted random values.
@@ -67,10 +69,12 @@ public func rand(_ rows: Int, _ cols: Int) -> Matrix {
 /// - Parameters:
 ///    - rows: number of rows
 ///    - cols: number of columns
+///    - seed: optional seed; the same seed always gives the same values
+///            (the elements of the matrix are `randn(rows * cols, seed:)` in row-major order)
 /// - Returns: random values matrix of specified size
-public func randn(_ rows: Int, _ cols: Int) -> Matrix {
+public func randn(_ rows: Int, _ cols: Int, seed: UInt64? = nil) -> Matrix {
     precondition(rows > 0 && cols > 0, "Matrix dimensions must be positive")
-    return Matrix(rows, cols, randn(rows * cols))
+    return Matrix(rows, cols, randn(rows * cols, seed: seed))
 }
 
 /// Create a matrix with ones on the main diagonal and zeros elsewhere.

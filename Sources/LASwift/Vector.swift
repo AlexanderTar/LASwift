@@ -37,10 +37,12 @@ public func ones(_ count: Int) -> Vector {
 ///
 /// - Parameters:
 ///    - count: number of elements
+///    - seed: optional seed; the same seed always gives the same values. Without one,
+///            every call gives different values.
 /// - Returns: random values vector of specified size
-public func rand(_ count: Int) -> Vector {
+public func rand(_ count: Int, seed: UInt64? = nil) -> Vector {
     var iDist = Int(1)
-    var iSeed = (0..<4).map { _ in Int(Random.within(0.0...4095.0)) }
+    var iSeed = Random.iSeed(seed)
     var n = Int(count)
     var x = Vector(repeating: 0.0, count: count)
     laswift_dlarnv(&iDist, &iSeed, &n, &x)
@@ -51,10 +53,12 @@ public func rand(_ count: Int) -> Vector {
 ///
 /// - Parameters:
 ///    - count: number of elements
+///    - seed: optional seed; the same seed always gives the same values. Without one,
+///            every call gives different values.
 /// - Returns: random values vector of specified size
-public func randn(_ count: Int) -> Vector {
+public func randn(_ count: Int, seed: UInt64? = nil) -> Vector {
     var iDist = Int(3)
-    var iSeed = (0..<4).map { _ in Int(Random.within(0.0...4095.0)) }
+    var iSeed = Random.iSeed(seed)
     var n = Int(count)
     var x = Vector(repeating: 0.0, count: count)
     laswift_dlarnv(&iDist, &iSeed, &n, &x)
