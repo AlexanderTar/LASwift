@@ -258,6 +258,23 @@ struct InputValidationPreconditionTests {
         expectStderr(result, contains: "Matrix dimensions must be positive")
     }
 
+    @Test("a matrix from an empty vector fails the precondition", .exitTests)
+    func emptyVectorMatrix() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = Matrix(Vector())
+        }
+        expectStderr(result, contains: "Matrix dimensions must be positive")
+    }
+
+    @Test("a negative row index fails the precondition", .exitTests)
+    func negativeRowIndex() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            let m = Matrix([[1.0, 2.0], [3.0, 4.0]])
+            _ = m[row: -1]
+        }
+        expectStderr(result, contains: "Invalid index")
+    }
+
     @Test("a matrix with zero rows fails the precondition", .exitTests)
     func zeroDimensions() async {
         let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {

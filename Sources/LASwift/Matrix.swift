@@ -213,6 +213,7 @@ public struct Matrix: Sendable, Hashable {
 
     /// Create 1-column Matrix (transposed Vector)
     public init(_ v: Vector) {
+        precondition(!v.isEmpty, "Matrix dimensions must be positive")
         flat = v
         rows = v.count
         cols = 1
@@ -274,14 +275,14 @@ extension Matrix {
     ///    - row: row index (0-based)
     public subscript(row row: Int) -> Vector {
         get {
-            precondition(row < rows, "Invalid index")
+            precondition(row >= 0 && row < rows, "Invalid index")
             let startIndex = row * cols
             let endIndex = row * cols + cols
             return Array(flat[startIndex..<endIndex])
         }
         
         set {
-            precondition(row < rows, "Invalid index")
+            precondition(row >= 0 && row < rows, "Invalid index")
             precondition(newValue.count == cols, "Input dimensions must agree")
             let startIndex = row * cols
             let endIndex = row * cols + cols
