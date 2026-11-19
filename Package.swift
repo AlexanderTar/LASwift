@@ -21,9 +21,13 @@ let package = Package(
         .package(url: "https://github.com/Quick/Nimble.git", from: "10.0.0")
     ],
     targets: [
+        // C shim over Accelerate's new LAPACK interface; see its header for why it is a C target.
         .target(
-            name: "LASwift", 
-            dependencies: []),
+            name: "CLASwiftLAPACK",
+            cSettings: [.define("ACCELERATE_NEW_LAPACK"), .define("ACCELERATE_LAPACK_ILP64")]),
+        .target(
+            name: "LASwift",
+            dependencies: ["CLASwiftLAPACK"]),
         .testTarget(
             name: "LASwiftTests",
             dependencies: ["LASwift", "Quick", "Nimble"])

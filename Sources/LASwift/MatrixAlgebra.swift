@@ -7,6 +7,7 @@
 // of the BSD license. See the LICENSE file for details.
 
 import Accelerate
+import CLASwiftLAPACK
 
 /// Matrix triangular part.
 ///
@@ -145,30 +146,30 @@ public func inv(_ A: Matrix) -> Matrix {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     let B = Matrix(A)
     
-    var M = __CLPK_integer(A.rows)
+    var M = Int(A.rows)
     var N = M
     var LDA = N
-    var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
+    var pivot = [Int](repeating: 0, count: Int(N))
     
-    var wkOpt = __CLPK_doublereal(0.0)
-    var lWork = __CLPK_integer(-1)
+    var wkOpt = Double(0.0)
+    var lWork = Int(-1)
     
-    var error: __CLPK_integer = 0
+    var error: Int = 0
     
-    dgetrf_(&M, &N, &(B.flat), &LDA, &pivot, &error)
+    laswift_dgetrf(&M, &N, &(B.flat), &LDA, &pivot, &error)
     
     precondition(error == 0, "Matrix is non invertible")
     
     /* Query and allocate the optimal workspace */
     
-    dgetri_(&N, &(B.flat), &LDA, &pivot, &wkOpt, &lWork, &error)
+    laswift_dgetri(&N, &(B.flat), &LDA, &pivot, &wkOpt, &lWork, &error)
     
-    lWork = __CLPK_integer(wkOpt)
+    lWork = Int(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute inversed matrix */
     
-    dgetri_(&N, &(B.flat), &LDA, &pivot, &work, &lWork, &error)
+    laswift_dgetri(&N, &(B.flat), &LDA, &pivot, &work, &lWork, &error)
     
     precondition(error == 0, "Matrix is non invertible")
     
@@ -187,40 +188,40 @@ public func eig(_ A: Matrix) -> (V: Matrix, D: Matrix) {
     
     let V = Matrix(A)
     
-    var N = __CLPK_integer(A.rows)
+    var N = Int(A.rows)
     
     var LDA = N
     
-    var wkOpt = __CLPK_doublereal(0.0)
-    var lWork = __CLPK_integer(-1)
+    var wkOpt = Double(0.0)
+    var lWork = Int(-1)
     
     var jobvl: Int8 = 86 // 'V'
     var jobvr: Int8 = 86 // 'V'
     
-    var error = __CLPK_integer(0)
+    var error = Int(0)
     
     // Real parts of eigenvalues
     var wr = Vector(repeating: 0.0, count: Int(N))
     // Imaginary parts of eigenvalues
     var wi = Vector(repeating: 0.0, count: Int(N))
     // Left eigenvectors
-    var vl = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N))
+    var vl = [Double](repeating: 0.0, count: Int(N * N))
     // Right eigenvectors
-    var vr = [__CLPK_doublereal](repeating: 0.0, count: Int(N * N))
+    var vr = [Double](repeating: 0.0, count: Int(N * N))
     
     var ldvl = N
     var ldvr = N
     
     /* Query and allocate the optimal workspace */
     
-    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error)
+    laswift_dgeev(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &wkOpt, &lWork, &error)
     
-    lWork = __CLPK_integer(wkOpt)
+    lWork = Int(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute eigen vectors */
     
-    dgeev_(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error)
+    laswift_dgeev(&jobvl, &jobvr, &N, &V.flat, &LDA, &wr, &wi, &vl, &ldvl, &vr, &ldvr, &work, &lWork, &error)
     
     precondition(error == 0, "Failed to compute eigen vectors")
     
@@ -238,31 +239,31 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     
     var jobz: Int8 = 65 // 'A'
     
-    var M = __CLPK_integer(A.rows);
-    var N = __CLPK_integer(A.cols);
+    var M = Int(A.rows);
+    var N = Int(A.cols);
     
     var LDA = M;
     var LDU = M;
     var LDVT = N;
     
-    var wkOpt = __CLPK_doublereal(0.0)
-    var lWork = __CLPK_integer(-1)
-    var iWork = [__CLPK_integer](repeating: 0, count: Int(8 * min(M, N)))
+    var wkOpt = Double(0.0)
+    var lWork = Int(-1)
+    var iWork = [Int](repeating: 0, count: Int(8 * min(M, N)))
     
-    var error = __CLPK_integer(0)
+    var error = Int(0)
     
     var s = Vector(repeating: 0.0, count: Int(min(M, N)))
     let U = Matrix(Int(LDU), Int(M))
     let VT = Matrix(Int(LDVT), Int(N))
     
     /* Query and allocate the optimal workspace */
-    dgesdd_(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &wkOpt, &lWork, &iWork, &error)
+    laswift_dgesdd(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &wkOpt, &lWork, &iWork, &error)
     
-    lWork = __CLPK_integer(wkOpt)
+    lWork = Int(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute SVD */
-    dgesdd_(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &work, &lWork, &iWork, &error)
+    laswift_dgesdd(&jobz, &M, &N, &_A.flat, &LDA, &s, &U.flat, &LDU, &VT.flat, &LDVT, &work, &lWork, &iWork, &error)
     
     precondition(error == 0, "Failed to compute SVD")
     
@@ -284,9 +285,9 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var jobv:Int8 = Int8(Array("V".utf8).first!)
     var jobq:Int8 = Int8(Array("Q".utf8).first!)
     
-    var M = __CLPK_integer(A.rows)
-    var N = __CLPK_integer(A.cols)
-    var P = __CLPK_integer(B.rows)
+    var M = Int(A.rows)
+    var N = Int(A.cols)
+    var P = Int(B.rows)
     
     var LDA = M
     var LDB = P
@@ -295,12 +296,12 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var LDQ = N
     
     let lWork = max(max(Int(3*N),Int(M)),Int(P))+Int(N)
-    var iWork = [__CLPK_integer](repeating: 0, count: Int(N))
+    var iWork = [Int](repeating: 0, count: Int(N))
     var work = Vector(repeating: 0.0, count: Int(lWork) * 4)
-    var error = __CLPK_integer(0)
+    var error = Int(0)
     
-    var k = __CLPK_integer()
-    var l = __CLPK_integer()
+    var k = Int()
+    var l = Int()
     
     let U = Matrix(Int(LDU), Int(M))
     let V = Matrix(Int(LDV), Int(P))
@@ -308,7 +309,7 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var alpha = Vector(repeating: 0.0, count: Int(N))
     var beta = Vector(repeating: 0.0, count: Int(N))
     
-    dggsvd_(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &work, &iWork, &error)
+    laswift_dggsvd(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &work, &iWork, &error)
     
     return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), Vector(alpha[Int(k)...Int(k+l)-1]), Vector(beta[Int(k)...Int(k+l)-1]), error == 0)
 }
@@ -333,18 +334,18 @@ public func chol(_ A: Matrix, _ t: Triangle = .Upper) -> Matrix {
         uplo = 76 // 'L'
     }
     
-    var N = __CLPK_integer(A.rows)
+    var N = Int(A.rows)
     
     /* LAPACK is using column-major order */
     var U = toCols(A, .Row)
     
     var LDA = N
     
-    var error = __CLPK_integer(0)
+    var error = Int(0)
     
     /* Compute Cholesky decomposition */
     
-    dpotrf_(&uplo, &N, &U.flat, &LDA, &error)
+    laswift_dpotrf(&uplo, &N, &U.flat, &LDA, &error)
     
     precondition(error == 0, "Failed to compute Cholesky decomposition")
     
@@ -391,14 +392,14 @@ public func det(_ A: Matrix) -> Double {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
     let B = Matrix(A)
     
-    var M = __CLPK_integer(A.rows)
+    var M = Int(A.rows)
     var N = M
     var LDA = N
-    var pivot = [__CLPK_integer](repeating: 0, count: Int(N))
+    var pivot = [Int](repeating: 0, count: Int(N))
     
-    var error: __CLPK_integer = 0
+    var error: Int = 0
     
-    dgetrf_(&M, &N, &(B.flat), &LDA, &pivot, &error)
+    laswift_dgetrf(&M, &N, &(B.flat), &LDA, &pivot, &error)
     
     var d = 1.0
 

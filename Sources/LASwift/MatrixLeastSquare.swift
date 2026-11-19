@@ -7,6 +7,7 @@
 // of the BSD license. See the LICENSE file for details.
 
 import Accelerate
+import CLASwiftLAPACK
 
 /// Compute the least squares solution to the overdetermined linear
 /// system A*X = B with full rank matrix A.
@@ -35,26 +36,26 @@ public func lstsqr(_ A: Matrix, _ B: Matrix) -> (X: Matrix, R: Matrix) {
     let bt = Matrix(B.T)
     
     var TRANS: Int8 = Int8(Array("N".utf8).first!)  // No transpose
-    var M = __CLPK_integer(A.rows)
-    var N = __CLPK_integer(A.cols)
-    var NRHS = __CLPK_integer(B.cols)
+    var M = Int(A.rows)
+    var N = Int(A.cols)
+    var NRHS = Int(B.cols)
     var LDA = M
     var LDB = M
     
-    var wkOpt = __CLPK_doublereal(0.0)
-    var lWork = __CLPK_integer(-1)
+    var wkOpt = Double(0.0)
+    var lWork = Int(-1)
     
-    var info: __CLPK_integer = 0
+    var info: Int = 0
  
     /* Query and allocate the optimal workspace */
-    dgels_(&TRANS, &M, &N, &NRHS, &(at.flat), &LDA, &(bt.flat), &LDB, &wkOpt, &lWork, &info);
+    laswift_dgels(&TRANS, &M, &N, &NRHS, &(at.flat), &LDA, &(bt.flat), &LDB, &wkOpt, &lWork, &info);
     
     precondition(info == 0, "Error finding optimal lWork")
-    lWork = __CLPK_integer(wkOpt)
+    lWork = Int(wkOpt)
     var work = Vector(repeating: 0.0, count: Int(lWork))
     
     /* Compute least square solution */
-    dgels_(&TRANS, &M, &N, &NRHS, &(at.flat), &LDA, &(bt.flat), &LDB, &work, &lWork, &info);
+    laswift_dgels(&TRANS, &M, &N, &NRHS, &(at.flat), &LDA, &(bt.flat), &LDB, &work, &lWork, &info);
     
     precondition(info == 0, "Error")
     
@@ -71,15 +72,6 @@ public func lstsqr(_ A: Matrix, _ B: Matrix) -> (X: Matrix, R: Matrix) {
     
     return (X, R)
 }
-
-/* Xcode 10.1
- From </Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers/clapack.h>
- int dgels_(char *__trans, __CLPK_integer *__m, __CLPK_integer *__n,
- __CLPK_integer *__nrhs, __CLPK_doublereal *__a, __CLPK_integer *__lda,
- __CLPK_doublereal *__b, __CLPK_integer *__ldb,
- __CLPK_doublereal *__work, __CLPK_integer *__lwork,
- __CLPK_integer *__info)
-*/
 
 /*
  Is there a problem defining Vector = [Double] = Array<Double> and

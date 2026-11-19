@@ -7,6 +7,7 @@
 // of the BSD license. See the LICENSE file for details.
 
 import Accelerate
+import CLASwiftLAPACK
 
 /// Typealiasing of array of Doubles to Vector
 /// to make functions more mathematical.
@@ -38,11 +39,11 @@ public func ones(_ count: Int) -> Vector {
 ///    - count: number of elements
 /// - Returns: random values vector of specified size
 public func rand(_ count: Int) -> Vector {
-    var iDist = __CLPK_integer(1)
-    var iSeed = (0..<4).map { _ in __CLPK_integer(Random.within(0.0...4095.0)) }
-    var n = __CLPK_integer(count)
+    var iDist = Int(1)
+    var iSeed = (0..<4).map { _ in Int(Random.within(0.0...4095.0)) }
+    var n = Int(count)
     var x = Vector(repeating: 0.0, count: count)
-    dlarnv_(&iDist, &iSeed, &n, &x)
+    laswift_dlarnv(&iDist, &iSeed, &n, &x)
     return x
 }
 
@@ -52,11 +53,11 @@ public func rand(_ count: Int) -> Vector {
 ///    - count: number of elements
 /// - Returns: random values vector of specified size
 public func randn(_ count: Int) -> Vector {
-    var iDist = __CLPK_integer(3)
-    var iSeed = (0..<4).map { _ in __CLPK_integer(Random.within(0.0...4095.0)) }
-    var n = __CLPK_integer(count)
+    var iDist = Int(3)
+    var iSeed = (0..<4).map { _ in Int(Random.within(0.0...4095.0)) }
+    var n = Int(count)
     var x = Vector(repeating: 0.0, count: count)
-    dlarnv_(&iDist, &iSeed, &n, &x)
+    laswift_dlarnv(&iDist, &iSeed, &n, &x)
     return x
 }
 
