@@ -1,0 +1,18 @@
+version: 2
+
+# One weekly pull request covering every ecosystem.
+multi-ecosystem-groups:
+  all:
+    schedule:
+      interval: "weekly"
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "all"
+  # The package has no dependencies today; this is a no-op until one is added.
+  - package-ecosystem: "swift"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "all"
