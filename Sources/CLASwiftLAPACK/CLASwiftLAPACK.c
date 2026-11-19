@@ -33,13 +33,14 @@ void laswift_dgesdd(const char *jobz, const laswift_int *m, const laswift_int *n
     dgesdd_(jobz, CI(m), CI(n), a, CI(lda), s, u, CI(ldu), vt, CI(ldvt), work, CI(lwork), MI(iwork), MI(info));
 }
 
-void laswift_dggsvd(const char *jobu, const char *jobv, const char *jobq, const laswift_int *m,
+void laswift_dggsvd3(const char *jobu, const char *jobv, const char *jobq, const laswift_int *m,
                     const laswift_int *n, const laswift_int *p, laswift_int *k, laswift_int *l, double *a,
                     const laswift_int *lda, double *b, const laswift_int *ldb, double *alpha, double *beta,
                     double *u, const laswift_int *ldu, double *v, const laswift_int *ldv, double *q,
-                    const laswift_int *ldq, double *work, laswift_int *iwork, laswift_int *info) {
-    dggsvd_(jobu, jobv, jobq, CI(m), CI(n), CI(p), MI(k), MI(l), a, CI(lda), b, CI(ldb), alpha, beta, u, CI(ldu),
-            v, CI(ldv), q, CI(ldq), work, MI(iwork), MI(info));
+                    const laswift_int *ldq, double *work, const laswift_int *lwork, laswift_int *iwork,
+                     laswift_int *info) {
+    dggsvd3_(jobu, jobv, jobq, CI(m), CI(n), CI(p), MI(k), MI(l), a, CI(lda), b, CI(ldb), alpha, beta, u, CI(ldu),
+            v, CI(ldv), q, CI(ldq), work, CI(lwork), MI(iwork), MI(info));
 }
 
 void laswift_dpotrf(const char *uplo, const laswift_int *n, double *a, const laswift_int *lda,

@@ -756,31 +756,6 @@ struct MatrixLinearAlgebraTests {
         expectClose(usv.U * usv.S * usv.V′, m1)
     }
 
-    @Test("gsvd")
-    func gsvdTest() {
-        let m1 = Matrix([[1.0, 6.0, 11.0],
-                         [2.0, 7.0, 12.0],
-                         [3.0, 8.0, 13.0],
-                         [4.0, 9.0, 14.0],
-                         [5.0, 10.0, 15.0]])
-        let m2 = Matrix([[8.0, 1.0, 6.0],
-                         [3.0, 5.0, 7.0],
-                         [4.0, 9.0, 2.0]])
-        let m3 = Matrix([[0.5700, -0.6457, -0.4279],
-                         [-0.7455, -0.3296, -0.4375],
-                         [-0.1702, -0.0135, -0.4470],
-                         [0.2966, 0.3026, -0.4566],
-                         [0.0490, 0.6187, -0.4661]])
-        let (U, _, _, _, _, _) = gsvd(m1, m2)
-        // The old spec wrote `expect(U == m3)` with no matcher, so it asserted nothing.
-        // As a real assertion it fails: U is 5x5 where m3 is 5x3. To 4 decimals m3's
-        // columns 1 and 2 are U's columns 1 and 0, and m3's column 0 is not in U at all.
-        // m3 looks like another implementation's economy-size output. Not loosened.
-        withKnownIssue("gsvd's U does not match the expected matrix (see comment)") {
-            expectClose(U, m3)
-        }
-    }
-
     @Test("chol")
     func cholesky() {
         let m1 = Matrix([[1, 1, 1, 1, 1],

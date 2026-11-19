@@ -272,11 +272,23 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
 
 /// Perform a generalized singular value decomposition of 2 given matrices.
 ///
+/// With `A` of size m x n and `B` of size p x n, LAPACK's `dggsvd3` computes orthogonal
+/// `U` (m x m), `V` (p x p) and `Q` (n x n) with `U' * A * Q = D1 * [0 R]` and
+/// `V' * B * Q = D2 * [0 R]`, where `R` is upper triangular and `D1`, `D2` are
+/// diagonal-like with the generalized singular values `alpha` and `beta`
+/// (`alpha^2 + beta^2 = 1`). The factors are full size, not economy size.
+///
+/// Precondition: `A` and `B` need the same number of columns.
+///
 /// - Parameters:
-///    - A: first matrix
-///    - B: second matrix
-/// - Returns: matrices U, V, and Q, plus vectors alpha and beta
+///    - A: first matrix (m x n)
+///    - B: second matrix (p x n)
+/// - Returns: matrices U (m x m), V (p x p) and Q (n x n), vectors alpha and beta with one
+///            entry per generalized singular value (`l` of them, in LAPACK's order; empty
+///            when `l` is 0), and whether LAPACK converged. When `success` is `false` the
+///            factors are not meaningful and alpha and beta are empty.
 public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, alpha: Vector, beta: Vector, success: Bool) {
+    precondition(A.cols == B.cols, "Matrices must have the same number of columns")
     /* LAPACK is using column-major order */
     var _A = toCols(A, .Row)
     var _B = toCols(B, .Row)
@@ -295,9 +307,7 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var LDV = P
     var LDQ = N
     
-    let lWork = max(max(Int(3*N),Int(M)),Int(P))+Int(N)
-    var iWork = [Int](repeating: 0, count: Int(N))
-    var work = Vector(repeating: 0.0, count: Int(lWork) * 4)
+    var iWork = [Int](repeating: 0, count: N)
     var error = Int(0)
     
     var k = Int()
@@ -306,12 +316,25 @@ public func gsvd(_ A: Matrix, _ B: Matrix) -> (U: Matrix, V: Matrix, Q: Matrix, 
     var U = Matrix(Int(LDU), Int(M))
     var V = Matrix(Int(LDV), Int(P))
     var Q = Matrix(Int(LDQ), Int(N))
-    var alpha = Vector(repeating: 0.0, count: Int(N))
-    var beta = Vector(repeating: 0.0, count: Int(N))
+    var alpha = Vector(repeating: 0.0, count: N)
+    var beta = Vector(repeating: 0.0, count: N)
     
-    laswift_dggsvd(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &work, &iWork, &error)
+    /* Query and allocate the optimal workspace */
+    var wkOpt = 0.0
+    var lWork = -1
+    laswift_dggsvd3(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &wkOpt, &lWork, &iWork, &error)
+    precondition(error == 0, "Failed to query the GSVD workspace size")
     
-    return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), Vector(alpha[Int(k)...Int(k+l)-1]), Vector(beta[Int(k)...Int(k+l)-1]), error == 0)
+    lWork = Int(wkOpt)
+    var work = Vector(repeating: 0.0, count: lWork)
+    
+    /* Compute GSVD */
+    laswift_dggsvd3(&jobu, &jobv, &jobq, &M, &N, &P, &k, &l, &_A.flat, &LDA, &_B.flat, &LDB, &alpha, &beta, &U.flat, &LDU, &V.flat, &LDV, &Q.flat, &LDQ, &work, &lWork, &iWork, &error)
+    
+    guard error == 0 else {
+        return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), [], [], false)
+    }
+    return (toRows(U, .Column), toRows(V, .Column), toRows(Q, .Column), Vector(alpha[k..<(k + l)]), Vector(beta[k..<(k + l)]), true)
 }
 
 /// Compute the Cholesky factorization of a real symmetric positive definite matrix.
@@ -361,24 +384,22 @@ public func chol(_ A: Matrix, _ t: Triangle = .Upper) -> Matrix {
 ///     - t: Triangle value (.Upper, .Lower)
 /// - Returns: upper/lower triangular part
 public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
-    var _A = zeros(A.rows, A.cols)
-    switch t {
-    case .Upper:
-        for i in (0..<A.rows) {
-            A.flat.withUnsafeBufferPointer { bufPtr in
-                let p = bufPtr.baseAddress! + (i * _A.cols) + i
-                vDSP_mmovD(p, &_A.flat[(i * _A.cols) + i], vDSP_Length(A.cols - i), vDSP_Length(1), vDSP_Length(A.cols), vDSP_Length(_A.cols))
-            }
-        }
-    case .Lower:
-        for i in (0..<A.rows) {
-            A.flat.withUnsafeBufferPointer { bufPtr in
-                let p = bufPtr.baseAddress! + (i * _A.cols)
-                vDSP_mmovD(p, &_A.flat[(i * _A.cols)], vDSP_Length(i + 1), vDSP_Length(1), vDSP_Length(A.cols), vDSP_Length(_A.cols))
+    var res = zeros(A.rows, A.cols)
+    let cols = A.cols
+    A.flat.withUnsafeBufferPointer { src in
+        res.flat.withUnsafeMutableBufferPointer { dst in
+            for i in 0..<A.rows {
+                // Upper keeps columns i..<cols (nothing once i >= cols), lower columns 0...i (at most cols).
+                let first = t == .Upper ? i : 0
+                let count = t == .Upper ? cols - i : min(i + 1, cols)
+                if count > 0 {
+                    vDSP_mmovD(src.baseAddress! + i * cols + first, dst.baseAddress! + i * cols + first,
+                               vDSP_Length(count), 1, vDSP_Length(cols), vDSP_Length(cols))
+                }
             }
         }
     }
-    return _A
+    return res
 }
 
 /// Compute the determinant of a given square matrix.

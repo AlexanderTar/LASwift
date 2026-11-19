@@ -28,11 +28,12 @@ void laswift_dgesdd(const char *jobz, const laswift_int *m, const laswift_int *n
                     const laswift_int *lda, double *s, double *u, const laswift_int *ldu, double *vt,
                     const laswift_int *ldvt, double *work, const laswift_int *lwork, laswift_int *iwork,
                     laswift_int *info);
-void laswift_dggsvd(const char *jobu, const char *jobv, const char *jobq, const laswift_int *m,
+void laswift_dggsvd3(const char *jobu, const char *jobv, const char *jobq, const laswift_int *m,
                     const laswift_int *n, const laswift_int *p, laswift_int *k, laswift_int *l, double *a,
                     const laswift_int *lda, double *b, const laswift_int *ldb, double *alpha, double *beta,
                     double *u, const laswift_int *ldu, double *v, const laswift_int *ldv, double *q,
-                    const laswift_int *ldq, double *work, laswift_int *iwork, laswift_int *info);
+                    const laswift_int *ldq, double *work, const laswift_int *lwork, laswift_int *iwork,
+                     laswift_int *info);
 void laswift_dpotrf(const char *uplo, const laswift_int *n, double *a, const laswift_int *lda,
                     laswift_int *info);
 void laswift_dgels(const char *trans, const laswift_int *m, const laswift_int *n, const laswift_int *nrhs,
