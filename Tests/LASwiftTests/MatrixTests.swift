@@ -336,7 +336,7 @@ struct MatrixComparisonTests {
 struct MatrixSubscriptTests {
     @Test("[i,j]")
     func elementSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         #expect(m1[1, 1] == 4.0)
         m1[1, 0] = 10.0
         #expect(m1[1, 0] == 10.0)
@@ -344,7 +344,7 @@ struct MatrixSubscriptTests {
 
     @Test("index")
     func indexSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         #expect(m1[3] == 4.0)
         m1[2] = 10.0
         #expect(m1[2] == 10.0)
@@ -353,7 +353,7 @@ struct MatrixSubscriptTests {
 
     @Test("row")
     func rowSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         expectClose(m1[row: 1], [3.0, 4.0])
         m1[row: 0] = [10.0, 20.0]
         expectClose(m1[row: 0], [10.0, 20.0])
@@ -363,7 +363,7 @@ struct MatrixSubscriptTests {
 
     @Test("column")
     func columnSubscript() {
-        let m1 = sample2x2()
+        var m1 = sample2x2()
         expectClose(m1[col: 1], [2.0, 4.0])
         m1[col: 0] = [10.0, 30.0]
         expectClose(m1[col: 0], [10.0, 30.0])
@@ -379,7 +379,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("[i,j] -> Matrix")
     func submatrix() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[0, 1].flat, [2.0, 3.0, 5.0, 6.0, 8.0, 9.0])
         m1[1, 0] = m2
         expectClose(m1[1..<3, 0...1].flat, [10.0, 11.0, 12.0, 13.0])
@@ -387,7 +387,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("closed")
     func closed() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1...2, 0...1].flat, [4.0, 5.0, 7.0, 8.0])
         m1[0...1, 1...2] = m2
         expectClose(m1.flat, [1.0, 10.0, 11.0, 4.0, 12.0, 13.0, 7.0, 8.0, 9.0])
@@ -395,7 +395,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("open")
     func open() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1..<3, 0..<2].flat, [4.0, 5.0, 7.0, 8.0])
         m1[0..<2, 1..<3] = m2
         expectClose(m1.flat, [1.0, 10.0, 11.0, 4.0, 12.0, 13.0, 7.0, 8.0, 9.0])
@@ -403,7 +403,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("partial")
     func partial() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         expectClose(m1[1..., ..<2].flat, [4.0, 5.0, 7.0, 8.0])
         m1[1..., 1...] = m2
         expectClose(m1.flat, [1.0, 2.0, 3.0, 4.0, 10.0, 11.0, 7.0, 12.0, 13.0])
@@ -411,7 +411,7 @@ struct MatrixRangeSubscriptTests {
 
     @Test("unbounded")
     func unbounded() {
-        let m1 = sample3x3()
+        var m1 = sample3x3()
         let row = Matrix([[10.0, 11.0, 12.0]])
         expectClose(m1[..., 2...2].flat, [3.0, 6.0, 9.0])
         m1[1...1, ...] = row
@@ -1035,3 +1035,75 @@ struct MatrixPreconditionTests {
     }
 }
 #endif
+
+private func requireSendable<T: Sendable>(_: T) {}
+
+@Suite("Matrix value semantics")
+struct MatrixValueSemanticsTests {
+    @Test("Matrix is Sendable")
+    func isSendable() {
+        requireSendable(sample2x2())
+    }
+
+    @Test("mutating a copy leaves the original unchanged")
+    func copyThenMutate() {
+        let original = sample2x2()
+        var copy = original
+        copy[0, 0] = 99.0
+        copy[row: 1] = [7.0, 8.0]
+        #expect(original[0, 0] == 1.0)
+        #expect(original[row: 1] == [3.0, 4.0])
+        #expect(copy[0, 0] == 99.0)
+    }
+
+    @Test("unbounded range subscript returns an independent matrix")
+    func unboundedSubscriptCopies() {
+        let source = sample3x3()
+        var result = source[..., ...]
+        result[0, 0] = 99.0
+        #expect(source[0, 0] == 1.0)
+        #expect(result[0, 0] == 99.0)
+    }
+
+    @Test("slice with all rows and columns returns an independent matrix")
+    func allAllSliceCopies() {
+        let source = sample3x3()
+        var result = slice(source, (.All, .All))
+        result[1, 1] = 99.0
+        #expect(source[1, 1] == 5.0)
+        #expect(result[1, 1] == 99.0)
+    }
+
+    @Test("vstack of one matrix returns an independent matrix")
+    func singleVstackCopies() {
+        let source = sample2x2()
+        var result = vstack([source])
+        result[0, 1] = 99.0
+        #expect(source[0, 1] == 2.0)
+        #expect(result[0, 1] == 99.0)
+    }
+
+    @Test("hstack of one matrix returns an independent matrix")
+    func singleHstackCopies() {
+        let source = sample2x2()
+        var result = hstack([source])
+        result[1, 0] = 99.0
+        #expect(source[1, 0] == 3.0)
+        #expect(result[1, 0] == 99.0)
+    }
+
+    @Test("vstack and hstack of several matrices keep every input unchanged")
+    func multiStackLeavesInputs() {
+        let a = sample2x2()
+        let b = Matrix([[5.0, 6.0]])
+        let c = Matrix([[7.0, 8.0], [9.0, 10.0]])
+        let tall = vstack([a, b, a])
+        #expect(tall.rows == 5 && tall.cols == 2)
+        #expect(tall.flat == [1, 2, 3, 4, 5, 6, 1, 2, 3, 4])
+        let wide = hstack([a, c, a])
+        #expect(wide.rows == 2 && wide.cols == 6)
+        #expect(wide.flat == [1, 2, 7, 8, 1, 2, 3, 4, 9, 10, 3, 4])
+        #expect(a.flat == [1, 2, 3, 4])
+        #expect(c.flat == [7, 8, 9, 10])
+    }
+}

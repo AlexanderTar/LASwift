@@ -106,8 +106,10 @@ public func diag(_ v: Matrix) -> Matrix {
 /// - Returns: square diagonal matrix with specified values
 public func diag(_ v: Vector) -> Matrix {
     let count = v.count
-    let m: Matrix = zeros(count, count)
-    _ = (0..<count).map { m[$0, $0] = v[$0] }
+    var m: Matrix = zeros(count, count)
+    for i in 0..<count {
+        m[i, i] = v[i]
+    }
     return m
 }
 
@@ -141,7 +143,7 @@ public func diag(_ rows: Int, _ cols: Int, _ v: Vector) -> Matrix {
     })
 }
 
-// MARK: - Matrix class
+// MARK: - Matrix type
 
 /// Matrix dimensions.
 ///
@@ -152,57 +154,53 @@ public enum Dim {
     case Column
 }
 
-/// Matrix of Double values
-public class Matrix {
-    public var flat = Vector()
-    internal var _rows: Int = 0
-    internal var _cols: Int = 0
-    
+/// Matrix of Double values.
+///
+/// `Matrix` is a value type: copies are independent, and the elements are
+/// stored in a row-major array that is copied lazily on first mutation.
+public struct Matrix: Sendable {
+    /// Elements in row-major order. Always holds `rows * cols` values.
+    public internal(set) var flat: Vector
+
     /// Number of rows in Matrix.
-    public var rows: Int {
-        return _rows
-    }
-    
+    public let rows: Int
+
     /// Number of columns in Matrix.
-    public var cols: Int {
-        return _cols
-    }
-    
+    public let cols: Int
+
     /// Transpose
     public var T: Matrix {
         get {
             return transpose(self)
         }
     }
-    
+
     public init(_ r: Int, _ c: Int, _ value: Double = 0.0) {
         precondition(r > 0 && c > 0, "Matrix dimensions must be positive")
         flat = Vector(repeating: value, count: r * c)
-        _rows = r
-        _cols = c
+        rows = r
+        cols = c
     }
-    
+
     public init(_ r: Int, _ c: Int, _ f: Vector) {
         precondition(r * c == f.count, "Matrix dimensions must agree")
         flat = f
-        _rows = r
-        _cols = c
+        rows = r
+        cols = c
     }
-    
+
     /// Create new Matrix by copying existing.
     public init(_ M: Matrix) {
-        flat = M.flat
-        _rows = M.rows
-        _cols = M.cols
+        self = M
     }
-    
+
     /// Create 1-column Matrix (transposed Vector)
     public init(_ v: Vector) {
         flat = v
-        _rows = v.count
-        _cols = 1
+        rows = v.count
+        cols = 1
     }
-    
+
     /// Create Matrix from array of Vectors (two-dimensional array)
     public init(_ data: [Vector]) {
         // assuming empty input as invalid
@@ -210,10 +208,10 @@ public class Matrix {
         precondition(data[0].count > 0, "Input must not be empty")
         // check if all subarrays have same length
         precondition(Set(data.map { $0.count }).count == 1, "Input dimensions must agree")
-        
+
         flat = data.flatMap { $0 }
-        _rows = data.count
-        _cols = data[0].count
+        rows = data.count
+        cols = data[0].count
     }
 }
 
@@ -358,7 +356,7 @@ extension Matrix {
     }
 
     public subscript(_ : UnboundedRange, _ : UnboundedRange) -> Matrix {
-        get { return self}
+        get { return self }
         set { self[0..<rows, 0..<cols] = newValue}
     }
 
@@ -396,7 +394,7 @@ extension Matrix {
             precondition(indexIsValidForRow(row.lowerBound, col.lowerBound), "Invalid range")
             precondition(indexIsValidForRow(row.upperBound, col.upperBound), "Invalid range")
 
-            let dst = Matrix(row.count, col.count)
+            var dst = Matrix(row.count, col.count)
 
             flat.withUnsafeBufferPointer { srcBuf in
                 let srcPtr = srcBuf.baseAddress! + row.lowerBound * cols + col.lowerBound
@@ -413,6 +411,7 @@ extension Matrix {
             precondition(indexIsValidForRow(row.upperBound, col.upperBound), "Invalid range")
             precondition(newValue.cols == col.count && newValue.rows == row.count, "Matrix dimensions must agree")
 
+            let cols = self.cols
             flat.withUnsafeMutableBufferPointer { dstBuf in
                 let dstPtr = dstBuf.baseAddress! + row.lowerBound * cols + col.lowerBound
                 vDSP_mmovD(newValue.flat, dstPtr,
@@ -467,12 +466,18 @@ public func toCols(_ A: Matrix, _ d: Dim) -> Matrix {
 /// - Returns: new matrix by vertically stacking rows of input matrices
 public func vstack(_ ma: [Matrix]) -> Matrix {
     precondition(ma.count > 0, "Must have at least 1 input matrix in array")
-    var m = ma[0]
-    for i in 1..<ma.count {
-        precondition(ma[i].cols == m.cols, "Number of cols must be equal")
-        m = append(m, rows: ma[i])
+    let cols = ma[0].cols
+    var count = 0
+    for m in ma {
+        precondition(m.cols == cols, "Number of cols must be equal")
+        count += m.flat.count
     }
-    return m
+    var flat = Vector()
+    flat.reserveCapacity(count)
+    for m in ma {
+        flat.append(contentsOf: m.flat)
+    }
+    return Matrix(count / cols, cols, flat)
 }
 
 /// Horizontally stack (left-to-right) columns in matrices.
@@ -484,12 +489,22 @@ public func vstack(_ ma: [Matrix]) -> Matrix {
 /// - Returns: new matrix by horizontally stacking columns of input matrices
 public func hstack(_ ma: [Matrix]) -> Matrix {
     precondition(ma.count > 0, "Must have at least 1 input matrix in array")
-    var m = ma[0]
-    for i in 1..<ma.count {
-        precondition(ma[i].rows == m.rows, "Number of rows must be equal")
-        m = append(m, cols: ma[i])
+    let rows = ma[0].rows
+    var cols = 0
+    for m in ma {
+        precondition(m.rows == rows, "Number of rows must be equal")
+        cols += m.cols
     }
-    return m
+    var result = Matrix(rows, cols)
+    var offset = 0
+    for m in ma {
+        result.flat.withUnsafeMutableBufferPointer { dst in
+            vDSP_mmovD(m.flat, dst.baseAddress! + offset, vDSP_Length(m.cols), vDSP_Length(rows),
+                       vDSP_Length(m.cols), vDSP_Length(cols))
+        }
+        offset += m.cols
+    }
+    return result
 }
 
 /// Insert row to matrix at specified position.
@@ -514,7 +529,7 @@ public func insert(_ m: Matrix, rows: Matrix, at index: Int) -> Matrix {
     precondition(rows.cols == m.cols, "Input dimensions must agree")
     precondition(index <= m.rows, "Index out of bounds")
     
-    let res = zeros(m.rows + rows.rows, m.cols)
+    var res = zeros(m.rows + rows.rows, m.cols)
     
     if (index > 0) {
         vDSP_mmovD(m.flat, &res.flat, vDSP_Length(m.cols), vDSP_Length(index), vDSP_Length(m.cols), vDSP_Length(res.cols))
@@ -728,7 +743,7 @@ public func insert(_ m: Matrix, cols: Matrix, at index: Int) -> Matrix {
     precondition(cols.rows == m.rows, "Input dimensions must agree")
     precondition(index <= m.cols && index >= 0, "Index out of bounds")
     
-    let res = zeros(m.rows, m.cols + cols.cols)
+    var res = zeros(m.rows, m.cols + cols.cols)
     
     if (index > 0) {
         vDSP_mmovD(m.flat, &res.flat, vDSP_Length(index), vDSP_Length(m.rows), vDSP_Length(m.cols), vDSP_Length(res.cols))
@@ -1016,7 +1031,7 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
 }
 
 func slice(_ m: Matrix, _ rr: [Int], _ cr: [Int]) -> Matrix {
-    let res = zeros(rr.count, cr.count)
+    var res = zeros(rr.count, cr.count)
     
     // vgathrD is using 1-based indices
     let _cr = cr.map { vDSP_Length($0 + 1) }
