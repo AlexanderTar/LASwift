@@ -264,7 +264,8 @@ public func - (_ a: Vector, _ b: Double) -> Vector {
 ///     - b: vector
 /// - Returns: elementwise difference of scalar a and vector b
 public func minus(_ a: Double, _ b: Vector) -> Vector {
-    return uminus(minus(b, a))
+    // a + (-b), not -(b - a): the latter gives -0.0 where a == b.
+    return plus(uminus(b), a)
 }
 
 /// Perform scalar and vector substraction.

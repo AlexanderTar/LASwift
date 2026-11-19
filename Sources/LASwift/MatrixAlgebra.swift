@@ -400,10 +400,11 @@ public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
 
 /// Compute the determinant of a given square matrix.
 ///
-///    A precondition error is thrown if the given matrix is singular or algorithm fails to converge.
+/// A singular matrix has determinant 0: no precondition error is thrown, and the result is
+/// `+0.0` (never `-0.0`).
 ///
 /// - Parameters:
-///     - A: square matrix=
+///     - A: square matrix
 /// - Returns: determinant of A matrix
 public func det(_ A: Matrix) -> Double {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
@@ -427,7 +428,8 @@ public func det(_ A: Matrix) -> Double {
         }
     }
     
-    return d
+    // A singular matrix gives -0.0 when a row swap flips a zero; report +0.0.
+    return d == 0.0 ? 0.0 : d
 }
 
 /// Return the 2-D convolution of the given matrix with the provided kernel, the same size as `A`.
