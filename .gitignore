@@ -21,9 +21,6 @@ DerivedData
 *.ipa
 .swiftpm
 
-# Bundler
-.bundle
-Gemfile.lock
 
 Package.resolved
 

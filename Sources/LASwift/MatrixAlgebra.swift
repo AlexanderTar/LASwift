@@ -533,7 +533,6 @@ public func det(_ A: Matrix) -> Double {
 ///    - A: Matrix
 ///    - K: Matrix with an odd number of rows and columns, smaller in dimension than A
 /// - Returns: Matrix result of the convolution
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
 public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
     precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
     precondition(K.rows % 2 == 1 && K.cols % 2 == 1, "The kernel matrix needs an odd number of rows and columns.")

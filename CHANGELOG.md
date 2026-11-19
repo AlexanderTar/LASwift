@@ -38,7 +38,7 @@ Apple platforms and Swift Package Manager only.
 - `normalize(_:.Column)` returned the wrong shape.
 - Slicing with ranges resolved them against the wrong axis, and `Take`/`Drop` at full size, zero steps and slice bounds were wrong.
 - `tri` overflowed a heap buffer.
-- Statistics no longer return `-0` for zero results.
+- `a - B` (scalar minus vector or matrix) and `det` no longer return `-0` for zero results.
 - Many functions now check their inputs with `precondition` instead of reading or writing out of bounds.
 
 ### Removed
@@ -74,7 +74,8 @@ Apple platforms and Swift Package Manager only.
    your kernel if you relied on correlation. The kernel must have odd dimensions and be
    smaller than the matrix.
 8. **`thr` zeroes below the threshold.** It used to set them to `t` (only `t = 0` gave
-   the same result); `max(x, t)` reproduces the old behaviour.
+   the same result); `x.map { Swift.max($0, t) }` (for a matrix, `map(A) { Swift.max($0, t) }`)
+   reproduces the old behaviour.
 9. **`std` is the sample deviation.** It divides by N − 1 by default. Pass
    `normalization: .population` for the old result.
 10. **`normalize(_:.Column)` keeps the matrix shape.**

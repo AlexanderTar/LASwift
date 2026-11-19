@@ -14,6 +14,7 @@ import Accelerate
 ///
 /// - Parameters
 ///     - a: vector
+///
 /// A precondition error is thrown if the vector is empty.
 ///
 /// `NaN` elements are not handled consistently: depending on where the `NaN` sits,
@@ -30,6 +31,7 @@ public func max(_ a: Vector) -> Double {
 ///
 /// - Parameters
 ///     - a: vector
+///
 /// A precondition error is thrown if the vector is empty.
 ///
 /// `NaN` elements are skipped (unlike `max`, which may return `NaN`),
@@ -45,6 +47,7 @@ public func maxi(_ a: Vector) -> Int {
 ///
 /// - Parameters
 ///     - a: vector
+///
 /// A precondition error is thrown if the vector is empty. See `max` for `NaN` behaviour.
 ///
 /// - Returns: smallest element of vector a
@@ -57,6 +60,7 @@ public func min(_ a: Vector) -> Double {
 ///
 /// - Parameters
 ///     - a: vector
+///
 /// A precondition error is thrown if the vector is empty.
 ///
 /// `NaN` elements are skipped (unlike `min`, which may return `NaN`),
@@ -72,6 +76,7 @@ public func mini(_ a: Vector) -> Int {
 ///
 /// - Parameters
 ///     - a: vector
+///
 /// A precondition error is thrown if the vector is empty.
 ///
 /// - Returns: mean value of vector a
