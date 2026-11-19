@@ -296,13 +296,11 @@ struct MatrixScalarArithmeticTests {
 
 // These specs exercise the library's own tolerance-based comparison operators on
 // matrices, so they use the operators directly. They go away with the operators.
-@Suite("Matrix comparison")
-struct MatrixComparisonTests {
+@Suite("Matrix equality")
+struct MatrixEqualityTests {
     @Test("equal")
     func equal() {
-        let m1 = sample2x2()
-        let m2 = sample2x2()
-        #expect(m1 == m2)
+        #expect(sample2x2() == sample2x2())
     }
 
     @Test("not equal")
@@ -312,23 +310,43 @@ struct MatrixComparisonTests {
         #expect(m1 != m2)
     }
 
-    @Test("greater/less than")
-    func greaterLess() {
-        let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
-        let m2 = sample2x2()
-        #expect(m1 > m2)
-        #expect(m2 < m1)
+    @Test("equality is exact, not tolerance based")
+    func exact() {
+        let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+        let m2 = Matrix([[1.0 + 1e-15, 2.0], [3.0, 4.0]])
+        #expect(m1 != m2)
+        #expect(Matrix([[0.1 + 0.2]]) != Matrix([[0.3]]))
     }
 
-    @Test("greater/less than or equal")
-    func greaterLessOrEqual() {
-        let m1 = Matrix([[11.0, 12.0], [13.0, 14.0]])
-        let m2 = sample2x2()
-        let m3 = sample2x2()
-        #expect(m1 >= m2)
-        #expect(m2 <= m1)
-        #expect(m2 >= m3)
-        #expect(m2 <= m3)
+    @Test("same elements with a different shape are not equal")
+    func shapeMatters() {
+        let flat = [1.0, 2.0, 3.0, 4.0]
+        #expect(Matrix(2, 2, flat) != Matrix(1, 4, flat))
+        #expect(Matrix(2, 2, flat) != Matrix(4, 1, flat))
+    }
+
+    @Test("a matrix holding infinities equals itself")
+    func infinity() {
+        let m = Matrix([[Double.infinity, -Double.infinity], [1.0, 2.0]])
+        #expect(m == m)
+        #expect(m == Matrix([[Double.infinity, -Double.infinity], [1.0, 2.0]]))
+    }
+
+    @Test("equal matrices hash equally and work as set members and dictionary keys")
+    func hashable() {
+        let a = sample2x2()
+        let b = sample2x2()
+        #expect(a.hashValue == b.hashValue)
+        let set: Set<Matrix> = [a, b, Matrix([[1.0, 2.0, 3.0, 5.0]])]
+        #expect(set.count == 2)
+        #expect([a: "x"][b] == "x")
+        #expect(Matrix([[0.0]]).hashValue == Matrix([[-0.0]]).hashValue)
+    }
+
+    @Test("a matrix holding NaN never equals anything")
+    func nan() {
+        let m = Matrix([[Double.nan, 1.0]])
+        #expect(m != m)
     }
 }
 

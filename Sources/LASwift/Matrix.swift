@@ -158,7 +158,12 @@ public enum Dim {
 ///
 /// `Matrix` is a value type: copies are independent, and the elements are
 /// stored in a row-major array that is copied lazily on first mutation.
-public struct Matrix: Sendable {
+///
+/// Equality and hashing are exact and elementwise: two matrices are equal when
+/// they have the same shape and every pair of elements is `==` (so a matrix
+/// holding NaN is not equal to itself). Use `isApproximatelyEqual` for
+/// tolerance-based comparison.
+public struct Matrix: Sendable, Hashable {
     /// Elements in row-major order. Always holds `rows * cols` values.
     public internal(set) var flat: Vector
 
@@ -167,6 +172,11 @@ public struct Matrix: Sendable {
 
     /// Number of columns in Matrix.
     public let cols: Int
+
+    /// Exact elementwise equality (see the type documentation).
+    public static func == (lhs: Matrix, rhs: Matrix) -> Bool {
+        return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat.elementsEqual(rhs.flat)
+    }
 
     /// Transpose
     public var T: Matrix {
@@ -1126,40 +1136,4 @@ extension Matrix: CustomStringConvertible {
     public var description: String {
         return "\((0..<rows).map{"\(self[row: $0])"}.joined(separator: "\n"))"
     }
-}
-
-// MARK: - Matrix comparison
-
-extension Matrix: Equatable {}
-
-/// Check if two matrices are equal using Double value approximate comparison
-public func == (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat ==~ rhs.flat
-}
-
-/// Check if two matrices are not equal using Double value approximate comparison
-public func != (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows != rhs.rows || lhs.cols != rhs.cols || lhs.flat !=~ rhs.flat
-}
-
-extension Matrix: Comparable {}
-
-/// Check if one matrix is greater than another using Double value approximate comparison
-public func > (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat >~ rhs.flat
-}
-
-/// Check if one matrix is less than another using Double value approximate comparison
-public func < (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat <~ rhs.flat
-}
-
-/// Check if one matrix is greater than or equal to another using Double value approximate comparison
-public func >= (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat >=~ rhs.flat
-}
-
-/// Check if one matrix is less than or equal to another using Double value approximate comparison
-public func <= (lhs: Matrix, rhs: Matrix) -> Bool {
-    return lhs.rows == rhs.rows && lhs.cols == rhs.cols && lhs.flat <=~ rhs.flat
 }
