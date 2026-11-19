@@ -319,6 +319,23 @@ public func svd(_ A: Matrix) -> (U: Matrix, S: Matrix, V: Matrix) {
     return (toRows(U, .Column), diag(Int(M), Int(N), s), VT)
 }
 
+/// Compute the numerical rank of a given matrix: the number of singular values greater than a tolerance.
+///
+/// The default tolerance is the one NumPy uses in `matrix_rank`:
+/// `max(singular values) * max(rows, cols) * eps`, where `eps` is the double precision machine epsilon.
+///
+/// - Parameters:
+///    - A: matrix to find the rank of
+///    - tol: singular values less than or equal to this value are treated as zero (optional)
+/// - Returns: number of singular values of `A` greater than the tolerance
+public func rank(_ A: Matrix, tol: Double? = nil) -> Int {
+    let s = svd(A).S
+    let n = min(s.rows, s.cols)
+    let sv = (0..<n).map { s.flat[$0 * s.cols + $0] }
+    let threshold = tol ?? (sv.max() ?? 0.0) * Double(max(A.rows, A.cols)) * Double.ulpOfOne
+    return sv.filter { $0 > threshold }.count
+}
+
 /// Perform a generalized singular value decomposition of 2 given matrices.
 ///
 /// - Parameters:
