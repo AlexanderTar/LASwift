@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LASwift social preview</title>
+<!-- Source for social-preview.png (1280x640) and icon.png (512x512). Build with assets/build-social-preview.sh. -->
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    position: relative; display: flex; align-items: center; gap: 72px; padding: 0 96px;
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; color: #fff;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(900px 600px at 18% 30%, rgb(255 120 60 / 0.30), transparent 70%),
+      linear-gradient(135deg, #1a1530 0%, #14102a 55%, #2a1740 100%);
+  }
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgb(255 220 200 / 0.14) 1.2px, transparent 1.8px); background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(60% 80% at 75% 50%, #000, transparent 80%);
+  }
+  .tile {
+    position: relative; width: 340px; height: 340px; flex: none; border-radius: 76px;
+    background: linear-gradient(145deg, #ff8a3d 0%, #f05138 55%, #d6336c 100%);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.45), inset 0 2px 0 rgb(255 255 255 / 0.35);
+  }
+  .tile svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .text { position: relative; }
+  h1 { font-size: 120px; line-height: 1.1; font-weight: 800; letter-spacing: -0.035em; }
+  p { margin-top: 24px; max-width: 700px; font-size: 38px; line-height: 1.28; letter-spacing: -0.01em; color: #ffe3d6; text-wrap: balance; }
+  .url { display: block; margin-top: 44px; font: 24px/1 "SF Mono", Menlo, monospace; color: #ffab8a; }
+  /* ?icon renders only the tile at 512x512 */
+  body.icon { padding: 0; gap: 0; width: 512px; height: 512px; background: transparent; }
+  body.icon::before, body.icon .text { display: none; }
+  body.icon .tile { width: 512px; height: 512px; border-radius: 114px; box-shadow: none; }
+</style>
+</head>
+<body>
+<div class="tile">
+  <svg viewBox="0 0 340 340" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M118 78 H92 V262 H118" stroke-width="14"/>
+    <path d="M222 78 H248 V262 H222" stroke-width="14"/>
+    <g fill="#fff" stroke="none">
+      <circle cx="136" cy="126" r="13"/><circle cx="170" cy="126" r="13" opacity=".55"/><circle cx="204" cy="126" r="13" opacity=".55"/>
+      <circle cx="136" cy="170" r="13" opacity=".55"/><circle cx="170" cy="170" r="13"/><circle cx="204" cy="170" r="13" opacity=".55"/>
+      <circle cx="136" cy="214" r="13" opacity=".55"/><circle cx="170" cy="214" r="13" opacity=".55"/><circle cx="204" cy="214" r="13"/>
+    </g>
+  </svg>
+</div>
+<div class="text">
+  <h1>LASwift</h1>
+  <p>Fast linear algebra for Swift, powered by Accelerate.</p>
+  <span class="url">github.com/AlexanderTar/LASwift</span>
+</div>
+<script>if (location.search === "?icon") document.body.className = "icon";</script>
+</body>
+</html>
