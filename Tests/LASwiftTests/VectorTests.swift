@@ -2,314 +2,293 @@
 //  VectorTests.swift
 //  LASwift
 //
-//  Created by Alexander Taraymovich on 22/02/2017.
-//  Copyright © 2017 CocoaPods. All rights reserved.
+//  Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
+//  All rights reserved.
+//
+//  This software may be modified and distributed under the terms
+//  of the BSD license. See the LICENSE file for details.
 //
 
 import Darwin
-import Quick
-import Nimble
 import LASwift
+import Testing
 
-class VectorSpec: QuickSpec {
-    override func spec() {
-        describe("Vector construction tests") {
-            
-            let vec1 = ones(10)
-            
-            it("ones vector has correct size") {
-                expect(vec1.count) == 10
-            }
-            
-            it("ones vector all ones") {
-                for elem in vec1 {
-                    expect(elem) == 1.0
-                }
-            }
-            
-            let vec2 = zeros(10)
-            
-            it("zeros vector has correct size") {
-                expect(vec2.count) == 10
-            }
-            
-            it("zeros vector all zeros") {
-                for elem in vec2 {
-                    expect(elem) == 0.0
-                }
-            }
-            
-            let vec3 = zeros(10)
-            
-            it("zeros vectors are equal") {
-                expect(vec3) == vec2
-            }
-            
-            it("zeros and ones vectors are not equal") {
-                expect(vec2) != vec1
-            }
-            
-            let vec4 = [Double](repeating: 1.0, count: 10)
-            
-            it("differently constructed ones vectors are equal") {
-                expect(vec1) == vec4
-            }
-        }
-        
-        describe("Vector comparison") {
-            it("equal") {
-                let v1 = [1.0, 2.0]
-                let v2 = [1.0, 2.0]
-                expect(v1 == v2) == true
-            }
-            it("not equal") {
-                let v1 = [1.0, 2.0]
-                let v2 = [1.0, 4.0]
-                expect(v1 != v2) == true
-            }
-            it("greater/less than") {
-                let v1 = [11.0, 12.0]
-                let v2 = [1.0, 2.0]
-                expect(v1 > v2) == true
-                expect(v2 < v1) == true
-            }
-            it("greater/less than or equal") {
-                let v1 = [11.0, 12.0]
-                let v2 = [1.0, 2.0]
-                let v3 = [1.0, 2.0]
-                expect(v1 >= v2) == true
-                expect(v2 <= v1) == true
-                expect(v2 >= v3) == true
-                expect(v2 <= v3) == true
-            }
-        }
-        describe("Vector arithmetic tests") {            
-            it("addition") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = [5.0, 7.0, 9.0]
-                expect(vec1 + vec2).to(beCloseTo(res))
-            }
-            
-            it("substraction") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = [-3.0, -3.0, -3.0]
-                expect(vec1 - vec2).to(beCloseTo(res))
-            }
-            
-            it("multiplication") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = [4.0, 10.0, 18.0]
-                expect(vec1 .* vec2).to(beCloseTo(res))
-            }
-            
-            it("right division") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = [1.0 / 4.0, 2.0 / 5.0, 3.0 / 6.0]
-                expect(vec1 ./ vec2).to(beCloseTo(res))
-            }
-            
-            it("left division") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = [4.0 / 1.0, 5.0 / 2.0, 6.0 / 3.0]
-                expect(vec1 ./. vec2).to(beCloseTo(res))
-            }
-            
-            it("scalar addition") {
-                let vec = [1.0, 2.0, 3.0]
-                let s = 7.0
-                let res = [8.0, 9.0, 10.0]
-                expect(vec + s).to(beCloseTo(res))
-                expect(s + vec).to(beCloseTo(res))
-            }
-            
-            it("scalar substraction") {
-                let vec = [1.0, 2.0, 3.0]
-                let s = 7.0
-                let res1 = [-6.0, -5.0, -4.0]
-                let res2 = [6.0, 5.0, 4.0]
-                expect(vec - s).to(beCloseTo(res1))
-                expect(s - vec).to(beCloseTo(res2))
-            }
-            
-            it("scalar multiplication") {
-                let vec = [1.0, 2.0, 3.0]
-                let s = 7.0
-                let res = [7.0, 14.0, 21.0]
-                expect(vec .* s).to(beCloseTo(res))
-                expect(s .* vec).to(beCloseTo(res))
-            }
-            
-            it("scalar right division") {
-                let vec = [1.0, 2.0, 3.0]
-                let s = 7.0
-                let res1 = [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0]
-                let res2 = [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0]
-                expect(vec ./ s).to(beCloseTo(res1))
-                expect(s ./ vec).to(beCloseTo(res2))
-            }
-            
-            it("scalar left division") {
-                let vec = [1.0, 2.0, 3.0]
-                let s = 7.0
-                let res1 = [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0]
-                let res2 = [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0]
-                expect(vec ./. s).to(beCloseTo(res1))
-                expect(s ./. vec).to(beCloseTo(res2))
-            }
-            
-            it("negation") {
-                let vec = [1.0, -2.0, 3.0]
-                let res = [-1.0, 2.0, -3.0]
-                expect(-vec).to(beCloseTo(res))
-            }
-            
-            it("absolute") {
-                let vec = [1.0, -2.0, 3.0]
-                let res = [1.0, 2.0, 3.0]
-                expect(abs(vec)).to(beCloseTo(res))
-            }
-            
-            it("threshold") {
-                let vec = [1.0, -2.0, 3.0]
-                let res = [1.0, 0.0, 3.0]
-                expect(thr(vec, 0.0)).to(beCloseTo(res))
-            }
-            
-            it("dot product") {
-                let vec1 = [1.0, 2.0, 3.0]
-                let vec2 = [4.0, 5.0, 6.0]
-                let res = 32.0
-                expect(vec1 * vec2).to(beCloseTo(res))
-            }
-        }
-        
-        describe("Vector power and exponential tests") {
-            it("power") {
-                let vec = [1.0, 2.0, 3.0]
-                let p = 3.0
-                let res = [1.0, 8.0, 27.0]
-                expect(vec .^ p).to(beCloseTo(res))
-            }
-            it("square") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [1.0, 4.0, 9.0]
-                expect(square(vec)).to(beCloseTo(res))
-                expect(square(vec)).to(beCloseTo(vec .^ 2))
-            }
-            it("sqrt") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [sqrt(1.0), sqrt(2.0), sqrt(3.0)]
-                expect(sqrt(vec)).to(beCloseTo(res))
-                expect(sqrt(vec)).to(beCloseTo(vec .^ 0.5))
-            }
-            it("exp") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [exp(1.0), exp(2.0), exp(3.0)]
-                expect(exp(vec)).to(beCloseTo(res))
-            }
-            it("log") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [log(1.0), log(2.0), log(3.0)]
-                expect(log(vec)).to(beCloseTo(res))
-            }
-            it("log10") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [log10(1.0), log10(2.0), log10(3.0)]
-                expect(log10(vec)).to(beCloseTo(res))
-            }
-            it("log2") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [log2(1.0), log2(2.0), log2(3.0)]
-                expect(log2(vec)).to(beCloseTo(res))
-            }
-        }
-        
-        describe("Vector trigonometric tests") {
-            it("sin") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [sin(1.0), sin(2.0), sin(3.0)]
-                expect(sin(vec)).to(beCloseTo(res))
-            }
-            it("cos") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [cos(1.0), cos(2.0), cos(3.0)]
-                expect(cos(vec)).to(beCloseTo(res))
-            }
-            it("tan") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [tan(1.0), tan(2.0), tan(3.0)]
-                expect(tan(vec)).to(beCloseTo(res))
-            }
-            it("asin") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [asin(1.0), asin(2.0), asin(3.0)]
-                expect(asin(vec)).to(beCloseTo(res))
-            }
-            it("acos") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [acos(1.0), acos(2.0), acos(3.0)]
-                expect(acos(vec)).to(beCloseTo(res))
-            }
-            it("atan") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = [atan(1.0), atan(2.0), atan(3.0)]
-                expect(atan(vec)).to(beCloseTo(res))
-            }
-        }
-        
-        describe("Vector statistics tests") {
-            it("max") {
-                let vec = [1.0, 3.0, 2.0]
-                let res = 3.0
-                expect(max(vec)).to(beCloseTo(res))
-            }
-            it("maxi") {
-                let vec = [1.0, 3.0, 2.0]
-                let res = 1
-                expect(maxi(vec)) == res
-            }
-            it("min") {
-                let vec = [3.0, 1.0, 2.0]
-                let res = 1.0
-                expect(min(vec)).to(beCloseTo(res))
-            }
-            it("mini") {
-                let vec = [3.0, 1.0, 2.0]
-                let res = 1
-                expect(mini(vec)) == res
-            }
-            it("mean") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = 2.0
-                expect(mean(vec)).to(beCloseTo(res))
-            }
-            it("std") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = sqrt(2.0 / 3.0)
-                expect(std(vec)).to(beCloseTo(res))
-            }
-            it("sum") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = 6.0
-                expect(sum(vec)).to(beCloseTo(res))
-            }
-            it("sumsq") {
-                let vec = [1.0, 2.0, 3.0]
-                let res = 14.0
-                expect(sumsq(vec)).to(beCloseTo(res))
-            }
-            it("normalize") {
-                let vec = [1.0, 2.0, 3.0]
-                let m = mean(vec)
-                let s = std(vec)
-                let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
-                expect(normalize(vec)).to(beCloseTo(res))
-            }
-        }
+@Suite("Vector construction")
+struct VectorConstructionTests {
+    let vec1 = ones(10)
+    let vec2 = zeros(10)
+
+    @Test("ones vector has correct size")
+    func onesSize() {
+        #expect(vec1.count == 10)
+    }
+
+    @Test("ones vector all ones")
+    func onesAllOnes() {
+        #expect(vec1.allSatisfy { $0 == 1.0 })
+    }
+
+    @Test("zeros vector has correct size")
+    func zerosSize() {
+        #expect(vec2.count == 10)
+    }
+
+    @Test("zeros vector all zeros")
+    func zerosAllZeros() {
+        #expect(vec2.allSatisfy { $0 == 0.0 })
+    }
+
+    @Test("zeros vectors are equal")
+    func zerosEqual() {
+        expectClose(zeros(10), vec2)
+    }
+
+    @Test("zeros and ones vectors are not equal")
+    func zerosOnesNotEqual() {
+        #expect(!isClose(vec2, vec1))
+    }
+
+    @Test("differently constructed ones vectors are equal")
+    func onesConstructedDifferently() {
+        expectClose(vec1, [Double](repeating: 1.0, count: 10))
+    }
+}
+
+// These specs exercise the library's own tolerance-based comparison operators on
+// vectors, so they use the operators directly. They go away with the operators.
+@Suite("Vector comparison")
+struct VectorComparisonTests {
+    @Test("equal")
+    func equal() {
+        let v1 = [1.0, 2.0]
+        let v2 = [1.0, 2.0]
+        #expect(v1 == v2)
+    }
+
+    @Test("not equal")
+    func notEqual() {
+        let v1 = [1.0, 2.0]
+        let v2 = [1.0, 4.0]
+        #expect(v1 != v2)
+    }
+
+    @Test("greater/less than")
+    func greaterLess() {
+        let v1 = [11.0, 12.0]
+        let v2 = [1.0, 2.0]
+        #expect(v1 > v2)
+        #expect(v2 < v1)
+    }
+
+    @Test("greater/less than or equal")
+    func greaterLessOrEqual() {
+        let v1 = [11.0, 12.0]
+        let v2 = [1.0, 2.0]
+        let v3 = [1.0, 2.0]
+        #expect(v1 >= v2)
+        #expect(v2 <= v1)
+        #expect(v2 >= v3)
+        #expect(v2 <= v3)
+    }
+}
+
+@Suite("Vector arithmetic")
+struct VectorArithmeticTests {
+    let a = [1.0, 2.0, 3.0]
+    let b = [4.0, 5.0, 6.0]
+    let s = 7.0
+
+    @Test("addition")
+    func addition() {
+        expectClose(a + b, [5.0, 7.0, 9.0], tol: closeTolerance)
+    }
+
+    @Test("substraction")
+    func subtraction() {
+        expectClose(a - b, [-3.0, -3.0, -3.0], tol: closeTolerance)
+    }
+
+    @Test("multiplication")
+    func multiplication() {
+        expectClose(a .* b, [4.0, 10.0, 18.0], tol: closeTolerance)
+    }
+
+    @Test("right division")
+    func rightDivision() {
+        expectClose(a ./ b, [1.0 / 4.0, 2.0 / 5.0, 3.0 / 6.0], tol: closeTolerance)
+    }
+
+    @Test("left division")
+    func leftDivision() {
+        expectClose(a ./. b, [4.0 / 1.0, 5.0 / 2.0, 6.0 / 3.0], tol: closeTolerance)
+    }
+
+    @Test("scalar addition")
+    func scalarAddition() {
+        let res = [8.0, 9.0, 10.0]
+        expectClose(a + s, res, tol: closeTolerance)
+        expectClose(s + a, res, tol: closeTolerance)
+    }
+
+    @Test("scalar substraction")
+    func scalarSubtraction() {
+        expectClose(a - s, [-6.0, -5.0, -4.0], tol: closeTolerance)
+        expectClose(s - a, [6.0, 5.0, 4.0], tol: closeTolerance)
+    }
+
+    @Test("scalar multiplication")
+    func scalarMultiplication() {
+        let res = [7.0, 14.0, 21.0]
+        expectClose(a .* s, res, tol: closeTolerance)
+        expectClose(s .* a, res, tol: closeTolerance)
+    }
+
+    @Test("scalar right division")
+    func scalarRightDivision() {
+        expectClose(a ./ s, [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0], tol: closeTolerance)
+        expectClose(s ./ a, [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0], tol: closeTolerance)
+    }
+
+    @Test("scalar left division")
+    func scalarLeftDivision() {
+        expectClose(a ./. s, [7.0 / 1.0, 7.0 / 2.0, 7.0 / 3.0], tol: closeTolerance)
+        expectClose(s ./. a, [1.0 / 7.0, 2.0 / 7.0, 3.0 / 7.0], tol: closeTolerance)
+    }
+
+    @Test("negation")
+    func negation() {
+        expectClose(-[1.0, -2.0, 3.0], [-1.0, 2.0, -3.0], tol: closeTolerance)
+    }
+
+    @Test("absolute")
+    func absolute() {
+        expectClose(abs([1.0, -2.0, 3.0]), [1.0, 2.0, 3.0], tol: closeTolerance)
+    }
+
+    @Test("threshold")
+    func threshold() {
+        expectClose(thr([1.0, -2.0, 3.0], 0.0), [1.0, 0.0, 3.0], tol: closeTolerance)
+    }
+
+    @Test("dot product")
+    func dotProduct() {
+        expectClose(a * b, 32.0, tol: closeTolerance)
+    }
+}
+
+typealias VectorFunction = @Sendable (Vector) -> Vector
+typealias ScalarFunction = @Sendable (Double) -> Double
+
+/// One elementwise function: the vector version under test and the scalar function it must match.
+struct ElementwiseCase: Sendable, CustomTestStringConvertible {
+    let name: String
+    let vector: VectorFunction
+    let scalar: ScalarFunction
+    /// Inputs inside the function's domain (asin and acos are NaN outside [-1, 1]).
+    var input: Vector = [1.0, 2.0, 3.0]
+    var testDescription: String { name }
+}
+
+let exponentialCases: [ElementwiseCase] = [
+    .init(name: "exp", vector: { exp($0) }, scalar: { exp($0) }),
+    .init(name: "log", vector: { log($0) }, scalar: { log($0) }),
+    .init(name: "log10", vector: { log10($0) }, scalar: { log10($0) }),
+    .init(name: "log2", vector: { log2($0) }, scalar: { log2($0) }),
+    .init(name: "sqrt", vector: { sqrt($0) }, scalar: { sqrt($0) }),
+]
+
+let trigonometricCases: [ElementwiseCase] = [
+    .init(name: "sin", vector: { sin($0) }, scalar: { sin($0) }),
+    .init(name: "cos", vector: { cos($0) }, scalar: { cos($0) }),
+    .init(name: "tan", vector: { tan($0) }, scalar: { tan($0) }),
+    .init(name: "asin", vector: { asin($0) }, scalar: { asin($0) }, input: [-1.0, -0.5, 0.5, 1.0]),
+    .init(name: "acos", vector: { acos($0) }, scalar: { acos($0) }, input: [-1.0, -0.5, 0.5, 1.0]),
+    .init(name: "atan", vector: { atan($0) }, scalar: { atan($0) }),
+]
+
+@Suite("Vector power and exponential")
+struct VectorExponentialTests {
+    let vec = [1.0, 2.0, 3.0]
+
+    @Test("power")
+    func power() {
+        expectClose(vec .^ 3.0, [1.0, 8.0, 27.0], tol: closeTolerance)
+    }
+
+    @Test("square")
+    func square() {
+        expectClose(LASwift.square(vec), [1.0, 4.0, 9.0], tol: closeTolerance)
+        expectClose(LASwift.square(vec), vec .^ 2, tol: closeTolerance)
+    }
+
+    // exp, log, log10, log2 and sqrt; sqrt also checks the 0.5 power.
+    @Test("elementwise function matches scalar function", arguments: exponentialCases)
+    func elementwise(_ c: ElementwiseCase) {
+        expectClose(c.vector(vec), vec.map(c.scalar), tol: closeTolerance)
+    }
+
+    @Test("sqrt equals the 0.5 power")
+    func sqrtIsHalfPower() {
+        expectClose(sqrt(vec), vec .^ 0.5, tol: closeTolerance)
+    }
+}
+
+@Suite("Vector trigonometric")
+struct VectorTrigonometricTests {
+    @Test("elementwise function matches scalar function", arguments: trigonometricCases)
+    func elementwise(_ c: ElementwiseCase) {
+        expectClose(c.vector(c.input), c.input.map(c.scalar), tol: closeTolerance)
+    }
+}
+
+@Suite("Vector statistics")
+struct VectorStatisticsTests {
+    @Test("max")
+    func max() {
+        expectClose(LASwift.max([1.0, 3.0, 2.0]), 3.0, tol: closeTolerance)
+    }
+
+    @Test("maxi")
+    func maxi() {
+        #expect(LASwift.maxi([1.0, 3.0, 2.0]) == 1)
+    }
+
+    @Test("min")
+    func min() {
+        expectClose(LASwift.min([3.0, 1.0, 2.0]), 1.0, tol: closeTolerance)
+    }
+
+    @Test("mini")
+    func mini() {
+        #expect(LASwift.mini([3.0, 1.0, 2.0]) == 1)
+    }
+
+    @Test("mean")
+    func mean() {
+        expectClose(LASwift.mean([1.0, 2.0, 3.0]), 2.0, tol: closeTolerance)
+    }
+
+    @Test("std")
+    func std() {
+        expectClose(LASwift.std([1.0, 2.0, 3.0]), sqrt(2.0 / 3.0), tol: closeTolerance)
+    }
+
+    @Test("sum")
+    func sum() {
+        expectClose(LASwift.sum([1.0, 2.0, 3.0]), 6.0, tol: closeTolerance)
+    }
+
+    @Test("sumsq")
+    func sumsq() {
+        expectClose(LASwift.sumsq([1.0, 2.0, 3.0]), 14.0, tol: closeTolerance)
+    }
+
+    @Test("normalize")
+    func normalize() {
+        let vec = [1.0, 2.0, 3.0]
+        let m = LASwift.mean(vec)
+        let s = LASwift.std(vec)
+        let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
+        expectClose(LASwift.normalize(vec), res, tol: closeTolerance)
     }
 }
