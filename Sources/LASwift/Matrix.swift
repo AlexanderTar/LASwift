@@ -497,7 +497,7 @@ public func hstack(_ ma: [Matrix]) -> Matrix {
 /// - Parameters:
 ///    - m: matrix
 ///    - row: row values to insert
-///    - at: index to insert row to
+///    - index: index to insert row to
 /// - Returns: new matrix with inserted row
 public func insert(_ m: Matrix, row: Vector, at index: Int) -> Matrix {
     return insert(m, rows: Matrix([row]), at: index)
@@ -508,7 +508,7 @@ public func insert(_ m: Matrix, row: Vector, at index: Int) -> Matrix {
 /// - Parameters:
 ///    - m: matrix
 ///    - rows: rows values to insert represented as matrix
-///    - at: index to insert rows to
+///    - index: index to insert rows to
 /// - Returns: new matrix with inserted rows
 public func insert(_ m: Matrix, rows: Matrix, at index: Int) -> Matrix {
     precondition(rows.cols == m.cols, "Input dimensions must agree")
@@ -710,8 +710,8 @@ public func === (_ lhs: Matrix, _ rhs: Matrix) -> Matrix {
 ///
 /// - Parameters:
 ///    - m: matrix
-///    - cols: column values to insert
-///    - at: index to insert column to
+///    - col: column values to insert
+///    - index: index to insert column to
 /// - Returns: new matrix with inserted column
 public func insert(_ m: Matrix, col: Vector, at index: Int) -> Matrix {
     return insert(m, cols: Matrix(col), at: index)
@@ -722,7 +722,7 @@ public func insert(_ m: Matrix, col: Vector, at index: Int) -> Matrix {
 /// - Parameters:
 ///    - m: matrix
 ///    - cols: columns values to insert represented as matrix
-///    - at: index to insert columns to
+///    - index: index to insert columns to
 /// - Returns: new matrix with inserted columns
 public func insert(_ m: Matrix, cols: Matrix, at index: Int) -> Matrix {
     precondition(cols.rows == m.rows, "Input dimensions must agree")
