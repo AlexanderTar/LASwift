@@ -606,6 +606,67 @@ struct MatrixStatisticsTests {
     }
 }
 
+@Suite("Matrix column statistics on non-square matrices")
+struct MatrixColumnStatisticsTests {
+    /// 3x4, no ties, so the index results are unambiguous.
+    let wide = Matrix([[3.0, -1.0, 4.0, 1.0],
+                       [5.0, 9.0, 2.0, 6.0],
+                       [7.0, 3.0, 5.0, 8.0]])
+
+    @Test("column results on a wide matrix")
+    func wideColumns() {
+        #expect(max(wide, .Column) == [7.0, 9.0, 5.0, 8.0])
+        #expect(min(wide, .Column) == [3.0, -1.0, 2.0, 1.0])
+        #expect(maxi(wide, .Column) == [2, 1, 2, 2])
+        #expect(mini(wide, .Column) == [0, 0, 1, 0])
+        #expect(sum(wide, .Column) == [15.0, 11.0, 11.0, 15.0])
+        #expect(sumsq(wide, .Column) == [83.0, 91.0, 45.0, 101.0])
+        expectClose(mean(wide, .Column), [5.0, 11.0 / 3.0, 11.0 / 3.0, 5.0])
+        expectClose(std(wide, .Column), [
+            sqrt((4.0 + 0.0 + 4.0) / 3.0),
+            sqrt((pow(-1.0 - 11.0 / 3.0, 2) + pow(9.0 - 11.0 / 3.0, 2) + pow(3.0 - 11.0 / 3.0, 2)) / 3.0),
+            sqrt((pow(4.0 - 11.0 / 3.0, 2) + pow(2.0 - 11.0 / 3.0, 2) + pow(5.0 - 11.0 / 3.0, 2)) / 3.0),
+            sqrt((pow(1.0 - 5.0, 2) + pow(6.0 - 5.0, 2) + pow(8.0 - 5.0, 2)) / 3.0),
+        ])
+    }
+
+    @Test("column results on a tall matrix")
+    func tallColumns() {
+        let tall = transpose(wide)
+        #expect(max(tall, .Column) == [4.0, 9.0, 8.0])
+        #expect(min(tall, .Column) == [-1.0, 2.0, 3.0])
+        #expect(maxi(tall, .Column) == [2, 1, 3])
+        #expect(mini(tall, .Column) == [1, 2, 1])
+        #expect(sum(tall, .Column) == [7.0, 22.0, 23.0])
+        #expect(sumsq(tall, .Column) == [27.0, 146.0, 147.0])
+    }
+
+    @Test("column results agree with the row results of the transpose on random data")
+    func randomAgreesWithTranspose() {
+        for (r, c) in [(7, 5), (5, 7), (1, 6), (6, 1)] {
+            let m = rand(r, c)
+            let t = transpose(m)
+            expectClose(max(m, .Column), max(t, .Row), tol: 1e-12)
+            expectClose(min(m, .Column), min(t, .Row), tol: 1e-12)
+            expectClose(mean(m, .Column), mean(t, .Row), tol: 1e-12)
+            expectClose(sum(m, .Column), sum(t, .Row), tol: 1e-12)
+            expectClose(sumsq(m, .Column), sumsq(t, .Row), tol: 1e-12)
+            expectClose(std(m, .Column), std(t, .Row), tol: 1e-12)
+            #expect(maxi(m, .Column) == maxi(t, .Row))
+            #expect(mini(m, .Column) == mini(t, .Row))
+        }
+    }
+
+    @Test("column statistics do not change the matrix")
+    func inputUntouched() {
+        let before = wide
+        _ = mean(wide, .Column)
+        _ = std(wide, .Column)
+        _ = maxi(wide, .Column)
+        #expect(wide == before)
+    }
+}
+
 @Suite("Matrix linear algebra")
 struct MatrixLinearAlgebraTests {
     @Test("trace")
