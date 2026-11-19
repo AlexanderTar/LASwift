@@ -81,4 +81,4 @@ xcodebuild docbuild -scheme LASwift -destination "generic/platform=macOS"
 3. Run the checks above, then open the pull request and fill in the template.
 4. Sign your commits with GPG.
 
-Dependabot opens one weekly pull request for GitHub Actions updates. Merge it once CI passes.
+Dependabot opens weekly pull requests for GitHub Actions updates (and Swift package updates, if any appear). Merge it once CI passes.

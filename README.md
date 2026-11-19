@@ -55,7 +55,7 @@ let quadratic = A ** 2 + 3.0 .* eye(2, 2)
 let squares = [1.0, 2.0, 3.0] .** 2 // [1, 4, 9]
 
 let (V, D, _, _) = eig(A)           // right eigenvectors in the columns of V
-isApproximatelyEqual(A * V, V * D)  // true
+assert(isApproximatelyEqual(A * V, V * D))
 ```
 
 `**` and `.**` bind tighter than `*`, like exponentiation in maths. The old `^` and

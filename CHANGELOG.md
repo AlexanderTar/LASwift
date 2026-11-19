@@ -70,9 +70,11 @@ Apple platforms and Swift Package Manager only.
    and `Vi`. For a matrix with real eigenvalues, `Vi` and `Di` are zero. Use `eigvals` when you
    only need the eigenvalues.
 7. **`convolve` is a true convolution.** The kernel is flipped, as in `conv2(A, K, 'same')`.
-   0.3 cross-correlated and zeroed the border elements; now the border is computed too. Flip your kernel if you relied on correlation. The kernel must have odd dimensions and be
+   0.3 cross-correlated and zeroed the border elements; now the border is computed too. Flip
+   your kernel if you relied on correlation. The kernel must have odd dimensions and be
    smaller than the matrix.
-8. **`thr` zeroes below the threshold.** It used to leave those values alone.
+8. **`thr` zeroes below the threshold.** It used to set them to `t` (only `t = 0` gave
+   the same result); `max(x, t)` reproduces the old behaviour.
 9. **`std` is the sample deviation.** It divides by N − 1 by default. Pass
    `normalization: .population` for the old result.
 10. **`normalize(_:.Column)` keeps the matrix shape.**
