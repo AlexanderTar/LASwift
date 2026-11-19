@@ -571,8 +571,9 @@ struct MatrixStatisticsTests {
 
     @Test("std")
     func deviation() {
-        let res1 = [sqrt(4.5 / 2.0), sqrt(0.5 / 2.0)]
-        let res2 = [sqrt(2.0 / 2.0), sqrt(2.0 / 2.0)]
+        // Sample deviation: divide by N - 1 = 1.
+        let res1 = [sqrt(4.5 / 1.0), sqrt(0.5 / 1.0)]
+        let res2 = [sqrt(2.0 / 1.0), sqrt(2.0 / 1.0)]
         expectClose(std(m1), res1, tol: closeTolerance)
         expectClose(std(m1, .Row), res1, tol: closeTolerance)
         expectClose(std(m1, .Column), res2, tol: closeTolerance)
@@ -581,9 +582,9 @@ struct MatrixStatisticsTests {
     @Test("normalize")
     func normalization() {
         let mr = mean(m1)
-        let sr = std(m1)
+        let sr = std(m1, normalization: .population)
         let mc = mean(m1, .Column)
-        let sc = std(m1, .Column)
+        let sc = std(m1, .Column, normalization: .population)
         let res1 = transpose((transpose(m1) - mr) ./ sr)
         let res2 = (m1 - mc) ./ sc
         expectClose(normalize(m1), res1)
@@ -623,10 +624,10 @@ struct MatrixColumnStatisticsTests {
         #expect(sumsq(wide, .Column) == [83.0, 91.0, 45.0, 101.0])
         expectClose(mean(wide, .Column), [5.0, 11.0 / 3.0, 11.0 / 3.0, 5.0])
         expectClose(std(wide, .Column), [
-            sqrt((4.0 + 0.0 + 4.0) / 3.0),
-            sqrt((pow(-1.0 - 11.0 / 3.0, 2) + pow(9.0 - 11.0 / 3.0, 2) + pow(3.0 - 11.0 / 3.0, 2)) / 3.0),
-            sqrt((pow(4.0 - 11.0 / 3.0, 2) + pow(2.0 - 11.0 / 3.0, 2) + pow(5.0 - 11.0 / 3.0, 2)) / 3.0),
-            sqrt((pow(1.0 - 5.0, 2) + pow(6.0 - 5.0, 2) + pow(8.0 - 5.0, 2)) / 3.0),
+            sqrt((4.0 + 0.0 + 4.0) / 2.0),
+            sqrt((pow(-1.0 - 11.0 / 3.0, 2) + pow(9.0 - 11.0 / 3.0, 2) + pow(3.0 - 11.0 / 3.0, 2)) / 2.0),
+            sqrt((pow(4.0 - 11.0 / 3.0, 2) + pow(2.0 - 11.0 / 3.0, 2) + pow(5.0 - 11.0 / 3.0, 2)) / 2.0),
+            sqrt((pow(1.0 - 5.0, 2) + pow(6.0 - 5.0, 2) + pow(8.0 - 5.0, 2)) / 2.0),
         ])
     }
 

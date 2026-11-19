@@ -256,7 +256,7 @@ struct VectorStatisticsTests {
 
     @Test("std")
     func std() {
-        expectClose(LASwift.std([1.0, 2.0, 3.0]), sqrt(2.0 / 3.0), tol: closeTolerance)
+        expectClose(LASwift.std([1.0, 2.0, 3.0]), sqrt(2.0 / 2.0), tol: closeTolerance)
     }
 
     @Test("sum")
@@ -273,7 +273,7 @@ struct VectorStatisticsTests {
     func normalize() {
         let vec = [1.0, 2.0, 3.0]
         let m = LASwift.mean(vec)
-        let s = LASwift.std(vec)
+        let s = LASwift.std(vec, normalization: .population)
         let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
         expectClose(LASwift.normalize(vec), res, tol: closeTolerance)
     }
