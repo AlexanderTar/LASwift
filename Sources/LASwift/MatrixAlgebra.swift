@@ -85,11 +85,12 @@ public func * (_ A: Matrix, _ B: Matrix) -> Matrix {
 ///
 /// If power is 1, source matrix is returned
 /// If power is -1, inverted matrix is returned
-/// If power is > 1, continuous matrix product result is returned (eg `mpower(A, 2) = mtimes(A, A)`)
+/// If power is > 1, continuous matrix product result is returned (eg `mpower(A, 2) = mtimes(A, A)`),
+/// computed by repeated squaring
 /// If power is < -1, continuous matrix product of inverted matrix result is returned
-/// All other values are invalid
+/// If power is 0, identity matrix is returned
 ///
-/// Alternatively, `mpower(A, p)` can be executed with `A ^ p`.
+/// Alternatively, `mpower(A, p)` can be executed with `A ** p`.
 ///
 /// - Parameters
 ///     - A: matrix
@@ -103,13 +104,18 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
     case -1:
         return inv(A)
     case _ where p > 1:
-        var C = Matrix(A)
+        // Exponentiation by squaring: O(log p) products instead of p - 1.
+        var result: Matrix? = nil
+        var base = A
         var p = p
-        while (p > 1) {
-            C = mtimes(A, C)
-            p -= 1
+        while p > 0 {
+            if p & 1 == 1 {
+                result = result.map { mtimes($0, base) } ?? base
+            }
+            p >>= 1
+            if p > 0 { base = mtimes(base, base) }
         }
-        return C
+        return result!
     case _ where p < -1:
         return inv(mpower(A, -p))
     default:
@@ -121,16 +127,27 @@ public func mpower(_ A: Matrix, _ p: Int) -> Matrix {
 ///
 /// If power is 1, source matrix is returned
 /// If power is -1, inverted matrix is returned
-/// If power is > 1, continuous matrix product result is returned (eg `A ^ 2 = mtimes(A, A)`)
+/// If power is > 1, continuous matrix product result is returned (eg `A ** 2 = mtimes(A, A)`)
 /// If power is < -1, continuous matrix product of inverted matrix result is returned
-/// All other values are invalid
+/// If power is 0, identity matrix is returned
 ///
-/// Alternatively, `A ^ p` can be executed with `mpower(A, p)`.
+/// Binds tighter than `*`, `.*` and `+`, so `A + A ** 2` is `A + mpower(A, 2)`.
+///
+/// Alternatively, `A ** p` can be executed with `mpower(A, p)`.
 ///
 /// - Parameters
 ///     - A: matrix
 ///     - p: power to raise matrix to (integer)
 /// - Returns: matrix A raised to power p
+public func ** (_ A: Matrix, _ p: Int) -> Matrix {
+    return mpower(A, p)
+}
+
+/// Raise matrix to specified power (integer value).
+///
+/// Deprecated: `^` binds looser than `*` and `+` (it keeps the precedence of the
+/// standard library's bitwise XOR), so `A + A ^ 2` is `(A + A) ^ 2`. Use `**`.
+@available(*, deprecated, renamed: "**")
 public func ^ (_ a: Matrix, _ p: Int) -> Matrix {
     return mpower(a, p)
 }
@@ -449,10 +466,11 @@ public func tri(_ A: Matrix, _ t: Triangle) -> Matrix {
 
 /// Compute the determinant of a given square matrix.
 ///
-///    A precondition error is thrown if the given matrix is singular or algorithm fails to converge.
+/// A singular matrix has determinant 0: no precondition error is thrown, and the result is
+/// `+0.0` (never `-0.0`).
 ///
 /// - Parameters:
-///     - A: square matrix=
+///     - A: square matrix
 /// - Returns: determinant of A matrix
 public func det(_ A: Matrix) -> Double {
     precondition(A.rows == A.cols, "Matrix dimensions must agree")
@@ -476,26 +494,55 @@ public func det(_ A: Matrix) -> Double {
         }
     }
     
-    return d
+    // A singular matrix gives -0.0 when a row swap flips a zero; report +0.0.
+    return d == 0.0 ? 0.0 : d
 }
 
- /// Return the result of convolving the given matrix with the provided kernel.
- ///
- /// - Parameters:
- ///    - A: Matrix
- ///    - K: Matrix (Needs to be smaller in dimension than A)
- /// - Returns: Matrix result of the convolution
- @available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
- public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
-     precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
+/// Return the 2-D convolution of the given matrix with the provided kernel, the same size as `A`.
+///
+/// This is true convolution (the kernel is flipped in both directions), equal to
+/// Matlab's `conv2(A, K, 'same')` and `scipy.signal.convolve2d(A, K, mode: 'same')`.
+/// `A` is treated as zero outside its edges, so border elements are computed from the
+/// part of the kernel that overlaps `A`; they are not zeroed.
+///
+/// A precondition error is thrown if the kernel is not smaller than `A` in both dimensions,
+/// or if the kernel has an even number of rows or columns (it has no centre element).
+///
+/// - Parameters:
+///    - A: Matrix
+///    - K: Matrix with an odd number of rows and columns, smaller in dimension than A
+/// - Returns: Matrix result of the convolution
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, *)
+public func convolve(_ A: Matrix, _ K: Matrix) -> Matrix {
+    precondition(A.rows > K.rows && A.cols > K.cols, "The kernel matrix needs to be smaller than the matrix it will convolve.")
+    precondition(K.rows % 2 == 1 && K.cols % 2 == 1, "The kernel matrix needs an odd number of rows and columns.")
 
-     let result: [Double]
+    // Zero-pad A by half the kernel on each side. vDSP leaves a border of half a kernel
+    // unfilled, so the interior of the padded result is exactly the zero-padded 'same' result.
+    let padRows = K.rows / 2
+    let padCols = K.cols / 2
+    let paddedCols = A.cols + 2 * padCols
+    var padded = Matrix(A.rows + 2 * padRows, paddedCols)
+    for r in 0..<A.rows {
+        for c in 0..<A.cols {
+            padded.flat[(r + padRows) * paddedCols + c + padCols] = A[r, c]
+        }
+    }
 
-     if K.rows == 3 {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, with3x3Kernel: K.flat)
-     } else {
-         result = Accelerate.vDSP.convolve(A.flat, rowCount: A.rows, columnCount: A.cols, withKernel: K.flat, kernelRowCount: K.rows, kernelColumnCount: K.cols)
-     }
+    // vDSP correlates; reversing the flat kernel rotates it by 180 degrees, which makes it convolve.
+    let flipped = Array(K.flat.reversed())
+    let filtered: [Double]
+    if K.rows == 3 && K.cols == 3 {
+        filtered = Accelerate.vDSP.convolve(padded.flat, rowCount: padded.rows, columnCount: padded.cols, with3x3Kernel: flipped)
+    } else {
+        filtered = Accelerate.vDSP.convolve(padded.flat, rowCount: padded.rows, columnCount: padded.cols, withKernel: flipped, kernelRowCount: K.rows, kernelColumnCount: K.cols)
+    }
 
-     return Matrix(A.rows, A.cols, result)
- }
+    var result = Matrix(A.rows, A.cols)
+    for r in 0..<A.rows {
+        for c in 0..<A.cols {
+            result.flat[r * A.cols + c] = filtered[(r + padRows) * paddedCols + c + padCols]
+        }
+    }
+    return result
+}

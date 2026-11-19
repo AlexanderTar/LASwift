@@ -198,13 +198,13 @@ struct VectorExponentialTests {
 
     @Test("power")
     func power() {
-        expectClose(vec .^ 3.0, [1.0, 8.0, 27.0], tol: closeTolerance)
+        expectClose(vec .** 3.0, [1.0, 8.0, 27.0], tol: closeTolerance)
     }
 
     @Test("square")
     func square() {
         expectClose(LASwift.square(vec), [1.0, 4.0, 9.0], tol: closeTolerance)
-        expectClose(LASwift.square(vec), vec .^ 2, tol: closeTolerance)
+        expectClose(LASwift.square(vec), vec .** 2, tol: closeTolerance)
     }
 
     // exp, log, log10, log2 and sqrt; sqrt also checks the 0.5 power.
@@ -215,7 +215,7 @@ struct VectorExponentialTests {
 
     @Test("sqrt equals the 0.5 power")
     func sqrtIsHalfPower() {
-        expectClose(sqrt(vec), vec .^ 0.5, tol: closeTolerance)
+        expectClose(sqrt(vec), vec .** 0.5, tol: closeTolerance)
     }
 }
 
@@ -256,7 +256,7 @@ struct VectorStatisticsTests {
 
     @Test("std")
     func std() {
-        expectClose(LASwift.std([1.0, 2.0, 3.0]), sqrt(2.0 / 3.0), tol: closeTolerance)
+        expectClose(LASwift.std([1.0, 2.0, 3.0]), sqrt(2.0 / 2.0), tol: closeTolerance)
     }
 
     @Test("sum")
@@ -273,7 +273,7 @@ struct VectorStatisticsTests {
     func normalize() {
         let vec = [1.0, 2.0, 3.0]
         let m = LASwift.mean(vec)
-        let s = LASwift.std(vec)
+        let s = LASwift.std(vec, normalization: .population)
         let res = [(1.0 - m) / s, (2.0 - m) / s, (3.0 - m) / s]
         expectClose(LASwift.normalize(vec), res, tol: closeTolerance)
     }

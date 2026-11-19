@@ -264,7 +264,8 @@ public func - (_ a: Vector, _ b: Double) -> Vector {
 ///     - b: vector
 /// - Returns: elementwise difference of scalar a and vector b
 public func minus(_ a: Double, _ b: Vector) -> Vector {
-    return uminus(minus(b, a))
+    // a + (-b), not -(b - a): the latter gives -0.0 where a == b.
+    return plus(uminus(b), a)
 }
 
 /// Perform scalar and vector substraction.
@@ -498,13 +499,17 @@ public prefix func - (_ a: Vector) -> Vector {
 
 /// Threshold function on vector.
 ///
+/// Elements less than `t` are set to 0; elements greater than or equal to `t` are kept
+/// (so an element equal to `t` is kept). A `NaN` element is kept (it is not less than `t`).
+///
 /// - Parameters
 ///     - a: vector
-/// - Returns: vector with values less than certain value set to 0 
+///     - t: threshold
+/// - Returns: vector with values less than t set to 0
 ///            and keeps the value otherwise
 public func thr(_ a: Vector, _ t: Double) -> Vector {
     var b = zeros(a.count)
     var t = t
-    vDSP_vthrD(a, 1, &t, &b, 1, vDSP_Length(a.count))
+    vDSP_vthresD(a, 1, &t, &b, 1, vDSP_Length(a.count))
     return b
 }

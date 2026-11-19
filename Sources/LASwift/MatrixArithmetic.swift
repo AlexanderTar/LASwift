@@ -769,9 +769,12 @@ public prefix func - (_ A: Matrix) -> Matrix {
 
 /// Threshold function on matrix.
 ///
+/// Elements less than `t` are set to 0; elements greater than or equal to `t` are kept.
+///
 /// - Parameters
 ///     - A: matrix
-/// - Returns: matrix with values less than certain value set to 0
+///     - t: threshold
+/// - Returns: matrix with values less than t set to 0
 ///            and keeps the value otherwise
 public func thr(_ A: Matrix, _ t: Double) -> Matrix {
     return Matrix(A.rows, A.cols, thr(A.flat, t))
