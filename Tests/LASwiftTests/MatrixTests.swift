@@ -500,14 +500,14 @@ func expectedElementwise(_ c: MatrixElementwiseCase) -> Matrix {
 struct MatrixExponentialTests {
     @Test("power")
     func power() {
-        expectClose(sample2x2() .^ 3.0, Matrix([[1.0, 8.0], [27.0, 64.0]]))
+        expectClose(sample2x2() .** 3.0, Matrix([[1.0, 8.0], [27.0, 64.0]]))
     }
 
     @Test("square")
     func squareTest() {
         let res = Matrix([[1.0, 4.0], [9.0, 16.0]])
         expectClose(square(sample2x2()), res)
-        expectClose(sample2x2() .^ 2.0, res)
+        expectClose(sample2x2() .** 2.0, res)
     }
 
     // exp, log, log10, log2 and sqrt.
@@ -518,7 +518,7 @@ struct MatrixExponentialTests {
 
     @Test("sqrt equals the 0.5 power")
     func sqrtIsHalfPower() {
-        expectClose(sqrt(sample2x2()), sample2x2() .^ 0.5)
+        expectClose(sqrt(sample2x2()), sample2x2() .** 0.5)
     }
 }
 
@@ -709,10 +709,10 @@ struct MatrixLinearAlgebraTests {
         let res2 = inv(m1 * m1)
         let identity = Matrix([[1.0, 0.0],
                                [0.0, 1.0]])
-        expectClose(m1 ^ 1, m1)
-        expectClose(m1 ^ 2, res1)
-        expectClose(m1 ^ -2, res2)
-        expectClose(m1 ^ 0, identity)
+        expectClose(m1 ** 1, m1)
+        expectClose(m1 ** 2, res1)
+        expectClose(m1 ** -2, res2)
+        expectClose(m1 ** 0, identity)
     }
 
     @Test("inverse")
@@ -725,7 +725,7 @@ struct MatrixLinearAlgebraTests {
                           [0.058823529411764663, 0.058823529411764719, -0.098039215686274522]])
         expectClose(inv(m1), res)
         expectClose(mpower(m1, -1), res)
-        expectClose(m1 ^ -1, res)
+        expectClose(m1 ** -1, res)
         expectClose(inv(m1) * m1, eye(3, 3))
     }
 
