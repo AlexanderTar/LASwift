@@ -984,16 +984,19 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
     case (.All, .All):
         return m
         
+    case (.Range(_, 0, _), _), (_, .Range(_, 0, _)):
+        preconditionFailure("Range step must not be zero")
+        
     case (.Range(let f, _, let t), _) where f < 0 || t >= m.rows,
          (_, .Range(let f, _, let t)) where f < 0 || t >= m.cols,
          (.Range(let f, _, let t), _) where f >= m.rows || t < 0,
          (_, .Range(let f, _, let t)) where f >= m.cols || t < 0:
         preconditionFailure("Range out of bounds")
         
-    case (.Take(let n), _) where n < 0 || n >= m.rows,
-         (_, .Take(let n)) where n < 0 || n >= m.cols,
-         (.Drop(let n), _) where n < 0 || n >= m.rows,
-         (_, .Drop(let n)) where n < 0 || n >= m.cols:
+    case (.Take(let n), _) where n < 0 || n > m.rows,
+         (_, .Take(let n)) where n < 0 || n > m.cols,
+         (.Drop(let n), _) where n < 0 || n > m.rows,
+         (_, .Drop(let n)) where n < 0 || n > m.cols:
         preconditionFailure("Range out of bounds")
         
     case (.All, _):
@@ -1032,8 +1035,8 @@ public func slice(_ m: Matrix, _ e: (er: Extractor, ec: Extractor)) -> Matrix {
         return slice(m, (e.er, .Pos([Int](n..<m.cols))))
         
     case (.Pos(let pr), .Pos(let pc)):
-        precondition(pr.count > 0 && pr.filter { $0 < 0 || $0 > m.rows }.count == 0, "Range out of bounds")
-        precondition(pc.count > 0 && pc.filter { $0 < 0 || $0 > m.cols }.count == 0, "Range out of bounds")
+        precondition(pr.count > 0 && pr.filter { $0 < 0 || $0 >= m.rows }.count == 0, "Range out of bounds")
+        precondition(pc.count > 0 && pc.filter { $0 < 0 || $0 >= m.cols }.count == 0, "Range out of bounds")
         return slice(m, pr, pc)
         
     default:

@@ -82,7 +82,67 @@ struct GSVDBoundsTests {
     }
 }
 
+@Suite("slice extractor bounds")
+struct SliceBoundsTests {
+    // 2 rows, 3 columns.
+    let m = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+
+    @Test("Take of every row or column returns the whole matrix")
+    func takeAll() {
+        expectClose(slice(m, (.Take(2), .All)), m)
+        expectClose(slice(m, (.All, .Take(3))), m)
+    }
+
+    @Test("DropLast(0) and TakeLast of everything return the whole matrix")
+    func dropLastNothing() {
+        expectClose(slice(m, (.DropLast(0), .All)), m)
+        expectClose(slice(m, (.All, .DropLast(0))), m)
+        expectClose(slice(m, (.TakeLast(2), .TakeLast(3))), m)
+    }
+
+    @Test("Drop(0) returns the whole matrix")
+    func dropNothing() {
+        expectClose(slice(m, (.Drop(0), .Drop(0))), m)
+    }
+}
+
 #if os(macOS) || os(Linux)
+@Suite("slice preconditions")
+struct SlicePreconditionTests {
+    @Test("a row position equal to the row count fails the precondition")
+    func rowPositionAtCount() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.Pos([2]), .All))
+        }
+        expectStderr(result, contains: "Range out of bounds")
+    }
+
+    @Test("a column position equal to the column count fails the precondition")
+    func columnPositionAtCount() async {
+        let result = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.All, .Pos([2])))
+        }
+        expectStderr(result, contains: "Range out of bounds")
+    }
+
+    @Test("a cyclic position never leaves the matrix")
+    func cyclicPosition() {
+        expectClose(slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.PosCyc([2]), .PosCyc([-1]))), Matrix([[2.0]]))
+    }
+
+    @Test("a range with step 0 fails the precondition")
+    func rangeStepZero() async {
+        let rows = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.Range(0, 0, 1), .All))
+        }
+        expectStderr(rows, contains: "Range step must not be zero")
+        let cols = await #expect(processExitsWith: .failure, observing: [\.standardErrorContent]) {
+            _ = slice(Matrix([[1.0, 2.0], [3.0, 4.0]]), (.All, .Range(0, 0, 1)))
+        }
+        expectStderr(cols, contains: "Range step must not be zero")
+    }
+}
+
 @Suite("gsvd preconditions")
 struct GSVDPreconditionTests {
     @Test("matrices with different column counts fail the precondition")
