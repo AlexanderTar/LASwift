@@ -1,7 +1,8 @@
 // MatrixLeastSquare.swift
 //
 // Created by Brett Larson on 9/10/20.
-// Copyright © 2020 Brett Larson. All rights reserved.
+// Copyright (c) 2020 Brett Larson
+// All rights reserved.
 //
 // This software may be modified and distributed under the terms
 // of the BSD license. See the LICENSE file for details.

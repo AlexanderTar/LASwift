@@ -1,4 +1,4 @@
-// Vector.swift
+// VectorArithmetic.swift
 //
 // Copyright (c) 2017 Alexander Taraymovich <taraymovich@me.com>
 // All rights reserved.
