@@ -1,0 +1,43 @@
+name: Documentation
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build documentation
+        run: |
+          xcodebuild docbuild -scheme LASwift -destination generic/platform=macOS \
+            -derivedDataPath "$RUNNER_TEMP/dd"
+          archive="$(find "$RUNNER_TEMP/dd" -name 'LASwift.doccarchive' -type d | head -n 1)"
+          test -n "$archive"
+          xcrun docc process-archive transform-for-static-hosting "$archive" \
+            --output-path "$RUNNER_TEMP/site" --hosting-base-path LASwift
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ runner.temp }}/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
