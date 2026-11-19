@@ -4,7 +4,7 @@
 
 <h1 align="center">LASwift</h1>
 
-<p align="center">Fast linear algebra for Swift, powered by Accelerate.</p>
+<p align="center">Fast linear algebra for Swift, on Apple platforms and Linux.</p>
 
 <p align="center">
   <a href="https://github.com/AlexanderTar/LASwift/actions/workflows/ci.yml"><img src="https://github.com/AlexanderTar/LASwift/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"></a>
@@ -18,8 +18,9 @@
 LASwift gives Swift a `Matrix` type and a `Vector` (an array of `Double`) with the
 operations you need for numerical code and machine learning. The syntax follows
 Matlab and the Haskell library [hmatrix](https://hackage.haskell.org/package/hmatrix).
-The work is done by Apple's Accelerate framework (vDSP, BLAS and LAPACK), so LASwift
-runs on Apple platforms only.
+On Apple platforms the work is done by the Accelerate framework (vDSP, BLAS and LAPACK).
+On Linux LASwift uses the system LAPACK and BLAS (OpenBLAS recommended) and portable
+Swift for the vector operations.
 
 ## Features
 
@@ -70,8 +71,23 @@ assert(isApproximatelyEqual(A * V, V * D))
 | tvOS | 16.4 |
 | watchOS | 9.4 |
 | visionOS | 1.0 |
+| Linux | Swift 6.2, LAPACK and BLAS (see below) |
 
-Building needs Xcode 26 or later (Swift 6.2 tools). These match [Package.swift](Package.swift).
+Building on Apple platforms needs Xcode 26 or later (Swift 6.2 tools). These match
+[Package.swift](Package.swift).
+
+### Linux
+
+Install LAPACK and BLAS before building. On Debian or Ubuntu:
+
+```sh
+apt-get install libopenblas-dev liblapack-dev
+```
+
+OpenBLAS is recommended. The reference `liblapack-dev` and `libblas-dev` without OpenBLAS
+also work, but matrix operations are about 10 times slower. LASwift calls LAPACK through
+its 32-bit integer interface on Linux, so a matrix dimension above 2,147,483,647 stops the
+program. CI tests Linux on x86_64 and arm64 in the `swift:6.2-noble` image.
 
 ## Installation
 

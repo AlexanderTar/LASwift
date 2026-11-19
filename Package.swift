@@ -20,7 +20,13 @@ let package = Package(
         // C shim over Accelerate's new LAPACK interface; see its header for why it is a C target.
         .target(
             name: "CLASwiftLAPACK",
-            cSettings: [.define("ACCELERATE_NEW_LAPACK"), .define("ACCELERATE_LAPACK_ILP64")]),
+            cSettings: [.define("ACCELERATE_NEW_LAPACK"), .define("ACCELERATE_LAPACK_ILP64")],
+            // Off Apple platforms the shim calls the system LAPACK/BLAS (e.g. Ubuntu's
+            // liblapack-dev + libopenblas-dev) through their standard LP64 Fortran interface.
+            linkerSettings: [
+                .linkedLibrary("lapack", .when(platforms: [.linux])),
+                .linkedLibrary("blas", .when(platforms: [.linux]))
+            ]),
         .target(
             name: "LASwift",
             dependencies: ["CLASwiftLAPACK"]),

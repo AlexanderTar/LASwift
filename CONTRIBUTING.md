@@ -5,8 +5,8 @@ problems as described in [SECURITY.md](SECURITY.md), not in a public issue.
 
 ## Setup
 
-You need a Mac with Xcode 26 or later (Swift 6.2 tools). LASwift uses Accelerate, so it does
-not build on Linux.
+You need Swift 6.2 tools: Xcode 26 or later on a Mac, or a Swift 6.2 toolchain on Linux with
+LAPACK and BLAS installed (`apt-get install libopenblas-dev liblapack-dev` on Debian or Ubuntu).
 
 ```sh
 git clone https://github.com/AlexanderTar/LASwift.git
@@ -28,6 +28,18 @@ for platform in iOS tvOS watchOS visionOS; do
   xcodebuild build-for-testing -scheme LASwift -destination "generic/platform=$platform" -quiet
 done
 ```
+
+CI also builds and tests on Linux (x86_64 and arm64). To run that job on a Mac with Docker:
+
+```sh
+docker run --rm -v "$PWD":/src -w /src swift:6.2-noble sh -c \
+  'apt-get update && apt-get install -y --no-install-recommends libopenblas-dev liblapack-dev &&
+   swift build --scratch-path /tmp/build && swift test --scratch-path /tmp/build'
+```
+
+On Linux the Accelerate calls go through `Sources/LASwift/PortableAccelerate.swift` and the
+`#else` branch of `Sources/CLASwiftLAPACK/CLASwiftLAPACK.c`. A new vDSP, vForce, BLAS or
+LAPACK call needs a portable version there too, or the Linux job fails to build.
 
 CI compiles the library and the tests for iOS, tvOS, watchOS and visionOS but does not run
 the tests there. Before a release,

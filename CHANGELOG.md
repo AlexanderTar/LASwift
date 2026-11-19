@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Linux support. LASwift uses the system LAPACK and BLAS there (`libopenblas-dev` and
+  `liblapack-dev` on Debian or Ubuntu) and portable Swift for the vDSP and vForce
+  operations. Apple platforms still use Accelerate and are unchanged.
+- CI builds and tests on Linux, x86_64 and arm64.
+
 ## 1.0.0
 
 1.0.0 is a breaking release. It makes `Matrix` a value type, fixes several results that
